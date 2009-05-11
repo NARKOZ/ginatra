@@ -12,6 +12,7 @@ end
 
 # stolen from rails
 class Array
+
   def extract_options!
     last.is_a?(::Hash) ? pop : {}
   end
@@ -31,6 +32,7 @@ end
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 module Sinatra
   module Partials
+
     def partial(template, *args)
       options = args.extract_options!
       options.merge!(:layout => false)
@@ -57,6 +59,7 @@ module Ginatra
   
   # Convenience class for me!
   class RepoList
+
     def initialize
       @repo_list = []
       Dir.entries(Sinatra::Application.git_dir).each do |e|
@@ -66,11 +69,13 @@ module Ginatra
       end
       return @repo_list
     end
+
     def each
       @repo_list.each do |r|
         yield(r)
       end
     end
+
     def include?(object)
       @repo_list.each do |r|
         if r == object
@@ -83,7 +88,9 @@ module Ginatra
 
   # Convenience class for me!
   class Repo
+
     attr_reader :name, :param, :description
+
     def initialize(path)
       @repo = Grit::Repo.new("#{Sinatra::Application.git_dir}/#{path}.git/")
       @name = path.capitalize
@@ -91,12 +98,15 @@ module Ginatra
       @description = @repo.description
       return @repo
     end
+
     def commits(num=10)
       @repo.commits('master', num)
     end
+
     def find_commit(short_id)
       commits(10000).select{|item| item.id =~ /^#{Regexp.escape(short_id)}/ }.first
     end
+
     def find_commit_by_tree(short_id)
       commits(10000).select{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }.first
     end
@@ -104,16 +114,20 @@ module Ginatra
 
   # Actually useful stuff
   module Helpers
+
     def gravatar_url(email)
       require "digest/md5"
       "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=40"
     end
+
     def nicetime(date)
       date.strftime("%b %d, %Y &ndash; %H:%M")
     end
+
     def actor_box(actor, role, date)
       partial(:actor_box, :locals => {:actor => actor, :role => role, :date => date})
     end
+
     def actor_boxes(commit)
       if commit.author.name == commit.committer.name
         actor_box(commit.committer, :committer, commit.committed_date)
@@ -121,7 +135,7 @@ module Ginatra
         actor_box(commit.author, :author, commit.authored_date) + actor_box(commit.committer, :committer, commit.committed_date)
       end
     end
-    
+
     # The only reason this doesn't work 100% of the time is because grit doesn't :/
     # if i find a fix, it'll go upstream :D
     def file_listing(commit)
@@ -138,6 +152,7 @@ module Ginatra
       out += "</ul>"
       return out
     end
+
     def diff_highlight(text)
       CodeRay.scan(text, :diff).html
     end
