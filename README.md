@@ -29,8 +29,7 @@ Then clone this repository:
 You'll  also need  to  (`--bare`) clone  `atmos/hancock-client`  into the  repos
 directory and call it test: (don't ask, it was just a repo i chose at random)
 
-   cd repos
-   git clone --bare git://github.com/atmos/hancock-client.git test.git
+    cd repos && git clone --bare git://github.com/atmos/hancock-client.git test.git
     
 Usage
 -----
@@ -52,6 +51,20 @@ the directory ends in `.git'. For Example:
     git clone --bare git://github.com/lenary/ginatra.git
     git clone --bare git://github.com/mojombo/grit.git fun.git
 
+Authors & Thanks
+----------------
+
+**Authors:**
+
+- Samuel Elliott (lenary)
+
+**Thanks**
+
+- (tekkub) - For help with Grit
+- (schacon) - For help with Grit
+- Conrad Irwin (cirwin) - For moral support and design help
+- #git - for any other problems I had
+- Picol Project (http://picol.org) - for the icons
 
 Screenshots
 -----------

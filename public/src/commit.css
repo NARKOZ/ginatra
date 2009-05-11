@@ -106,10 +106,10 @@
 	float: left;
 }
 .commit-tree .tree {
-  background: url('../img/tree.png') no-repeat center left;
+  background: url('../img/tree.png') no-repeat top left;
 }
 .commit-tree .blob {
-  background: url('../img/doc.png') no-repeat center left;
+  background: url('../img/doc.png') no-repeat top left;
 }
 .commit-diff h4{
   font-weight:bold;

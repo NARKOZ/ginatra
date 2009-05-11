@@ -61,7 +61,7 @@ module Ginatra
     def initialize
       @repo_list = []
       Dir.entries(Sinatra::Application.git_dir).each do |e|
-        unless e == '.' || e == '..'
+        unless e == '.' || e == '..' || e == 'README.md'
           @repo_list << Ginatra::Repo.new(e.gsub(/\.git$/, ''))
         end
       end
