@@ -1,18 +1,19 @@
-require 'rubygems'
-require 'cucumber/rake/task'
-require 'spec/rake/spectask'
+namespace :test do
+  require 'rubygems'
+  require 'cucumber/rake/task'
+  require 'spec/rake/spectask'
+  Cucumber::Rake::Task.new(:features) do |t|
+    t.cucumber_opts = "--format pretty"
+  end
 
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "--format pretty"
-end
+  Cucumber::Rake::Task.new(:current) do |c|
+    c.cucumber_opts = "--format pretty -t current"
+  end
 
-Cucumber::Rake::Task.new(:current) do |c|
-  c.cucumber_opts = "--format pretty -t current"
-end
-
-Spec::Rake::SpecTask.new(:spec) do |r|
-  r.spec_files = FileList['spec/*_spec.rb']
-  r.spec_opts = ['--color']
+  Spec::Rake::SpecTask.new(:spec) do |r|
+    r.spec_files = FileList['spec/*_spec.rb']
+    r.spec_opts = ['--color']
+  end
 end
 
 
