@@ -22,12 +22,12 @@ Feature: Page
     Then I should see "Ginatra"
     And I should see "Test"
     And I should see "Please edit the .git/description file for this repository and set the description for it."
-    And I should see "Commit eefb4c3"                                                                       
-    And I should see "doh, thanks lenary for reminding me of the files i'd forgotten"                       
-  Scenario:                                                                                                 
-    When I open '/test/tree/24f701fd'                                                                       
-    Then I should see "Ginatra"                                                                             
-    And I should see "Test"                                                                                 
+    And I should see "Commit eefb4c3"
+    And I should see "doh, thanks lenary for reminding me of the files i'd forgotten"
+  Scenario:
+    When I open '/test/tree/24f701fd'
+    Then I should see "Ginatra" 
+    And I should see "Test"
     And I should see "Please edit the .git/description file for this repository and set the description for it."
     And I should see "Tree"
     And I should see "README.md"
