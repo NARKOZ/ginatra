@@ -67,7 +67,7 @@ module Ginatra
           @repo_list << Ginatra::Repo.new(e.gsub(/\.git$/, ''))
         end
       end
-      return @repo_list
+      @repo_list
     end
 
     def each
@@ -77,12 +77,9 @@ module Ginatra
     end
 
     def include?(object)
-      @repo_list.each do |r|
-        if r == object
-          return true
-        end
+      @repo_list.any? do |r|
+        r == object
       end
-      return false
     end
   end
 
@@ -95,8 +92,8 @@ module Ginatra
       @repo = Grit::Repo.new("#{Sinatra::Application.git_dir}/#{path}.git/")
       @name = path.capitalize
       @param = path
-      @description = @repo.description
-      return @repo
+      @description = "Please edit the .git/description file for this repository and set the description for this project." if /^Unnamed repository;/.match(@repo.description)
+      @repo
     end
 
     def commits(num=10)
@@ -150,7 +147,7 @@ module Ginatra
         end
       end
       out += "</ul>"
-      return out
+      out
     end
 
     def diff_highlight(text)
