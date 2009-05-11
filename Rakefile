@@ -15,6 +15,16 @@ Spec::Rake::SpecTask.new(:spec) do |r|
   r.spec_opts = ['--color']
 end
 
-task :default => [:current]
+
+namespace :submodules do
+  task :init do
+    puts "Submodules INIT"
+    `git submodule init 2>&1`
+  end
+  task :update do
+    puts "Submodules UPDATE"
+    puts `git submodule update 2>&1`
+  end
+end
 
 
