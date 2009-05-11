@@ -1,0 +1,12 @@
+<h3>Repositories</h3>
+<div class="active repo-list">
+  <div class="commit-info">
+    <%= Sinatra::Application.description %>
+  </div>
+  <dl>
+    <% @repo_list.each do |repo| %>
+      <dt><a href="/<%= repo.param %>"><%= repo.name %></a></dt>
+      <dd><%= repo.description %></dd>
+    <% end %>
+  </dl>
+</div>

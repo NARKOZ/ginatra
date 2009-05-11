@@ -1,0 +1,18 @@
+<%= partial(:header, :locals => {:repo => @repo}) %>
+<h3>Commit <%= @commit.id %></h3>
+<div class="active">
+  <div class="commit">
+    <%= partial(:commit_info_box, 
+                :locals => { :repo => @repo, 
+                             :commit => @commit }) %>
+    <%= actor_boxes @commit %>
+  </div>
+  <div class="commit-message"><%= @commit.message.split("\n").join("<br />") %></div>
+    <%= file_listing(@commit) %>
+  <div class="commit-diff">
+    <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>
+      <h4><img src="/img/doc.png" /><%= diff.b_path %></h4>
+      <div class="CodeRay"><%= diff_highlight( diff.diff ) %></div>
+    <% end %>
+  </div>
+</div>

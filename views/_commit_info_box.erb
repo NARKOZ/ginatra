@@ -1,0 +1,30 @@
+<div class='commit-info'>
+  <table cellspacing=0>
+    <tr>
+      <td>commit:</td>
+      <td>
+        <a href='/<%= repo.param %>/commit/<%= commit.id_abbrev %>'>
+          <%= commit.id %>
+        </a>
+       </td>
+    </tr>
+    <tr>
+      <td>tree:</td>
+      <td>
+        <a href='/<%= repo.param %>/tree/<%= commit.tree.id[0..7] %>'>
+          <%= commit.tree.id %>
+        </a>
+      </td>
+    </tr>
+    <% commit.parents.each do |parent| %>
+      <tr>
+        <td>parent:</td>
+        <td>
+          <a href='/<%= repo.param %>/commit/<%= parent.id_abbrev %>'>
+            <%= parent.id %>
+          </a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

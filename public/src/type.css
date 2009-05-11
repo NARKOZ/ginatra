@@ -1,0 +1,27 @@
+body {
+  font-size: 16px;
+	line-height: 1.5em; /* 24px */
+	color: #333;
+	font-family: "helvetica" serif;
+}
+h1{
+	font-size: 3em;     /* 48px */
+	line-height: 1.5em; /* 72px */
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #333;
+	padding: 0 16px;
+}
+h2 {
+	font-size: 2.25em; /* 36px */
+	line-height: 1.33em; /* 48px */
+	padding: 0 8px;
+	font-weight: bold;
+	color: #333;
+	float: left;
+}
+h3{
+	font-size: 1.5em; /* 24px */
+	line-height: 2em; /* 48px */	
+	padding: 0 8px;
+}

@@ -1,0 +1,25 @@
+<%= partial(:header, :locals => {:repo => @repo}) %>
+<h3>Commits</h3>
+<div class="active">
+  <% if @repo.commits %>
+    <table cellpadding="0" class="commit-log">
+      <% for commit in @repo.commits %>
+        <tr>
+          <td rowspan="3"></td>
+          <td class="date"><%= nicetime(commit.committed_date) %></td>
+          <td class="id"><a href="<%= params[:repo] %>/commit/<%= commit.id_abbrev %>"><%= commit.id %></a></td>
+          <td rowspan="3"></td>
+        </tr>
+        <tr>
+          <td class="author" colspan="2">
+            <a href="mailto:<%= commit.author.email %>">
+              <%= commit.author.name %></a> <span class="quiet">(author)</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="mesg" colspan="2"><%= commit.short_message %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>

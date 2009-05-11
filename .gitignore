@@ -1,0 +1,4 @@
+repos/*
+public/*.esproj
+tmp/*
+.DS_Store

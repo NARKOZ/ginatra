@@ -1,0 +1,2 @@
+*.doc diff=doc
+*.png diff=exif
