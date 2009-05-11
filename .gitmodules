@@ -1,0 +1,3 @@
+[submodule "sinatra"]
+	path = sinatra
+	url = git://github.com/sinatra/sinatra.git

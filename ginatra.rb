@@ -1,14 +1,13 @@
 require "rubygems"
-require "sinatra"
+require "sinatra/lib/sinatra"
 require "grit"
 gem "coderay"
 require "coderay"
 
 configure do
-  set :views, "#{File.dirname(__FILE__)}/views"
   set :git_dir, "#{File.dirname(__FILE__)}/repos"
   set :description, "View My Rusty Git Repositories"
-  layout :layout
+  set :layout, :layout
 end
 
 # stolen from rails

@@ -15,6 +15,8 @@ Feature: Page
     And I should see "Test"
     And I should see "Unnamed repository; edit this file 'description' to name the repository."
     And I should see "Commits"
+    And I should see "(author)"
+    And Save and View
   Scenario:
     When I open '/test/commit/eefb4c3'
     Then I should see "Ginatra"

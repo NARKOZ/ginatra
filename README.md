@@ -60,11 +60,12 @@ Authors & Thanks
 
 **Thanks**
 
-- (tekkub) - For help with Grit
-- (schacon) - For help with Grit
-- Conrad Irwin (cirwin) - For moral support and design help
-- #git - for any other problems I had
+- tekkub - For help with Grit
+- schacon - For help with Grit
+- cirwin - For moral support and design help
+- irc://irc.freenode.net/git - for any other problems I had
 - Picol Project (http://picol.org) - for the icons
+- sr - For help with a large sinatra error
 
 Screenshots
 -----------
