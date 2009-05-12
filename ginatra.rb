@@ -7,79 +7,49 @@ require "coderay"
 configure do
   set :git_dir, "#{File.dirname(__FILE__)}/repos"
   set :description, "View My Rusty Git Repositories"
-  set :layout, :layout
-end
-
-# stolen from rails
-class Array
-
-  def extract_options!
-    last.is_a?(::Hash) ? pop : {}
-  end
-end
-
-# stolen from http://ozmm.org/posts/try.html
-class Object
-  ##
-  #   @person ? @person.name : nil
-  # vs
-  #   @person.try(:name)
-  def try(method)
-    send method if respond_to? method
-  end
 end
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
-module Sinatra
-  module Partials
-
-    def partial(template, *args)
-      options = args.extract_options!
-      options.merge!(:layout => false)
-      if collection = options.delete(:collection) then
-        collection.inject([]) do |buffer, member|
-          buffer << erb(template, options.merge(:layout =>
-          false, :locals => {template.to_sym => member}))
+module Sinatra::Partials
+  def partial(template, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    options.merge!(:layout => false)
+    if collection = options.delete(:collection) then
+      collection.inject([]) do |buffer, member|
+        buffer << erb(template, options.merge(:layout =>
+        false, :locals => {template.to_sym => member}))
       end.join("\n")
-      else
-        erb(:"_#{template}", options)
-      end
+    else
+      erb(:"_#{template}", options)
     end
   end
 end
 
-module Grit
-  class Tree
-    alias :find :/
-  end
+class Grit::Tree
+  alias :find :/
 end
 
 # Written myself. i know, what the hell?!
 module Ginatra
-  
+
   # Convenience class for me!
   class RepoList
+    
+    # Files not to include in the repository list
+    IGNORED_FILES = ['.', '..', 'README.md']
 
     def initialize
-      @repo_list = []
-      Dir.entries(Sinatra::Application.git_dir).each do |e|
-        unless e == '.' || e == '..' || e == 'README.md'
-          @repo_list << Ginatra::Repo.new(e.gsub(/\.git$/, ''))
-        end
-      end
-      @repo_list
+      @repo_list = Dir.entries(Sinatra::Application.git_dir)
+      @repo_list.delete_if{|e| IGNORED_FILES.include? e }
+      @repo_list.map!{|e| Ginatra::Repo.new(e.gsub(/\.git$/, ''))} 
     end
 
-    def each
-      @repo_list.each do |r|
-        yield(r)
-      end
+    def each(*a, &b)
+      @repo_list.each *a, &b
     end
 
-    def include?(object)
-      @repo_list.any? do |r|
-        r == object
-      end
+    def include?(*a, &b)
+      @repo_list.include? *a, &b
     end
   end
 
@@ -101,19 +71,19 @@ module Ginatra
     end
 
     def find_commit(short_id)
-      commits(10000).select{|item| item.id =~ /^#{Regexp.escape(short_id)}/ }.first
+      commits(10000).find{|item| item.id =~ /^#{Regexp.escape(short_id)}/ }
     end
 
     def find_commit_by_tree(short_id)
-      commits(10000).select{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }.first
+      commits(10000).find{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }
     end
   end
 
   # Actually useful stuff
   module Helpers
+    require "digest/md5"
 
     def gravatar_url(email)
-      require "digest/md5"
       "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=40"
     end
 
@@ -136,18 +106,15 @@ module Ginatra
     # The only reason this doesn't work 100% of the time is because grit doesn't :/
     # if i find a fix, it'll go upstream :D
     def file_listing(commit)
-      out = "<ul class='commit-files'>"
-      commit.diffs.each do |diff|
-        if diff.new_file
-          out += "<li class=\"add\">#{diff.b_path}</li>"
-        elsif diff.deleted_file
-          out += "<li class=\"rm\">#{diff.a_path}</li>"
+      out = commit.diffs.map do |diff|
+        if diff.deleted_file
+          %(<li class='rm'>#{diff.a_path}</li>)
         else
-          out += "<li class=\"diff\">#{diff.b_path}</li>"
+          cla = diff.new_file ? "add" : "diff"
+          %(<li class='#{cla}'>#{diff.a_path}</li>)
         end
       end
-      out += "</ul>"
-      out
+      "<ul class='commit-files'>#{out.join}</ul>"
     end
 
     def diff_highlight(text)

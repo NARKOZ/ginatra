@@ -1,4 +1,4 @@
-<li class="tree"><a href="#"><%= current_tree.try(:basename) %></a>
+<li class="tree"><a href="#"><%= current_tree.basename %></a>
   <ul>
     <% current_tree.trees.each do |next_tree| %>
       <%= partial(:tree_part, :locals => {:current_tree => next_tree}) %>
