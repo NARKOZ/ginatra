@@ -38,14 +38,12 @@ If you're just using it in development, use the following to run Ginatra:
 
     ruby ginatra.rb
     
-There  are issues  running sinatra  with thin,  but then  there are  also issues
-running it on passenger. The sinatra issues relate to sinatra not being upgraded
-to use rack 1.0, so these should be sorted out soon.
+There are issues running sinatra on passenger. We discourage Ginatra's use on passenger until we can make it stable.
 
 To clone repositories so that Ginatra  can see them, clone the repositories into
 `./repos/` - they will be served  automatically. Use the `--bare` switch to both
 save space and  make sure Ginatra can  read them. If you rename  them, make sure
-the directory ends in `.git'. For Example:
+the directory ends in `.git`. For Example:
 
     cd repos
     git clone --bare git://github.com/lenary/ginatra.git
