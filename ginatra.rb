@@ -5,7 +5,7 @@ gem "coderay"
 require "coderay"
 
 configure do
-  set :git_dir, "#{File.dirname(__FILE__)}/repos"
+  set :git_dir, "./repos"
   set :description, "View My Rusty Git Repositories"
 end
 
@@ -32,6 +32,9 @@ end
 # Written myself. i know, what the hell?!
 module Ginatra
 
+  class Error < StandardError; end
+  class CommitsError < Error; end
+
   # Convenience class for me!
   class RepoList
     
@@ -39,17 +42,18 @@ module Ginatra
     IGNORED_FILES = ['.', '..', 'README.md']
 
     def initialize
-      @repo_list = Dir.entries(Sinatra::Application.git_dir)
-      @repo_list.delete_if{|e| IGNORED_FILES.include? e }
-      @repo_list.map!{|e| Ginatra::Repo.new(e.gsub(/\.git$/, ''))} 
+      @repo_list = Dir.entries(Sinatra::Application.git_dir).
+                   delete_if{|e| IGNORED_FILES.include? e }.
+                   map!{|e| File.expand_path(e, Sinatra::Application.git_dir) }.
+                   map!{|e| Repo.new(e) }
     end
 
-    def each(*a, &b)
-      @repo_list.each *a, &b
+    def find(local_param)
+      @repo_list.find{|r| r.param == local_param }
     end
 
-    def include?(*a, &b)
-      @repo_list.include? *a, &b
+    def method_missing(sym, *args, &block)
+      @repo_list.send(sym, *args, &block)
     end
   end
 
@@ -59,10 +63,10 @@ module Ginatra
     attr_reader :name, :param, :description
 
     def initialize(path)
-      @repo = Grit::Repo.new("#{Sinatra::Application.git_dir}/#{path}.git/")
-      @name = path.capitalize
-      @param = path
-      @description = "Please edit the .git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
+      @repo = Grit::Repo.new(path)
+      @param = File.split(path).last.gsub(/\.git$/, '')
+      @name = @param.capitalize
+      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
       @repo
     end
 
@@ -76,6 +80,10 @@ module Ginatra
 
     def find_commit_by_tree(short_id)
       commits(10000).find{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }
+    end
+
+    def method_missing(sym, *args, &block)
+      @repo.send(sym, *args, &block)
     end
   end
 
@@ -129,24 +137,33 @@ helpers do
   include Sinatra::Partials
 end
 
+error Ginatra::CommitsError do
+  'No commits were returned for ' + request.uri
+end
+
 get '/' do
   @repo_list = Ginatra::RepoList.new
   erb :index
 end
 
 get '/:repo' do
-  @repo = Ginatra::Repo.new(params[:repo])
+  @repo_list = Ginatra::RepoList.new
+  @repo = @repo_list.find(params[:repo])
+  @commits = @repo.commits
+  raise Ginatra::CommitsError if @commits.empty?
   erb :log
 end
 
 get '/:repo/commit/:commit' do
-  @repo = Ginatra::Repo.new(params[:repo])
+  @repo_list = Ginatra::RepoList.new
+  @repo = @repo_list.find(params[:repo])
   @commit = @repo.find_commit(params[:commit])
   erb :commit
 end
 
 get '/:repo/tree/:tree' do
-  @repo = Ginatra::Repo.new(params[:repo])
+  @repo_list = Ginatra::RepoList.new
+  @repo = @repo_list.find(params[:repo])
   @commit = @repo.find_commit_by_tree(params[:tree])
   @tree = @commit.tree
   erb :tree
