@@ -7,6 +7,7 @@ require "coderay"
 configure do
   set :git_dir, "./repos"
   set :description, "View My Rusty Git Repositories"
+  set :git_dirs, ["./repos/*.git"]
 end
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
@@ -57,6 +58,19 @@ module Ginatra
     end
   end
 
+  class MultiRepoList < RepoList
+    def initialize
+      @repo_list = []
+      Sinatra::Application.git_dirs.each do |git_dir|
+        @repo_list << Dir.glob(git_dir).
+                          delete_if{|e| IGNORED_FILES.include? e }.
+                          map{|e| File.expand_path(e) }
+      end
+      @repo_list.flatten!
+      @repo_list.map!{|e| MultiRepo.new(e) }
+    end
+  end
+
   # Convenience class for me!
   class Repo
 
@@ -84,6 +98,24 @@ module Ginatra
 
     def method_missing(sym, *args, &block)
       @repo.send(sym, *args, &block)
+    end
+  end
+
+  class MultiRepo < Repo
+
+    attr_reader :name, :param, :description
+
+    def initialize(path)
+      @repo = Grit::Repo.new(path)
+      @param = File.split(path).last.gsub(/\.git$/, '')
+      @name = @param.capitalize
+      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
+      @repo
+    end
+
+    def self.create!(param)
+      @repo_list = MultiRepoList.new
+      @repo = @repo_list.find{|r| r.param =~ /^#{Regexp.escape param }$/}
     end
   end
 
