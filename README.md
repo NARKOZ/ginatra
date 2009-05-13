@@ -16,38 +16,45 @@ You should be using Git 1.6.3 or later just to be sure that it all works:
 
 You'll need a few gems just to serve git repositories:
 
-    (sudo) gem install sinatra grit coderay
+    $ (sudo) gem install grit coderay
 
 To run the test suite, you also need:
 
-    (sudo) gem install rspec webrat rack-test cucumber 
+    $ (sudo) gem install rspec webrat rack-test cucumber
+
+To do both these steps more quickly, run the following rake tasks:
+
+    $ rake setup:gems
+    $ rake setup:test
     
 Then clone this repository:
 
-    git clone git://github.com/lenary/ginatra.git
+    $ git clone git://github.com/lenary/ginatra.git
     
 You'll  also need  to  (`--bare`) clone  `atmos/hancock-client`  into the  repos
 directory and call it test: (don't ask, it was just a repo i chose at random)
 
-    cd repos && git clone --bare git://github.com/atmos/hancock-client.git test.git
+    $ cd repos && git clone --bare git://github.com/atmos/hancock-client.git test.git
+
+This can be done much quicker by doing the following rake task
+
+    $ rake setup:repo
     
 Usage
 -----
         
 If you're just using it in development, use the following to run Ginatra:
 
-    ruby ginatra.rb
+    $ ruby ginatra.rb
     
-There are issues running sinatra on passenger. We discourage Ginatra's use on passenger until we can make it stable.
+Ginatra  also runs  on thin.  **BEWARE:** There  are issues  running Ginatra  on
+Passenger. We discourage Ginatra's use on Passenger until we can make it stable.
 
-To clone repositories so that Ginatra  can see them, clone the repositories into
-`./repos/` - they will be served  automatically. Use the `--bare` switch to both
-save space and  make sure Ginatra can  read them. If you rename  them, make sure
-the directory ends in `.git`. For Example:
+I have made a rake task so that  you can easily add repositories to Ginatra. Use
+the following to add repositories to Ginatra, without fear of getting it wrong:
 
-    cd repos
-    git clone --bare git://github.com/lenary/ginatra.git
-    git clone --bare git://github.com/mojombo/grit.git fun.git
+    $ rake add repo='git://github.com/lenary/ginatra.git'
+    $ rake add repo='git://github.com/mojombo/grit.git' name='fun'
 
 Authors & Thanks
 ----------------
@@ -55,6 +62,7 @@ Authors & Thanks
 **Authors:**
 
 - Samuel Elliott (lenary)
+- Ryan Bigg (radar)
 
 **Thanks**
 
@@ -64,6 +72,7 @@ Authors & Thanks
 - irc://irc.freenode.net/git - for any other problems I had
 - Picol Project (http://picol.org) - for the icons
 - sr - For help with a large sinatra error
+- raggi - For a refactor and several feature suggestions
 
 Screenshots
 -----------
