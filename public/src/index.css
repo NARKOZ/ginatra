@@ -2,6 +2,7 @@
 @import url("type.css");
 @import url("table.css");
 @import url("commit.css");
+@import url("colour.css");
 
 html {
 	height: 100%;
@@ -10,8 +11,6 @@ body {
 	height: 100%;
 	font-size: 16px;
 	line-height: 1.5em;
-	background: #ccc;
-	color: #444;
 }
 #content {
 	min-height: 100%;
@@ -33,15 +32,16 @@ body {
 	width: auto;
 	margin: 0 3ex;
 	padding: 1ex 1ex 0 1ex;
-	border-top: 1px solid #eee;
-	background: #eee;
 	-webkit-border-top-left-radius: 2px;
 	-webkit-border-top-right-radius: 2px;
 	-moz-border-radius-topleft: 2px;
 	-moz-border-radius-topright: 2px;
 }
+h1 {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
 h3{
-	background: #eee;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-bottom-left-radius: 0;
@@ -53,49 +53,22 @@ h3{
 	width: auto;
 }
 div.active{
-  border-top: 3px solid #555;
 	-webkit-border-bottom-left-radius: 5px;
 	-webkit-border-bottom-right-radius: 5px;
 	-moz-border-radius-bottomleft: 5px;
 	-moz-border-radius-bottomright: 5px;
-	background: #aaa;
 	padding: 0 1ex 0.5ex;
 	margin: 0 0 1ex;
 	clear: both;
 	width: auto;
 }
-.message {
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	margin: 3px 0;
-	padding: 5px 40px 5px;
-}
-.excl {
-	background: rgb(255, 255, 204) url('../img/excl.png') no-repeat 3px center;
-	border: 1px solid rgb(255, 250, 120);
-}
-.info {
-	background: rgb(187, 187, 255) url('../img/info.png') no-repeat 3px center;
-	border: 1px solid rgb(120, 120, 255);
-}
-.error {
-	background: rgb(255, 221, 221) url('../img/error.png') no-repeat 3px center;
-	border: 1px solid rgb(255, 187, 187);
-}
-a {
-	color: #444;
-	text-decoration: none;
-}
-a:visited {
-	color: #666;
-}
-a:hover, a:active{
-	color: #444;
-	text-decoration: underline;
-}
-.quiet {
-	color: #888;
-}
+a              {	text-decoration: none; }
+dt a,
+table a,
+.commit-tree a {	text-decoration: underline; }
+a:visited      { }
+a:hover, 
+a:active       { text-decoration: underline; }
 .clearfix{
   height:1px;
   width:1px;

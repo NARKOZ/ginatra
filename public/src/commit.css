@@ -8,17 +8,16 @@
 .commit-message {
 	padding-right: 3.75em;
 }
-.commit-info, 
+.commit-info,
+.ginatra-info, 
 .commit-author, 
 .commit-committer,
 .repo-info,
 .short-commit-message {
-	border: 1px solid #555;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	margin: 1ex 0;
 	padding: 1ex;
-	background: #ccc;
 	font-size: 12px;
 }
 .commit-author img, 
@@ -27,7 +26,6 @@
   margin: 1.5ex 0 0 0;
 	width:  40px;
 	height: 40px;
-	border: 1px solid #000;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 }
@@ -76,8 +74,6 @@
 	line-height: 14px;
 	margin: 0 0 1ex;
 	padding: 2ex;
-	background: #ccc;
-	border: 1px solid #555;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	clear: both;
@@ -88,16 +84,13 @@
 	margin-left: 2em;
 }
 .commit-tree {
-  clear:left;
+  clear:both;
 	padding: 0 1ex;
 	margin: 1ex 0;
 	font-size: 14px;
 	line-height: 1.5em;
-	background: #ccc;
-	border: 1px solid #555;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	margin-right: 26em;
 }
 .commit-tree li {
 	padding-left:18px;
@@ -105,54 +98,46 @@
 .short-commit-message {
 	float: left;
 }
-.commit-tree .tree {
-  background: url('../img/tree.png') no-repeat top left;
-}
-.commit-tree .blob {
-  background: url('../img/doc.png') no-repeat top left;
-}
 .commit-diff h4{
   font-weight:bold;
   font-size:1.5em;
   line-height:1.5em;
-  background:#bbb;
-  width:53.45em;
+  width:53.35em;
+  margin-top: 0.5em;
+  -webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
 }
 h4 img{
   padding:0 4px;
 }
 .diff {
-  background:url('../../img/diff.png') no-repeat center left;
   padding-left:18px;
 }
 .add {
-  color: #080;
-  background:url('../../img/add.png') no-repeat center left;
   padding-left:18px;
 }
 .rm {
-  color: #800;
-  background:url('../../img/rm.png') no-repeat center left;
   padding-left:18px;
 }
 /* Coderay Stuff !*/
 .CodeRay {
   font-family: 'Courier New', 'Terminal', monospace;
-  border:1px solid #555;
   width:80em;
   overflow-x:auto;
 }
-.CodeRay .c  { color: #666; display:block; white-space: pre; }
-.CodeRay .ins { color: #080; display:block; white-space: pre; }
-.CodeRay .del { color: #800; display:block; white-space: pre; }
-.CodeRay .chg { color: #00f; display:block; white-space: pre; }
-.CodeRay .head { color: #000; display:none; }
+.CodeRay .c    { display:block; white-space: pre; }
+.CodeRay .ins  { display:block; white-space: pre; }
+.CodeRay .del  { display:block; white-space: pre; }
+.CodeRay .chg  { display:block; white-space: pre; }
+.CodeRay .head { display:none; }
 .CodeRay .ins .ins, 
 .CodeRay .del .del { font-weight:bold; display:inline; white-space: auto; }
-.CodeRay .chg .chg { color: #66f;      display:inline; white-space: auto; }
-.CodeRay .c:before { content:"  ";     display:inline; white-space: auto; }
+.CodeRay .chg .chg {                   display:inline; white-space: auto; }
+.CodeRay .c:before, 
+.before-c          { content:"  ";     display:inline; white-space: auto; }
 .CodeRay .ins .ins:after, 
 .CodeRay .ins .ins:before, 
 .CodeRay .del .del:after, 
 .CodeRay .del .del:before,
-.CodeRay .chg .chg:before { content:" "; display:inline; white-space: auto; }
+.CodeRay .chg .chg:before,
+.before-line        { content:" "; display:inline; white-space: auto; }

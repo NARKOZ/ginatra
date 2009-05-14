@@ -4,14 +4,8 @@ table{
 td, th{
  padding: 0 1ex;
 }
-td{
-	border-top: 1px solid #000;
-	background: #ccc;
-}
-th{
-	background: #666;
-	color: #eee;
-}
+td{}
+th{}
 th:first-child{
 	-webkit-border-top-left-radius: 2px;
 	-moz-border-radius-topleft: 2px;
@@ -22,15 +16,13 @@ th:last-child{
 }
 dl {
   margin: 1ex 0;
-  background: #ccc;
 }
 dt {
   padding: 0 1ex;
 	font-weight: bold;
 	display: block;
-	border-top: 1px solid #000;
 }
-.repo-list dl dt:first-child{
+.repo-list dl dt:first-child {
 	border-top: none;
 }
 dd {

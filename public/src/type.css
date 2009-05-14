@@ -1,7 +1,6 @@
 body {
   font-size: 16px;
 	line-height: 1.5em; /* 24px */
-	color: #333;
 	font-family: "helvetica" serif;
 }
 h1{
@@ -9,7 +8,6 @@ h1{
 	line-height: 1.5em; /* 72px */
 	font-weight: bold;
 	font-variant: small-caps;
-	color: #333;
 	padding: 0 16px;
 }
 h2 {
@@ -17,7 +15,6 @@ h2 {
 	line-height: 1.33em; /* 48px */
 	padding: 0 8px;
 	font-weight: bold;
-	color: #333;
 	float: left;
 }
 h3{
