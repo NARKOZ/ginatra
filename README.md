@@ -77,21 +77,21 @@ Authors & Thanks
 Screenshots
 -----------
 
-![Ginatra Index](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYuRcM&w=500&h=500 "Ginatra Index")
-
 **Index**
 
-![Ginatra Log](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYuhcM&w=500&h=500 "Ginatra Log")
+![Ginatra Index](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYox8M&w=500&h=500 "Ginatra Index")
 
 **Log**
 
-![Ginatra Commit](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYuxcM&w=500&h=500 "Ginatra Commit")
+![Ginatra Log](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYvRcM&w=500&h=500 "Ginatra Log")
 
 **Commit**
 
-![Ginatra Tree](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYuxcM&w=500&h=500 "Ginatra Tree")
+![Ginatra Commit](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYvBcM&w=500&h=500 "Ginatra Commit")
 
 **Tree**
+
+![Ginatra Tree](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYpB8M&w=500&h=500 "Ginatra Tree")
 
 Licence
 -------
