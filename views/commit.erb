@@ -7,7 +7,7 @@
                              :commit => @commit }) %>
     <%= actor_boxes @commit %>
   </div>
-  <div class="commit-message"><%= @commit.message.split("\n").join("<br />") %></div>
+  <div class="commit-message"><%=simple_format @commit.message %></div>
     <%= file_listing(@commit) %>
   <div class="commit-diff">
     <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>

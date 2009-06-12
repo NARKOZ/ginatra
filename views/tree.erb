@@ -6,7 +6,7 @@
                 :locals => { :repo => @repo, 
                              :commit => @commit }) %>
   </div>
-  <div class="commit-message"><%= @commit.message %></div>
+  <div class="commit-message"><%=simple_format @commit.message %></div>
   <ul class="commit-tree">
     <% @tree.trees.each do |tree| %>
       <li class="tree"><a href="#"><%= tree.basename %></a>

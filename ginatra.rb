@@ -152,6 +152,16 @@ module Ginatra
     def diff_highlight(text)
       CodeRay.scan(text, :diff).html
     end
+
+    # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
+    #   and simplified to just use <p> tags without any options
+    def simple_format(text)
+      text.gsub!(/\r\n?/, "\n")                    # \r\n and \r -> \n
+      text.gsub!(/\n\n+/, "</p>\n\n<p>")           # 2+ newline  -> paragraph
+      text.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') # 1 newline   -> br
+      text.insert 0, "<p>"
+      text << "</p>"
+    end
   end
 
 end

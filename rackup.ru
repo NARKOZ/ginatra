@@ -1,4 +1,4 @@
-require 'sinatra/lib/sinatra.rb'
+require 'sinatra'
 require 'rubygems'
  
 set :run, false
