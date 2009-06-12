@@ -1,5 +1,5 @@
 require "rubygems"
-require "sinatra/lib/sinatra"
+require "sinatra"
 require "grit"
 gem "coderay"
 require "coderay"
@@ -8,6 +8,7 @@ configure do
   set :git_dir, "./repos"
   set :description, "View My Rusty Git Repositories"
   set :git_dirs, ["./repos/*.git"]
+  set :ignored_files, ['.', '..', 'README.md']
 end
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
@@ -38,13 +39,10 @@ module Ginatra
 
   # Convenience class for me!
   class RepoList
-    
-    # Files not to include in the repository list
-    IGNORED_FILES = ['.', '..', 'README.md']
 
     def initialize
       @repo_list = Dir.entries(Sinatra::Application.git_dir).
-                   delete_if{|e| IGNORED_FILES.include? e }.
+                   delete_if{|e| Sinatra::Application.ignored_files.include? e }.
                    map!{|e| File.expand_path(e, Sinatra::Application.git_dir) }.
                    map!{|e| Repo.new(e) }
     end
@@ -63,7 +61,7 @@ module Ginatra
       @repo_list = []
       Sinatra::Application.git_dirs.each do |git_dir|
         @repo_list << Dir.glob(git_dir).
-                          delete_if{|e| IGNORED_FILES.include? e }.
+                          delete_if{|e| Sinatra::Application.ignored_files.include? e }.
                           map{|e| File.expand_path(e) }
       end
       @repo_list.flatten!
@@ -104,14 +102,6 @@ module Ginatra
   class MultiRepo < Repo
 
     attr_reader :name, :param, :description
-
-    def initialize(path)
-      @repo = Grit::Repo.new(path)
-      @param = File.split(path).last.gsub(/\.git$/, '')
-      @name = @param.capitalize
-      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
-      @repo
-    end
 
     def self.create!(param)
       @repo_list = MultiRepoList.new
@@ -173,13 +163,15 @@ error Ginatra::CommitsError do
   'No commits were returned for ' + request.uri
 end
 
+before do
+  @repo_list ||= Ginatra::RepoList.new
+end
+
 get '/' do
-  @repo_list = Ginatra::RepoList.new
   erb :index
 end
 
 get '/:repo' do
-  @repo_list = Ginatra::RepoList.new
   @repo = @repo_list.find(params[:repo])
   @commits = @repo.commits
   raise Ginatra::CommitsError if @commits.empty?
@@ -187,14 +179,12 @@ get '/:repo' do
 end
 
 get '/:repo/commit/:commit' do
-  @repo_list = Ginatra::RepoList.new
   @repo = @repo_list.find(params[:repo])
   @commit = @repo.find_commit(params[:commit])
   erb :commit
 end
 
 get '/:repo/tree/:tree' do
-  @repo_list = Ginatra::RepoList.new
   @repo = @repo_list.find(params[:repo])
   @commit = @repo.find_commit_by_tree(params[:tree])
   @tree = @commit.tree
