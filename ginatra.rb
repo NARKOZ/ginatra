@@ -175,7 +175,7 @@ error Ginatra::CommitsError do
   'No commits were returned for ' + request.uri
 end
 
-before do
+Sinatra::Application.before do # fixes cucumber compatibility issues
   @repo_list ||= Ginatra::RepoList.new
 end
 
