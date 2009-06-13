@@ -84,18 +84,6 @@ module Ginatra
       @repo
     end
 
-    def commits(num=10)
-      @repo.commits('master', num)
-    end
-
-    def find_commit(short_id)
-      commits(10000).find{|item| item.id =~ /^#{Regexp.escape(short_id)}/ }
-    end
-
-    def find_commit_by_tree(short_id)
-      commits(10000).find{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }
-    end
-
     def method_missing(sym, *args, &block)
       @repo.send(sym, *args, &block)
     end
@@ -190,15 +178,21 @@ get '/:repo' do
   erb :log
 end
 
+get '/:repo/:ref' do
+  @repo = @repo_list.find(params[:repo])
+  @commits = @repo.commits(params[:ref])
+  raise Ginatra::CommitsError if @commits.empty?
+  erb :log
+end
+
 get '/:repo/commit/:commit' do
   @repo = @repo_list.find(params[:repo])
-  @commit = @repo.find_commit(params[:commit])
+  @commit = @repo.commit(params[:commit]) # can also be a ref
   erb :commit
 end
 
 get '/:repo/tree/:tree' do
   @repo = @repo_list.find(params[:repo])
-  @commit = @repo.find_commit_by_tree(params[:tree])
-  @tree = @commit.tree
+  @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
   erb :tree
 end
