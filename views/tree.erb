@@ -13,16 +13,16 @@
         <ul>
           <% tree.trees.each do |next_tree| %>
             <%= partial(:tree_part, :locals => {:current_tree => next_tree }) %>
-          <% end unless tree.trees.empty? %>
+          <% end %>
           <% tree.blobs.each do |next_blob| %>
             <li class="blob"><%= next_blob.basename %></li>
-          <% end unless tree.blobs.empty? %>
+          <% end %>
         </ul>
       </li>
-    <% end unless @tree.trees.empty? %>
+    <% end %>
     <% @tree.blobs.each do |blob| %>
       <li class="blob"><%= blob.basename %></li>
-    <% end unless @tree.blobs.empty? %>
+    <% end %>
   </ul>
   <div class="clearfix">&nbsp;</div>
 </div>
