@@ -1,8 +1,6 @@
 require "rubygems"
 require "sinatra"
 require "grit"
-gem "coderay"
-require "coderay"
 
 configure do
   set :git_dir, "./repos"
@@ -27,10 +25,6 @@ module Sinatra::Partials
       erb(:"#{template}", options)
     end
   end
-end
-
-class Grit::Tree
-  alias :find :/
 end
 
 # Written myself. i know, what the hell?!
@@ -137,10 +131,6 @@ module Ginatra
       "<ul class='commit-files'>#{out.join}</ul>"
     end
 
-    def diff_highlight(text)
-      CodeRay.scan(text, :diff).html
-    end
-
     # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
     #   and simplified to just use <p> tags without any options
     def simple_format(text)
@@ -194,5 +184,41 @@ end
 get '/:repo/tree/:tree' do
   @repo = @repo_list.find(params[:repo])
   @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
+  @path = {}
+  @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
+  @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
   erb :tree
+end
+
+get '/:repo/tree/:tree/*' do # for when we specify a path
+  @repo = @repo_list.find(params[:repo])
+  @tree = @repo.tree(params[:tree])/params[:splat].first # can also be a ref (i think)
+  if @tree.is_a?(Grit::Blob)
+    # we need @tree to be a tree. if it's a blob, send it to the blob page
+    # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
+    redirect "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+  else
+    @path = {}
+    @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+    @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+    erb :tree
+  end
+end
+
+get '/:repo/blob/:blob' do
+  @repo = @repo_list.find(params[:repo])
+  @blob = @repo.blob(params[:blob])
+  erb :blob
+end
+
+get '/:repo/blob/:tree/*' do
+  @repo = @repo_list.find(params[:repo])
+  @blob = @repo.tree(params[:tree])/params[:splat].first
+  if @blob.is_a?(Grit::Tree)
+    # as above, we need @blob to be a blob. if it's a tree, send it to the tree page
+    # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
+    redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+  else
+    erb :blob
+  end
 end

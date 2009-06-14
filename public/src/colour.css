@@ -47,7 +47,8 @@ td, dt {
 .commit-committer,
 .short-commit-message,
 .commit-tree,
-.commit-diff {
+.commit-diff,
+div.blob {
 	background: #E6E6F2;
 }
 .commit-author img, 
@@ -60,25 +61,19 @@ td, dt {
 .commit-tree .blob {
   background: url('../img/doc.png') no-repeat top left;
 }
-.commit-diff h4{
+.commit-diff h4,
+div.blob h4 {
   background: #e7e7e7;
 }
-.diff {
+li.diff {
   background: url('../../img/diff.png') no-repeat center left;
 }
-.add {
+li.add {
   color: #080;
   background: url('../../img/add.png') no-repeat center left;
 }
-.rm {
+li.rm {
   color: #800;
   background: url('../../img/rm.png') no-repeat center left;
 }
-.CodeRay { background: #f3f3f3; }
-
-.CodeRay .c        { color: #333; }
-.CodeRay .ins      { color: #0b0; }
-.CodeRay .del      { color: #b00; }
-.CodeRay .chg      { color: #00f; }
-.CodeRay .chg .chg { color: #66f; }
 /* End Commit Colours */

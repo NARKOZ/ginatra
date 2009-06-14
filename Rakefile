@@ -60,7 +60,7 @@ namespace :setup do
 
   desc "Installs the Required Gems"
   task :gems do |t|
-    gems = %w(grit coderay)
+    gems = %w(grit)
     puts %x(gem install #{gems.join(" ")})
   end
 
