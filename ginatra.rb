@@ -133,13 +133,23 @@ module Ginatra
 
     # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
     #   and simplified to just use <p> tags without any options
+    # modified since
     def simple_format(text)
-      text.gsub!(/\r\n?/, "\n")                    # \r\n and \r -> \n
-      text.gsub!(/\n\n+/, "</p>\n\n<p>")           # 2+ newline  -> paragraph
-      text.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') # 1 newline   -> br
-      text.insert 0, "<p>"
-      text << "</p>"
+      text.gsub!(/ +/, " ")
+      text.gsub!(/\r\n?/, "\n")
+      text.gsub!(/\n/, "<br />\n")
     end
+
+    # stolen from rails: ERB::Util
+    def html_escape(s)
+      s.to_s.gsub(/[&"<>]/) do |special|
+        { '&' => '&amp;',
+          '>' => '&gt;',
+          '<' => '&lt;',
+          '"' => '&quot;' }[special]
+      end
+    end
+    alias :h :html_escape
   end
 
 end

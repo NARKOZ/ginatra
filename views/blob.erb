@@ -3,7 +3,7 @@
 <div class="active">
   <div class="blob">
     <h4><img src="/img/doc.png" /><%= @blob.name %></h4>
-    <pre><code><%= @blob.data %></code></pre>
+    <pre><code><%=h @blob.data %></code></pre>
   </div>
   <div class="clearfix">&nbsp;</div>
 </div>

@@ -12,7 +12,7 @@
   <div class="commit-diff">
     <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>
       <h4><img src="/img/doc.png" /><%= diff.b_path %></h4>
-      <pre><code class="diff"><%= diff.diff %></code></pre>
+      <pre><code class="diff"><%=h diff.diff %></code></pre>
     <% end %>
   </div>
 </div>
