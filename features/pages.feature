@@ -4,7 +4,7 @@ Feature: Page
   I want to see the home page
 
   Scenario:
-    When I go to the homepage
+    When I open '/'
     Then I should see "Ginatra"
     And I should see "View My Rusty Git Repositories"
     And I should see "Test"

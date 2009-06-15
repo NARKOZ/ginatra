@@ -1,7 +1,7 @@
-require 'sinatra'
-require 'rubygems'
- 
-set :run, false
- 
-require 'ginatra.rb'
-run Sinatra::Application
+current_path = File.expand_path(File.dirname(__FILE__))
+
+require "#{current_path}/lib/ginatra"
+
+map '/' do
+  run Ginatra::App
+end

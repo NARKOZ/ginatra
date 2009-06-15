@@ -1,7 +1,9 @@
 require 'rubygems'
 require 'cucumber/rake/task'
 require 'spec/rake/spectask'
-require "ginatra.rb"
+
+current_path = File.expand_path(File.dirname(__FILE__))
+require "#{current_path}/lib/ginatra"
 
 task :default => ['rake:spec', 'rake:features']
 

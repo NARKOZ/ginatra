@@ -7,7 +7,7 @@ describe "Ginatra" do
     before(:each) do
       @ginatra_repolist = Ginatra::RepoList.new
       @ginatra_repo = @ginatra_repolist.find("test")
-      @grit_repo = Grit::Repo.new(File.join(Sinatra::Application.git_dir, "test.git"), {})
+      @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
     end
 
     it "should have a name" do
@@ -32,7 +32,7 @@ describe "Ginatra" do
     end
 
     it "should be the same thing using #find or #new" do
-      Ginatra::RepoList.new.find("test") == Ginatra::Repo.new(File.join(Sinatra::Application.git_dir, "test.git"))
+      Ginatra::RepoList.new.find("test") == Ginatra::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
   end
@@ -59,7 +59,7 @@ describe "Ginatra" do
     before(:each) do
       @ginatra_multirepolist = Ginatra::MultiRepoList.new
       @ginatra_multirepo = @ginatra_multirepolist.find("test")
-      @grit_repo = Grit::Repo.new(File.join(Sinatra::Application.git_dir, "test.git"))
+      @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
     it "should have a name" do
@@ -84,7 +84,7 @@ describe "Ginatra" do
     end
 
     it "should create the same thing using .create! or .new" do
-      Ginatra::MultiRepoList.new.find("test") == Ginatra::MultiRepo.new(File.join(Sinatra::Application.git_dir, "test.git"))
+      Ginatra::MultiRepoList.new.find("test") == Ginatra::MultiRepo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
   end
