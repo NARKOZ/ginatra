@@ -138,6 +138,7 @@ module Ginatra
       text.gsub!(/ +/, " ")
       text.gsub!(/\r\n?/, "\n")
       text.gsub!(/\n/, "<br />\n")
+      text
     end
 
     # stolen from rails: ERB::Util
