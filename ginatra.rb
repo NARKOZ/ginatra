@@ -74,7 +74,8 @@ module Ginatra
       @repo = Grit::Repo.new(path)
       @param = File.split(path).last.gsub(/\.git$/, '')
       @name = @param.capitalize
-      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
+      @description = @repo.description
+      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
       @repo
     end
 
