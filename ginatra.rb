@@ -201,8 +201,22 @@ get '/:repo' do
 end
 
 get '/:repo/:ref' do
+  params[:page] = 1
   @repo = @repo_list.find(params[:repo])
   @commits = @repo.commits(params[:ref])
+  raise Ginatra::CommitsError if @commits.empty?
+  erb :log
+end
+
+get '/:repo/:ref/:page' do
+  params[:page] = params[:page].to_i
+  @repo = @repo_list.find(params[:repo])
+  @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
+  @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
+  if params[:page] - 1 > 0 
+    @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
+  end
+  @separator = @next_commits && @previous_commits
   raise Ginatra::CommitsError if @commits.empty?
   erb :log
 end

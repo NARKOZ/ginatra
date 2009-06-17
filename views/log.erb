@@ -1,5 +1,18 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
 <h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %></h3>
+
+<% if @previous_commits %>
+  <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
+<% end %>
+
+<% if @separator %>
+  |
+<% end %>
+
+<% if @next_commits %>
+  <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
+<% end %>
+
 <div class="active">
     <table cellpadding="0" class="commit-log">
       <% @commits.each do |commit| %>
