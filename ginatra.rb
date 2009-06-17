@@ -2,6 +2,11 @@ require "rubygems"
 require "sinatra"
 require "grit"
 
+# Gem: kematzy-sinatra-cache
+require 'sinatra/cache'
+
+
+
 configure do
   set :git_dir, "./repos"
   set :description, "View My Rusty Git Repositories"
@@ -205,7 +210,7 @@ end
 get '/:repo/commit/:commit' do
   @repo = @repo_list.find(params[:repo])
   @commit = @repo.commit(params[:commit]) # can also be a ref
-  erb :commit
+  cache erb(:commit)
 end
 
 get '/:repo/tree/:tree' do
