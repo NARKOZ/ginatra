@@ -15,7 +15,7 @@
           </td>
         </tr>
         <tr>
-          <td class="mesg" colspan="2"><%= commit.short_message %></td>
+          <td class="mesg" colspan="2"><%= truncate(h(commit.short_message), { :length => 140, :separator => ' '}) %></td>
         </tr>
       <% end %>
     </table>

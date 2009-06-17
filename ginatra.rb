@@ -1,5 +1,5 @@
 require "rubygems"
-require "sinatra/lib/sinatra"
+require "sinatra"
 require "grit"
 gem "coderay"
 require "coderay"
@@ -146,12 +146,14 @@ module Ginatra
     # The only reason this doesn't work 100% of the time is because grit doesn't :/
     # if i find a fix, it'll go upstream :D
     def file_listing(commit)
+      count = 0
       out = commit.diffs.map do |diff|
+        count = count + 1
         if diff.deleted_file
           %(<li class='rm'>#{diff.a_path}</li>)
         else
           cla = diff.new_file ? "add" : "diff"
-          %(<li class='#{cla}'>#{diff.a_path}</li>)
+          %(<li class='#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         end
       end
       "<ul class='commit-files'>#{out.join}</ul>"
@@ -159,6 +161,23 @@ module Ginatra
 
     def diff_highlight(text)
       CodeRay.scan(text, :diff).html
+    end
+    
+    def h(text)
+      text.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
+    end
+    
+    # Stolen and bastardised from rails
+    def truncate(text, options={})
+        options[:length] ||= 30
+        options[:omission] ||= "..."
+
+      if text
+        l = options[:length] - options[:omission].length
+        chars = text
+        stop = options[:separator] ? (chars.rindex(options[:separator], l) || l) : l
+        (chars.length > options[:length] ? chars[0...stop] + options[:omission] : text).to_s
+      end
     end
   end
 

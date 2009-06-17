@@ -7,11 +7,14 @@
                              :commit => @commit }) %>
     <%= actor_boxes @commit %>
   </div>
-  <div class="commit-message"><%= @commit.message.split("\n").join("<br />") %></div>
+  <div class="commit-message"><%= h(@commit.message.split("\n").join("<br />")) %></div>
     <%= file_listing(@commit) %>
   <div class="commit-diff">
+    <% count = 0 %>
     <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>
-      <h4><img src="/img/doc.png" /><%= diff.b_path %></h4>
+    <% count += 1%>
+    
+      <h4><img src="/img/doc.png" /><a name='file_<%= count %>'><%= diff.b_path %></a></h4>
       <div class="CodeRay"><%= diff_highlight( diff.diff ) %></div>
     <% end %>
   </div>
