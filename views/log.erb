@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Commits</h3>
+<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %></h3>
 <div class="active">
     <table cellpadding="0" class="commit-log">
       <% @commits.each do |commit| %>

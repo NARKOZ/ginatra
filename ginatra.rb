@@ -1,33 +1,30 @@
 require "rubygems"
 require "sinatra"
 require "grit"
-gem "coderay"
-require "coderay"
 
 configure do
   set :git_dir, "./repos"
   set :description, "View My Rusty Git Repositories"
   set :git_dirs, ["./repos/*.git"]
+  set :ignored_files, ['.', '..', 'README.md']
 end
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 module Sinatra::Partials
   def partial(template, *args)
+    template_array = template.to_s.split('/')
+    template = template_array[0..-2].join('/') + "/_#{template_array[-1]}"
     options = args.last.is_a?(Hash) ? args.pop : {}
     options.merge!(:layout => false)
     if collection = options.delete(:collection) then
       collection.inject([]) do |buffer, member|
-        buffer << erb(template, options.merge(:layout =>
-        false, :locals => {template.to_sym => member}))
+        buffer << erb(:"#{template}", options.merge(:layout =>
+        false, :locals => {template_array[-1].to_sym => member}))
       end.join("\n")
     else
-      erb(:"_#{template}", options)
+      erb(:"#{template}", options)
     end
   end
-end
-
-class Grit::Tree
-  alias :find :/
 end
 
 # Written myself. i know, what the hell?!
@@ -38,13 +35,10 @@ module Ginatra
 
   # Convenience class for me!
   class RepoList
-    
-    # Files not to include in the repository list
-    IGNORED_FILES = ['.', '..', 'README.md']
 
     def initialize
       @repo_list = Dir.entries(Sinatra::Application.git_dir).
-                   delete_if{|e| IGNORED_FILES.include? e }.
+                   delete_if{|e| Sinatra::Application.ignored_files.include? e }.
                    map!{|e| File.expand_path(e, Sinatra::Application.git_dir) }.
                    map!{|e| Repo.new(e) }
     end
@@ -63,7 +57,7 @@ module Ginatra
       @repo_list = []
       Sinatra::Application.git_dirs.each do |git_dir|
         @repo_list << Dir.glob(git_dir).
-                          delete_if{|e| IGNORED_FILES.include? e }.
+                          delete_if{|e| Sinatra::Application.ignored_files.include? e }.
                           map{|e| File.expand_path(e) }
       end
       @repo_list.flatten!
@@ -80,20 +74,9 @@ module Ginatra
       @repo = Grit::Repo.new(path)
       @param = File.split(path).last.gsub(/\.git$/, '')
       @name = @param.capitalize
-      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
+      @description = @repo.description
+      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
       @repo
-    end
-
-    def commits(num=10)
-      @repo.commits('master', num)
-    end
-
-    def find_commit(short_id)
-      commits(10000).find{|item| item.id =~ /^#{Regexp.escape(short_id)}/ }
-    end
-
-    def find_commit_by_tree(short_id)
-      commits(10000).find{|item| item.tree.id =~ /^#{Regexp.escape(short_id)}/ }
     end
 
     def method_missing(sym, *args, &block)
@@ -104,14 +87,6 @@ module Ginatra
   class MultiRepo < Repo
 
     attr_reader :name, :param, :description
-
-    def initialize(path)
-      @repo = Grit::Repo.new(path)
-      @param = File.split(path).last.gsub(/\.git$/, '')
-      @name = @param.capitalize
-      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@repo.description)
-      @repo
-    end
 
     def self.create!(param)
       @repo_list = MultiRepoList.new
@@ -159,12 +134,24 @@ module Ginatra
       "<ul class='commit-files'>#{out.join}</ul>"
     end
 
-    def diff_highlight(text)
-      CodeRay.scan(text, :diff).html
+    # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
+    #   and simplified to just use <p> tags without any options
+    # modified since
+    def simple_format(text)
+      text.gsub!(/ +/, " ")
+      text.gsub!(/\r\n?/, "\n")
+      text.gsub!(/\n/, "<br />\n")
+      text
     end
-    
-    def h(text)
-      text.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
+
+    # stolen from rails: ERB::Util
+    def html_escape(s)
+      s.to_s.gsub(/[&"<>]/) do |special|
+        { '&' => '&amp;',
+          '>' => '&gt;',
+          '<' => '&lt;',
+          '"' => '&quot;' }[special]
+      end
     end
     
     # Stolen and bastardised from rails
@@ -179,6 +166,7 @@ module Ginatra
         (chars.length > options[:length] ? chars[0...stop] + options[:omission] : text).to_s
       end
     end
+    alias :h :html_escape
   end
 
 end
@@ -192,30 +180,72 @@ error Ginatra::CommitsError do
   'No commits were returned for ' + request.uri
 end
 
+Sinatra::Application.before do # fixes cucumber compatibility issues
+  @repo_list ||= Ginatra::RepoList.new
+end
+
 get '/' do
-  @repo_list = Ginatra::RepoList.new
   erb :index
 end
 
 get '/:repo' do
-  @repo_list = Ginatra::RepoList.new
   @repo = @repo_list.find(params[:repo])
   @commits = @repo.commits
   raise Ginatra::CommitsError if @commits.empty?
   erb :log
 end
 
-get '/:repo/commit/:commit' do
-  @repo_list = Ginatra::RepoList.new
+get '/:repo/:ref' do
   @repo = @repo_list.find(params[:repo])
-  @commit = @repo.find_commit(params[:commit])
+  @commits = @repo.commits(params[:ref])
+  raise Ginatra::CommitsError if @commits.empty?
+  erb :log
+end
+
+get '/:repo/commit/:commit' do
+  @repo = @repo_list.find(params[:repo])
+  @commit = @repo.commit(params[:commit]) # can also be a ref
   erb :commit
 end
 
 get '/:repo/tree/:tree' do
-  @repo_list = Ginatra::RepoList.new
   @repo = @repo_list.find(params[:repo])
-  @commit = @repo.find_commit_by_tree(params[:tree])
-  @tree = @commit.tree
+  @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
+  @path = {}
+  @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
+  @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
   erb :tree
+end
+
+get '/:repo/tree/:tree/*' do # for when we specify a path
+  @repo = @repo_list.find(params[:repo])
+  @tree = @repo.tree(params[:tree])/params[:splat].first # can also be a ref (i think)
+  if @tree.is_a?(Grit::Blob)
+    # we need @tree to be a tree. if it's a blob, send it to the blob page
+    # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
+    redirect "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+  else
+    @path = {}
+    @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+    @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+    erb :tree
+  end
+end
+
+get '/:repo/blob/:blob' do
+  @repo = @repo_list.find(params[:repo])
+  @blob = @repo.blob(params[:blob])
+  erb :blob
+end
+
+get '/:repo/blob/:tree/*' do
+  @repo = @repo_list.find(params[:repo])
+  @blob = @repo.tree(params[:tree])/params[:splat].first
+  if @blob.is_a?(Grit::Tree)
+    # as above, we need @blob to be a blob. if it's a tree, send it to the tree page
+    # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
+    redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+  else
+    erb :blob
+  end
 end

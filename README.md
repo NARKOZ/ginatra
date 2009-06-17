@@ -16,7 +16,7 @@ You should be using Git 1.6.3 or later just to be sure that it all works:
 
 You'll need a few gems just to serve git repositories:
 
-    $ (sudo) gem install grit coderay
+    $ (sudo) gem install grit
 
 To run the test suite, you also need:
 
