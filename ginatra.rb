@@ -32,6 +32,11 @@ module Sinatra::Partials
   end
 end
 
+class Grit::Commit
+  # Needed for the Ginatra::Repo#commits method
+  attr_accessor :refs
+end
+
 # Written myself. i know, what the hell?!
 module Ginatra
 
@@ -84,6 +89,24 @@ module Ginatra
       @repo
     end
 
+    def commit(id)
+      @commit = @repo.commit(id)
+      @commit.refs = []
+      @repo.refs.each do |ref|
+        @commit.refs << ref if ref.commit.id == @commit.id
+      end
+      @commit
+    end
+
+    def commits(start = 'master', max_count = 10, skip = 0)
+      @repo.commits(start, max_count, skip).each do |commit|
+        commit.refs = []
+        @repo.refs.each do |ref|
+          commit.refs << ref if ref.commit.id == commit.id
+        end
+      end
+    end
+
     def method_missing(sym, *args, &block)
       @repo.send(sym, *args, &block)
     end
@@ -130,7 +153,7 @@ module Ginatra
       out = commit.diffs.map do |diff|
         count = count + 1
         if diff.deleted_file
-          %(<li class='rm'>#{diff.a_path}</li>)
+          %(<li class='rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         else
           cla = diff.new_file ? "add" : "diff"
           %(<li class='#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
@@ -172,6 +195,24 @@ module Ginatra
       end
     end
     alias :h :html_escape
+    
+    def commit_ref(ref, repo_param)
+      ref_class = case ref.class
+                  when Grit::Tag
+                    "tag"
+                  when Grit::Head
+                    "head"
+                  when Grit::Remote
+                    "remote"
+                  else
+                    ""
+                  end
+      "<a class=\"ref #{ref_class}\" href=\"/#{repo_param}/#{ref.name}\">#{ref.name}</a>"
+    end
+    
+    def commit_refs(commit, repo_param)
+      commit.refs.map{|r| commit_ref(r, repo_param) }.join("\n")
+    end
   end
 
 end
@@ -204,19 +245,6 @@ get '/:repo/:ref' do
   params[:page] = 1
   @repo = @repo_list.find(params[:repo])
   @commits = @repo.commits(params[:ref])
-  raise Ginatra::CommitsError if @commits.empty?
-  erb :log
-end
-
-get '/:repo/:ref/:page' do
-  params[:page] = params[:page].to_i
-  @repo = @repo_list.find(params[:repo])
-  @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
-  @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
-  if params[:page] - 1 > 0 
-    @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
-  end
-  @separator = @next_commits && @previous_commits
   raise Ginatra::CommitsError if @commits.empty?
   erb :log
 end
@@ -267,4 +295,17 @@ get '/:repo/blob/:tree/*' do
   else
     erb :blob
   end
+end
+
+get '/:repo/:ref/:page' do
+  params[:page] = params[:page].to_i
+  @repo = @repo_list.find(params[:repo])
+  @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
+  @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
+  if params[:page] - 1 > 0 
+    @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
+  end
+  @separator = @next_commits && @previous_commits
+  raise Ginatra::CommitsError if @commits.empty?
+  erb :log
 end
