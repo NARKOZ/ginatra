@@ -26,16 +26,18 @@ module Ginatra
     register Sinatra::Cache
 
     configure do
-      set :git_dir, "./repos"
+      current_path = File.expand_path(File.dirname(__FILE__))
+      set :git_dir, "#{current_path}/../repos"
       set :description, "View My Rusty Git Repositories"
-      set :git_dirs, ["./repos/*.git"]
+      set :git_dirs, ["#{current_path}/../repos/*.git"]
       set :ignored_files, ['.', '..', 'README.md']
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }
       set :dump_errors, true
       set :logging, Proc.new { !test? }
       set :static, true
-      set :public, 'public'
+      set :public, "#{current_path}/../public"
+      set :views, "#{current_path}/../views"
       set :cache_enabled, true
       set :cache_page_extension, '.html'
       set :cache_output_dir, ''
