@@ -6,3 +6,4 @@ tmp/*
 webrat*
 spec/*.html
 public/*/
+public/*.html

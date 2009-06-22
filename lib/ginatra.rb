@@ -23,6 +23,8 @@ module Ginatra
   
   class App < Sinatra::Base
 
+    register Sinatra::Cache
+
     configure do
       set :git_dir, "./repos"
       set :description, "View My Rusty Git Repositories"
@@ -34,6 +36,9 @@ module Ginatra
       set :logging, Proc.new { !test? }
       set :static, true
       set :public, 'public'
+      set :cache_enabled, true
+      set :cache_page_extension, '.html'
+      set :cache_output_dir, ''
     end
 
     helpers do
