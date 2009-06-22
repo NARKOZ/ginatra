@@ -14,7 +14,7 @@ module Ginatra
     end
 
     def actor_box(actor, role, date)
-      partial(:actor_box, :locals => {:actor => actor, :role => role, :date => date})
+      partial(:actor_box, :locals => { :actor => actor, :role => role, :date => date })
     end
 
     def actor_boxes(commit)
@@ -25,15 +25,35 @@ module Ginatra
       end
     end
 
+    def commit_ref(ref, repo_param)
+      ref_class = case ref.class
+                  when Grit::Tag
+                    "tag"
+                  when Grit::Head
+                    "head"
+                  when Grit::Remote
+                    "remote"
+                  else
+                    ""
+                  end
+      "<a class=\"ref #{ref_class}\" href=\"/#{repo_param}/#{ref.name}\">#{ref.name}</a>"
+    end
+
+    def commit_refs(commit, repo_param)
+      commit.refs.map{ |r| commit_ref(r, repo_param) }.join("\n")
+    end
+
     # The only reason this doesn't work 100% of the time is because grit doesn't :/
     # if i find a fix, it'll go upstream :D
     def file_listing(commit)
+      count = 0
       out = commit.diffs.map do |diff|
+        count = count + 1
         if diff.deleted_file
-          %(<li class='rm'>#{diff.a_path}</li>)
+          %(<li class='rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         else
           cla = diff.new_file ? "add" : "diff"
-          %(<li class='#{cla}'>#{diff.a_path}</li>)
+          %(<li class='#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         end
       end
       "<ul class='commit-files'>#{out.join}</ul>"
@@ -59,6 +79,19 @@ module Ginatra
       end
     end
     alias :h :html_escape
-  end
-  
+
+    # Stolen and bastardised from rails
+    def truncate(text, options={})
+        options[:length] ||= 30
+        options[:omission] ||= "..."
+
+      if text
+        l = options[:length] - options[:omission].length
+        chars = text
+        stop = options[:separator] ? (chars.rindex(options[:separator], l) || l) : l
+        (chars.length > options[:length] ? chars[0...stop] + options[:omission] : text).to_s
+      end
+    end
+
+  end  
 end

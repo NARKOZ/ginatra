@@ -1,11 +1,13 @@
 require 'rubygems'
 require 'sinatra/base'
+require 'sinatra/cache'
 require 'grit'
 
 current_path = File.expand_path(File.dirname(__FILE__))
 
 module Ginatra; end
 
+require "#{current_path}/grit/commit"
 require "#{current_path}/ginatra/helpers"
 require "#{current_path}/ginatra/repo"
 require "#{current_path}/ginatra/repo_list"
@@ -29,7 +31,7 @@ module Ginatra
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }
       set :dump_errors, true
-      set :logging, Proc.new { ! test? }
+      set :logging, Proc.new { !test? }
       set :static, true
       set :public, 'public'
     end
@@ -48,25 +50,26 @@ module Ginatra
     end
 
     get '/' do
-      erb :index
+      cache erb(:index)
     end
 
     get '/:repo' do
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits
-      erb :log
+      cache erb(:log)
     end
 
     get '/:repo/:ref' do
+      params[:page] = 1
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits(params[:ref])
-      erb :log
+      cache erb(:log)
     end
 
     get '/:repo/commit/:commit' do
       @repo = @repo_list.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
-      erb :commit
+      cache erb(:commit)
     end
 
     get '/:repo/tree/:tree' do
@@ -75,7 +78,7 @@ module Ginatra
       @path = {}
       @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
       @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
-      erb :tree
+      cache erb(:tree)
     end
 
     get '/:repo/tree/:tree/*' do # for when we specify a path
@@ -89,14 +92,14 @@ module Ginatra
         @path = {}
         @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-        erb :tree
+        cache erb(:tree)
       end
     end
 
     get '/:repo/blob/:blob' do
       @repo = @repo_list.find(params[:repo])
       @blob = @repo.blob(params[:blob])
-      erb :blob
+      cache erb(:blob)
     end
 
     get '/:repo/blob/:tree/*' do
@@ -107,9 +110,22 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
-        erb :blob
+        cache erb(:blob)
       end
     end
+
+    get '/:repo/:ref/:page' do
+      params[:page] = params[:page].to_i
+      @repo = @repo_list.find(params[:repo])
+      @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
+      @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
+      if params[:page] - 1 > 0 
+        @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
+      end
+      @separator = @next_commits && @previous_commits
+      cache erb(:log)
+    end
+
   end # App
 
 end # Ginatra

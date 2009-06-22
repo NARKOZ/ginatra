@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Commit: <%= @commit.id %></h3>
+<h3>Commit: <%= @commit.id %><%= commit_refs(@commit, @repo.param) %></h3>
 <div class="active">
   <div class="commit">
     <%= partial(:commit_info_box, 
@@ -7,12 +7,15 @@
                              :commit => @commit }) %>
     <%= actor_boxes @commit %>
   </div>
-  <div class="commit-message"><%=simple_format @commit.message %></div>
+  <div class="commit-message"><%= simple_format(h(@commit.message)) %></div>
     <%= file_listing(@commit) %>
   <div class="commit-diff">
+    <% count = 0 %>
     <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>
-      <h4><img src="/img/doc.png" /><%= diff.b_path %></h4>
-      <pre><code class="diff"><%=h diff.diff %></code></pre>
+      <% count += 1%>
+    
+      <h4><img src="/img/doc.png" /><a name='file_<%= count %>'><%= diff.b_path %></a></h4>
+      <pre class="diff"><%=h diff.diff %></pre>
     <% end %>
   </div>
 </div>

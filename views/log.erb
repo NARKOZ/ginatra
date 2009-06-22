@@ -1,22 +1,55 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
 <h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %></h3>
 <div class="active">
+  <% if @previous_commits %>
+    <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
+  <% end %>
+
+  <% if @separator %>
+    |
+  <% end %>
+
+  <% if @next_commits %>
+    <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
+  <% end %>
+  <div style="float:left">
+    <table cellpadding="0" class="repo-refs">
+      <tr><td><strong>Heads:</strong></td></tr>
+      <% @repo.heads.each do |head| %>
+        <tr><td>
+          <a href="/<%=h @repo.param %>/<%=h head.name %>">
+            <%=h head.name %>
+          </a>
+        </td></tr>
+      <% end %>
+      <tr><td><strong>Tags:</strong></td></tr>
+      <% @repo.tags.each do |tag| %>
+        <tr><td>
+          <a href="/<%=h @repo.param %>/commit/<%=h tag.name %>">
+            <%=h tag.name %>
+          </a>
+        </td></tr>
+      <% end %>
+    </table>
     <table cellpadding="0" class="commit-log">
       <% @commits.each do |commit| %>
         <tr>
           <td rowspan="3"></td>
           <td class="date"><%= nicetime(commit.committed_date) %></td>
           <td class="id"><a href="/<%= @repo.param %>/commit/<%= commit.id_abbrev %>"><%= commit.id %></a></td>
+          <td class="refs"><%= commit_refs(commit, @repo.param) %></td>
           <td rowspan="3"></td>
         </tr>
         <tr>
-          <td class="author" colspan="2">
+          <td class="author" colspan="3">
               <%= commit.author.name %> <span class="quiet">(author)</span>
           </td>
         </tr>
         <tr>
-          <td class="mesg" colspan="2"><%=h commit.short_message %></td>
+          <td class="mesg" colspan="3"><%= truncate(h(commit.short_message), { :length => 140, :separator => ' '}) %></td>
         </tr>
       <% end %>
     </table>
+  </div>
+  <div class="clearfix">&nbsp;</div>
 </div>

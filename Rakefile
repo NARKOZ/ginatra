@@ -62,7 +62,7 @@ namespace :setup do
 
   desc "Installs the Required Gems"
   task :gems do |t|
-    gems = %w(grit)
+    gems = %w(grit kematzy-sinatra-cache)
     puts %x(gem install #{gems.join(" ")})
   end
 
@@ -91,10 +91,10 @@ namespace :test do
 end
 
 def repo_dir
-  if Sinatra::Application.git_dir
-    File.expand_path( Sinatra::Application.git_dir )
-  elsif Sinatra::Application.git_dirs
-    a = Dir.glob(Sinatra::Application.git_dirs.first).first
+  if Ginatra::App.git_dir
+    File.expand_path( Ginatra::App.git_dir )
+  elsif Ginatra::App.git_dirs
+    a = Dir.glob(Ginatra::App.git_dirs.first).first
     if Dir.entries(a).include?"refs"
       a = File.dirname(a)
     else

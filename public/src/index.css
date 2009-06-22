@@ -76,3 +76,15 @@ a:active       { text-decoration: underline; }
   clear:both;
 }
 
+a.ref{
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  margin: 2px;
+  padding: 2px;
+  font-size: 14px;
+  line-height: 18px;
+}
+h3 a.ref{
+  margin-left: 1em;
+}
+

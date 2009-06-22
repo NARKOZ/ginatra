@@ -14,9 +14,9 @@ You should be using Git 1.6.3 or later just to be sure that it all works:
     $ git --version
     git version 1.6.3
 
-You'll need a few gems just to serve git repositories:
+You'll need a few gems just to serve git repositories & for page caching:
 
-    $ (sudo) gem install grit
+    $ (sudo) gem install grit kematzy-sinatra-cache
 
 To run the test suite, you also need:
 

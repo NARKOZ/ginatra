@@ -30,7 +30,8 @@
 .commit-author tr:first-child td,
 .commit-committer tr:first-child td,
 .commit-files tr:first-child td,
-.commit-log tr:first-child td {
+.commit-log tr:first-child td,
+.repo-refs tr:first-child td {
 	border-top: 0;
 }
 .first-no-border {
@@ -42,6 +43,10 @@
 	-moz-border-radius: 3px;
 	padding: 0;
 	margin: 1ex 0;
+}
+.repo-refs {
+  margin: 1ex;
+  float: right;
 }
 .commit-files img {
 	width: 16px;
