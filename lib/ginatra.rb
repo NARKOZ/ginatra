@@ -57,20 +57,20 @@ module Ginatra
     end
 
     get '/' do
-      cache erb(:index)
+      erb :index
     end
 
     get '/:repo' do
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits
-      cache erb(:log)
+      erb :log
     end
 
     get '/:repo/:ref' do
       params[:page] = 1
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits(params[:ref])
-      cache erb(:log)
+      erb :log
     end
 
     get '/:repo/commit/:commit' do
@@ -130,7 +130,7 @@ module Ginatra
         @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
       end
       @separator = @next_commits && @previous_commits
-      cache erb(:log)
+      erb :log
     end
 
   end # App
