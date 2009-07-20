@@ -1,7 +1,6 @@
 require "digest/md5"
 
 module Ginatra
-  
   # Actually useful stuff
   module Helpers
 
@@ -44,7 +43,7 @@ module Ginatra
     end
 
     def archive_link(tree, repo_param)
-      "<a class=\"download\" href=\"/#{repo_param}/archive/#{tree.id}.tar.gz\" title=\"Download a tar.gz snapshot of this Tree\">Download</a>"  end  
+      "<a class=\"download\" href=\"/#{repo_param}/archive/#{tree.id}.tar.gz\" title=\"Download a tar.gz snapshot of this Tree\">Download</a>"
     end
 
     # The only reason this doesn't work 100% of the time is because grit doesn't :/
@@ -97,5 +96,5 @@ module Ginatra
       end
     end
 
-  end  
+  end
 end
