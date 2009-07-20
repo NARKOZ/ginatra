@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Tree: <%= @tree.id %></h3>
+<h3>Tree: <%= @tree.id %> <%= archive_link @tree, @repo.param %></h3>
 <div class="active">
   <ul class="commit-tree">
     <% @tree.trees.each do |tree| %>

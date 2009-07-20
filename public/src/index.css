@@ -76,7 +76,8 @@ a:active       { text-decoration: underline; }
   clear:both;
 }
 
-a.ref{
+a.ref,
+a.download {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   margin: 2px;

@@ -72,9 +72,10 @@ li.rm {
   color: #800;
   background: url('../../img/rm.png') no-repeat center left;
 }
-a.ref    { background-color: #7782FC; color: #fff;}
-a.head   { background-color: #7782FC; }
-a.tag    { background-color: #d95959; }
-a.remote { background-color: #fafa78; }
+a.ref      { background-color: #7782FC; color: #fff;}
+a.download { background-color: #4462dC; }
+a.head     { background-color: #7782FC; }
+a.tag      { background-color: #d95959; }
+a.remote   { background-color: #fafa78; }
 
 /* End Commit Colours */

@@ -79,6 +79,12 @@ module Ginatra
       cache erb(:commit)
     end
 
+    get '/:repo/archive/:tree.tar.gz' do
+      response['Content-Type'] = "application/x-tar-gz"
+      @repo = @repo_list.find(params[:repo])
+      @repo.archive_tar_gz(params[:tree])
+    end
+
     get '/:repo/tree/:tree' do
       @repo = @repo_list.find(params[:repo])
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
@@ -122,6 +128,7 @@ module Ginatra
     end
 
     get '/:repo/:ref/:page' do
+      pass unless params[:page] =~ /^(\d)+$/
       params[:page] = params[:page].to_i
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
