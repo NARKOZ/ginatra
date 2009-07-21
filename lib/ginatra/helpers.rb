@@ -43,7 +43,11 @@ module Ginatra
     end
 
     def archive_link(tree, repo_param)
-      "<a class=\"download\" href=\"/#{repo_param}/archive/#{tree.id}.tar.gz\" title=\"Download a tar.gz snapshot of this Tree\">Download</a>"
+      "<a class=\"download\" href=\"/#{repo_param}/archive/#{tree.id}.tar.gz\" title=\"Download a tar.gz snapshot of this Tree\">Download Archive</a>"
+    end
+
+    def patch_link(commit, repo_param)
+      "<a class=\"download\" href=\"/#{repo_param}/commit/#{commit.id}.patch\" title=\"Download a patch file of this Commit\">Download Patch</a>"
     end
 
     # The only reason this doesn't work 100% of the time is because grit doesn't :/

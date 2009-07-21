@@ -73,6 +73,12 @@ module Ginatra
       erb :log
     end
 
+    get '/:repo/commit/:commit.patch' do
+      response['Content-Type'] = "text/plain"
+      @repo = @repo_list.find(params[:repo])
+      @repo.git.format_patch({}, "--stdout", "-1", params[:commit])
+    end
+
     get '/:repo/commit/:commit' do
       @repo = @repo_list.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
