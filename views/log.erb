@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %></h3>
+<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %> <%= atom_feed_link(@repo.param, params[:ref]) %></h3>
 <div class="active">
   <% if @previous_commits %>
     <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>

@@ -74,6 +74,7 @@ li.rm {
 }
 a.ref      { background-color: #7782FC; color: #fff; }
 a.download { background-color: #7782FC; color: #fff; }
+a.atom     { background-color: #7782FC; color: #fff; }
 a.head     { background-color: #7782FC; }
 a.tag      { background-color: #d95959; }
 a.remote   { background-color: #fafa78; }
