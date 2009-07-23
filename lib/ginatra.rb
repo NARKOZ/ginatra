@@ -60,10 +60,25 @@ module Ginatra
       erb :index
     end
 
+    get '/:repo.atom' do
+      @repo = @repo_list.find(params[:repo])
+      @commits = @repo.commits
+      return "" if @commits.empty?
+      builder :atom, :layout => nil
+    end
+
     get '/:repo' do
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits
       erb :log
+    end
+
+    get '/:repo/:ref.atom' do
+      params[:page] = 1
+      @repo = @repo_list.find(params[:repo])
+      @commits = @repo.commits(params[:ref])
+      return "" if @commits.empty?
+      builder :atom, :layout => nil
     end
 
     get '/:repo/:ref' do

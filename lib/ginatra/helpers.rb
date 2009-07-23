@@ -100,5 +100,15 @@ module Ginatra
       end
     end
 
+    # stolen from Marley
+    def rfc_date(datetime)
+      datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
+    end
+
+    # stolen from Marley
+    def hostname
+      (request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/) ? request.env['HTTP_X_FORWARDED_SERVER'] : request.env['HTTP_HOST']
+    end
+
   end
 end
