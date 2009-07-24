@@ -5,5 +5,5 @@ current_path = File.expand_path(File.dirname(__FILE__))
 require "#{current_path}/../lib/ginatra"
 require 'vegas'
 
-Vegas::Runner.new(Ginatra::App, 'ginatra_app', :port => 9797)
+Vegas::Runner.new(Ginatra::App, 'ginatra-app', :port => Ginatra::Config.port)
 

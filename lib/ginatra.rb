@@ -8,6 +8,7 @@ current_path = File.expand_path(File.dirname(__FILE__))
 module Ginatra; end
 
 require "#{current_path}/grit/commit"
+require "#{current_path}/ginatra/config"
 require "#{current_path}/ginatra/helpers"
 require "#{current_path}/ginatra/repo"
 require "#{current_path}/ginatra/repo_list"
@@ -18,19 +19,19 @@ module Ginatra
 
   class Error < StandardError; end
   class CommitsError < Error; end
-  
+
   VERSION = "0.9.9"
-  
+
   class App < Sinatra::Base
 
     register Sinatra::Cache
 
     configure do
       current_path = File.expand_path(File.dirname(__FILE__))
-      set :git_dir, "#{current_path}/../repos"
-      set :description, "View My Rusty Git Repositories"
-      set :git_dirs, ["#{current_path}/../repos/*.git"]
-      set :ignored_files, ['.', '..', 'README.md']
+      Config.load!
+      Config.each_pair do |k, v|
+        set k, v
+      end
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }
       set :dump_errors, true
@@ -74,7 +75,6 @@ module Ginatra
     end
 
     get '/:repo/:ref.atom' do
-      params[:page] = 1
       @repo = @repo_list.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?

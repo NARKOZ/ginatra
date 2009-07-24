@@ -3,9 +3,9 @@ module Ginatra
   class RepoList
 
     def initialize
-      @repo_list = Dir.entries(Ginatra::App.git_dir).
-                   delete_if{ |e| Ginatra::App.ignored_files.include?(e) }.
-                   map!{ |e| File.expand_path(e, Ginatra::App.git_dir) }.
+      @repo_list = Dir.entries(Ginatra::Config.git_dir).
+                   delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
+                   map!{ |e| File.expand_path(e, Ginatra::Config.git_dir) }.
                    map!{ |e| Repo.new(e) }
     end
 
@@ -21,9 +21,9 @@ module Ginatra
   class MultiRepoList < RepoList
     def initialize
       @repo_list = []
-      Ginatra::App.git_dirs.each do |git_dir|
+      Ginatra::Config.git_dirs.each do |git_dir|
         @repo_list << Dir.glob(git_dir).
-                          delete_if{ |e| Ginatra::App.ignored_files.include?(e) }.
+                          delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
                           map{ |e| File.expand_path(e) }
       end
       @repo_list.flatten!
