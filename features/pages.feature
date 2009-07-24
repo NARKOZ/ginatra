@@ -6,7 +6,7 @@ Feature: Page
   Scenario:
     When I open '/'
     Then I should see "Ginatra"
-    And I should see "View My Rusty Git Repositories"
+    And I should see "View My Git Repositories"
     And I should see "Test"
     And I should see "Please edit the test.git/description file for this repository and set the description for it."
   Scenario:
