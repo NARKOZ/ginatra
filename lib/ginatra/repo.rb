@@ -32,6 +32,7 @@ module Ginatra
       commit.refs = []
       refs = @repo.refs.select { |ref| ref.commit.id == commit.id }
       commit.refs << refs
+      commit.refs.flatten!
     end
 
     def method_missing(sym, *args, &block)
