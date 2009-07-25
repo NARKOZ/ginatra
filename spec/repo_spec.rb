@@ -7,7 +7,7 @@ describe "Ginatra" do
       @repo_list = Ginatra::RepoList
       @ginatra_repo = @repo_list.find("test")
       @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
-      @commit = @ginatra_repo.commit("a21409da199337fb4ba4cde4be8f82f38397782a")
+      @commit = @ginatra_repo.commit("d5fb542e867a50618812f7d6bf33e02755c128da")
     end
 
     it "should have a name" do
