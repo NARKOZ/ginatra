@@ -20,6 +20,12 @@ module Ginatra
 
   class Error < StandardError; end
   class CommitsError < Error; end
+  
+  class InvalidCommit < Error
+    def initialize(id)
+      super("Could not find a commit with the id of #{id}")
+    end
+  end
 
   VERSION = "0.9.9"
 

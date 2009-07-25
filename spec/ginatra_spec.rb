@@ -10,36 +10,6 @@ describe "Ginatra" do
 
   describe "Repo" do
 
-    before do
-      @ginatra_repo = @repo_list.find("test")
-      @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
-    end
-
-    it "should have a name" do
-      @ginatra_repo.name == "Test"
-    end
-
-    it "should have a param for urls" do
-      @ginatra_repo.param == 'test'
-    end
-
-    it "should have a description" do
-      @ginatra_repo.description == "Unnamed repository; edit this file to name it for gitweb."
-    end
-
-    it "should have a descripton that matches the grit description" do
-      @ginatra_repo.description == @grit_repo.description
-    end
-
-    it "should have an array of commits that match the grit array of commits limited to 25 items" do
-      @ginatra_repo.commits === @grit_repo.commits
-      @ginatra_repo.commits.length == 10
-    end
-
-    it "should be the same thing using #find or #new" do
-      @repo_list.find("test") == Ginatra::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
-    end
-
   end
 
   describe "RepoList" do

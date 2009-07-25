@@ -15,19 +15,23 @@ module Ginatra
 
     def commit(id)
       @commit = @repo.commit(id)
-      @commit.refs = []
-      @repo.refs.each do |ref|
-        @commit.refs << ref if ref.commit.id == @commit.id
-      end
+      raise(Ginatra::InvalidCommit.new(id)) if @commit.nil?
+      add_refs(@commit)
       @commit
     end
 
     def commits(start = 'master', max_count = 10, skip = 0)
+      raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
       @repo.commits(start, max_count, skip).each do |commit|
-        commit.refs = []
-        @repo.refs.each do |ref|
-          commit.refs << ref if ref.commit.id == commit.id
-        end
+        add_refs(commit) 
+      end
+    end
+    
+    # TODO: Perhaps move into commit class.
+    def add_refs(commit)
+      commit.refs = []
+      @repo.refs.select { |ref| ref.commit.id == commit.id }.each do |ref|
+        commit.refs << ref
       end
     end
 
