@@ -11,12 +11,12 @@ module Ginatra
                    map!{ |e| Repo.new(e) }
     end
 
-    def find(local_param)
-      @repo_list.find{ |r| r.param == local_param }
+    def self.find(local_param)
+      instance.find { |r| r.param == local_param }
     end
 
-    def method_missing(sym, *args, &block)
-      @repo_list.send(sym, *args, &block)
+    def self.method_missing(sym, *args, &block)
+      instance.send(sym, *args, &block)
     end
   end
 
