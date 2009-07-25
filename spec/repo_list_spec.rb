@@ -4,7 +4,8 @@ describe "Ginatra" do
   describe "RepoList" do
 
     before do
-      @repo = @repo_list.find("test")
+      @repo_list = Ginatra::RepoList.list
+      @repo = Ginatra::RepoList.find("test")
     end
 
     it "should be an array of `Ginatra::Repo`s" do
