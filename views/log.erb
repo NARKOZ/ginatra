@@ -51,7 +51,6 @@
           <span class='id'>
             <code><a href="<%= url %>"><%= commit.id %></a></code>
           </span>
-          <br>
           <span class='refs'><%= commit_refs(commit, @repo.param) %></span>
         </div>
         <span class='date'><%= nicetime(commit.committed_date) %></span><br>
