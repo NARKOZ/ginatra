@@ -60,29 +60,25 @@ module Ginatra
       'No commits were returned for ' + request.uri
     end
 
-    before do
-      @repo_list ||= RepoList.instance
-    end
-
     get '/' do
       erb :index
     end
 
     get '/:repo.atom' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
       return "" if @commits.empty?
       builder :atom, :layout => nil
     end
 
     get '/:repo' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
       erb :log
     end
 
     get '/:repo/:ref.atom' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?
       builder :atom, :layout => nil
@@ -90,31 +86,31 @@ module Ginatra
 
     get '/:repo/:ref' do
       params[:page] = 1
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       erb :log
     end
 
     get '/:repo/commit/:commit.patch' do
       response['Content-Type'] = "text/plain"
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @repo.git.format_patch({}, "--stdout", "-1", params[:commit])
     end
 
     get '/:repo/commit/:commit' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
       cache erb(:commit)
     end
 
     get '/:repo/archive/:tree.tar.gz' do
       response['Content-Type'] = "application/x-tar-gz"
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @repo.archive_tar_gz(params[:tree])
     end
 
     get '/:repo/tree/:tree' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
       @path = {}
       @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
@@ -123,7 +119,7 @@ module Ginatra
     end
 
     get '/:repo/tree/:tree/*' do # for when we specify a path
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @tree = @repo.tree(params[:tree])/params[:splat].first # can also be a ref (i think)
       if @tree.is_a?(Grit::Blob)
         # we need @tree to be a tree. if it's a blob, send it to the blob page
@@ -138,13 +134,13 @@ module Ginatra
     end
 
     get '/:repo/blob/:blob' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
       cache erb(:blob)
     end
 
     get '/:repo/blob/:tree/*' do
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @blob = @repo.tree(params[:tree])/params[:splat].first
       if @blob.is_a?(Grit::Tree)
         # as above, we need @blob to be a blob. if it's a tree, send it to the tree page
@@ -158,7 +154,7 @@ module Ginatra
     get '/:repo/:ref/:page' do
       pass unless params[:page] =~ /^(\d)+$/
       params[:page] = params[:page].to_i
-      @repo = @repo_list.find(params[:repo])
+      @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
       @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
       if params[:page] - 1 > 0 

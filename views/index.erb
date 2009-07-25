@@ -4,7 +4,7 @@
     <%=h Ginatra::App.description %>
   </div>
   <dl>
-    <% @repo_list.each do |repo| %>
+    <% Ginatra::RepoList.list.each do |repo| %>
       <dt><a href="/<%= repo.param %>"><%= repo.name %></a></dt>
       <dd><%=h repo.description %></dd>
     <% end %>

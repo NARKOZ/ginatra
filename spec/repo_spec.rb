@@ -4,7 +4,7 @@ describe "Ginatra" do
   describe "Repo" do
    
     before do
-      @repo_list = Ginatra::RepoList.instance
+      @repo_list = Ginatra::RepoList
       @ginatra_repo = @repo_list.find("test")
       @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
       @commit = @ginatra_repo.commit("a21409da199337fb4ba4cde4be8f82f38397782a")
@@ -44,12 +44,11 @@ describe "Ginatra" do
     end
     
     it "should have a list of commits" do
-      @repo_list.commits.should_not be_blank
+      @ginatra_repo.commits.should_not be_blank
     end
     
     it "should raise an error when asked to invert itself" do
       lambda { @ginatra_repo.commits("master", -1) }.should raise_error(Ginatra::Error, "max_count cannot be less than 0")
-      
     end
     
     it "should be able to add refs to a commit" do
