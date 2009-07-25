@@ -30,9 +30,8 @@ module Ginatra
     # TODO: Perhaps move into commit class.
     def add_refs(commit)
       commit.refs = []
-      @repo.refs.select { |ref| ref.commit.id == commit.id }.each do |ref|
-        commit.refs << ref
-      end
+      refs = @repo.refs.select { |ref| ref.commit.id == commit.id }
+      commit.refs << refs
     end
 
     def method_missing(sym, *args, &block)
