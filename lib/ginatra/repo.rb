@@ -42,7 +42,7 @@ module Ginatra
     attr_reader :name, :param, :description
 
     def self.create!(param)
-      @repo_list = MultiRepoList.new
+      @repo_list = MultiRepoList.instance
       @repo = @repo_list.find{ |r| r.param =~ /^#{Regexp.escape param }$/ }
     end
   end

@@ -1,12 +1,17 @@
 require File.join(File.dirname(__FILE__), "spec_helper")
 
 describe "Ginatra" do
+  
+  before do
+    @repo_list = Ginatra::RepoList.instance
+    @multi_repo_list = Ginatra::MultiRepoList.instance
+  end
+    
 
   describe "Repo" do
 
-    before(:each) do
-      @ginatra_repolist = Ginatra::RepoList.new
-      @ginatra_repo = @ginatra_repolist.find("test")
+    before do
+      @ginatra_repo = @repo_list.find("test")
       @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
     end
 
@@ -32,15 +37,14 @@ describe "Ginatra" do
     end
 
     it "should be the same thing using #find or #new" do
-      Ginatra::RepoList.new.find("test") == Ginatra::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
+      @repo_list.find("test") == Ginatra::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
   end
 
   describe "RepoList" do
 
-    before(:each) do
-      @repo_list = Ginatra::RepoList.new
+    before do
       @repo = @repo_list.find("test")
     end
 
@@ -57,8 +61,7 @@ describe "Ginatra" do
   describe "MultiRepo" do
 
     before(:each) do
-      @ginatra_multirepolist = Ginatra::MultiRepoList.new
-      @ginatra_multirepo = @ginatra_multirepolist.find("test")
+      @ginatra_multirepo = @multi_repo_list.find("test")
       @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
@@ -84,7 +87,7 @@ describe "Ginatra" do
     end
 
     it "should create the same thing using .create! or .new" do
-      Ginatra::MultiRepoList.new.find("test") == Ginatra::MultiRepo.new(File.join(Ginatra::App.git_dir, "test.git"))
+      @multi_repo_list.find("test") == Ginatra::MultiRepo.new(File.join(Ginatra::App.git_dir, "test.git"))
     end
 
   end
@@ -92,16 +95,15 @@ describe "Ginatra" do
   describe "MultiRepoList" do
 
     before(:each) do
-      @repo_list = Ginatra::MultiRepoList.new
-      @repo = @repo_list.find("test")
+      @repo = @multi_repo_list.find("test")
     end
 
     it "should be an array of `Ginatra::Repo`s" do
-      @repo_list.each { |r| r.should be_an_instance_of(Ginatra::MultiRepo)}
+      @multi_repo_list.each { |r| r.should be_an_instance_of(Ginatra::MultiRepo)}
     end
 
     it "should contain the test repo" do
-      @repo_list.include?(@repo)
+      @multi_repo_list.include?(@repo)
     end
 
   end

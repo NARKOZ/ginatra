@@ -6,9 +6,9 @@ require 'spec'
 current_path = File.expand_path(File.dirname(__FILE__))
 require "#{current_path}/../lib/ginatra"
 
-gem 'webrat', '~>0.4.4'
+gem 'webrat', '>=0.4.4'
 require 'webrat/sinatra'
-gem 'rack-test', '~>0.3.0'
+gem 'rack-test', '>=0.3.0'
 require 'rack/test'
 
 Webrat.configure do |config|

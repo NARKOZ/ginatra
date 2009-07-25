@@ -1,8 +1,10 @@
 module Ginatra
   # Convenience class for me!
   class RepoList
+    include Singleton
 
     def initialize
+
       @repo_list = Dir.entries(Ginatra::Config.git_dir).
                    delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
                    map!{ |e| File.expand_path(e, Ginatra::Config.git_dir) }.
