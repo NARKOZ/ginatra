@@ -28,7 +28,8 @@ module Ginatra
     end
 
     def has_repo?(local_param)
-      list.find { |r| r.param == local_param } ? true : false
+      l = local_param.sub(/\.git$/,'')
+      list.find { |r| r.param == l } ? true : false
     end
 
     def find(local_param)
