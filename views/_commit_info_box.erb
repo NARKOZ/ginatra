@@ -1,30 +1,27 @@
-<div class='commit-info'>
-  <table cellspacing=0>
-    <tr>
-      <td>commit:</td>
-      <td>
+<div id='commit-info'>
+  <div class='right'>
+    <dl>
+      <dt>commit:</dt>
+      <dd>
         <a href='/<%= repo.param %>/commit/<%= commit.id_abbrev %>'>
-          <%= commit.id %>
+          <code><%= commit.id %></code>
         </a>
-       </td>
-    </tr>
-    <tr>
-      <td>tree:</td>
-      <td>
+      </dd><br>
+      
+      <dt>tree:</dt>
+      <dd>
         <a href='/<%= repo.param %>/tree/<%= commit.tree.id[0..7] %>'>
-          <%= commit.tree.id %>
+          <code><%= commit.tree.id %></code>
         </a>
-      </td>
-    </tr>
-    <% commit.parents.each do |parent| %>
-      <tr>
-        <td>parent:</td>
-        <td>
+      </dd><br>
+      <% commit.parents.each do |parent| %>
+        <dt>parent:</dt>
+        <dd>
           <a href='/<%= repo.param %>/commit/<%= parent.id_abbrev %>'>
-            <%= parent.id %>
+            <code><%= parent.id %></code>
           </a>
-        </td>
-      </tr>
-    <% end %>
-  </table>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
 </div>

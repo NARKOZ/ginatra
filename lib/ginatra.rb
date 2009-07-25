@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra/base'
 require 'sinatra/cache'
 require 'grit'
+require 'coderay'
 
 current_path = File.expand_path(File.dirname(__FILE__))
 
@@ -100,7 +101,7 @@ module Ginatra
     get '/:repo/commit/:commit' do
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
-      cache erb(:commit)
+      erb(:commit)
     end
 
     get '/:repo/archive/:tree.tar.gz' do
@@ -147,6 +148,16 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
+        extension = params[:splat].first.split(".").last
+        @highlighter = case extension
+          when 'js'
+            'javascript'
+          when 'css'
+            'css'
+        end
+
+        @highlighter ||= 'ruby'
+
         cache erb(:blob)
       end
     end

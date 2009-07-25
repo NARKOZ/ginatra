@@ -17,24 +17,14 @@ module Ginatra
     end
 
     def actor_boxes(commit)
-      if commit.author.name == commit.committer.name
-        actor_box(commit.committer, :committer, commit.committed_date)
-      else
-        actor_box(commit.author, :author, commit.authored_date) + actor_box(commit.committer, :committer, commit.committed_date)
+      o = actor_box(commit.committer, :committer, commit.committed_date)
+      if commit.author.name != commit.committer.name
+        o = actor_box(commit.author, :author, commit.authored_date) + o
       end
     end
 
     def commit_ref(ref, repo_param)
-      ref_class = case ref.class
-                  when Grit::Tag
-                    "tag"
-                  when Grit::Head
-                    "head"
-                  when Grit::Remote
-                    "remote"
-                  else
-                    ""
-                  end
+      ref_class = ref.class.to_s.split("::")[1].to_s
       "<a class=\"ref #{ref_class}\" href=\"/#{repo_param}/#{ref.name}\">#{ref.name}</a>"
     end
 
@@ -57,13 +47,17 @@ module Ginatra
       out = commit.diffs.map do |diff|
         count = count + 1
         if diff.deleted_file
-          %(<li class='rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          %(<li class='file_rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         else
           cla = diff.new_file ? "add" : "diff"
-          %(<li class='#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          %(<li class='file_#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
         end
       end
-      "<ul class='commit-files'>#{out.join}</ul>"
+      "<ul id='files'>#{out.join}</ul>"
+    end
+    
+    def diff(diff)
+      diff = CodeRay.scan(diff, :diff).div(:line_numbers => :table, :css => :class)
     end
 
     # Stolen from rails: ActionView::Helpers::TextHelper#simple_format

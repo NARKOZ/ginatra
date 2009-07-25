@@ -30,7 +30,7 @@ h2 a, h2 a:visited, h2 a:hover, h2 a:active { text-decoration: none; }
 /* End Type Colours */
 
 /* Table Colours */
-td, dt {
+td {
 	border-top: 1px solid #7F7F7F;
 }
 .repo-info, .ginatra-info, dl, td {
@@ -42,9 +42,9 @@ td, dt {
 /* End Table Colours */
 
 /* Commit Colours */
-.commit-info, 
-.commit-author, 
-.commit-committer,
+#commit #info,
+#commit #author,
+#commit #committer,
 .short-commit-message,
 .commit-tree,
 .commit-diff,
@@ -79,4 +79,7 @@ a.head     { background-color: #7782FC; }
 a.tag      { background-color: #d95959; }
 a.remote   { background-color: #fafa78; }
 
+.commit, .list div, .single-commit #message {
+  background: #dcdcdc;
+}
 /* End Commit Colours */

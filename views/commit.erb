@@ -1,21 +1,20 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
 <h3>Commit: <%= @commit.id %><%= commit_refs(@commit, @repo.param) %> <%= patch_link(@commit, @repo.param) %></h3>
 <div class="active">
-  <div class="commit">
+  <div class='single-commit' id='commit'>
     <%= partial(:commit_info_box, 
                 :locals => { :repo => @repo, 
                              :commit => @commit }) %>
     <%= actor_boxes @commit %>
-  </div>
-  <div class="commit-message"><%= simple_format(h(@commit.message)) %></div>
+    <div id="message"><%= simple_format(h(@commit.message)) %></div>
     <%= file_listing(@commit) %>
-  <div class="commit-diff">
-    <% count = 0 %>
-    <% @commit.diffs.select{|d| !d.deleted_file && ! d.new_file}.each do |diff| %>
-      <% count += 1%>
-    
-      <h4><img src="/img/doc.png" /><a name='file_<%= count %>'><%= diff.b_path %></a></h4>
-      <pre class="diff"><%=h diff.diff %></pre>
-    <% end %>
+    <div id="files">
+      <% count = 0 %>
+      <% @commit.diffs.select { |d| !d.deleted_file && !d.new_file }.each do |diff| %>
+        <% count += 1 %>    
+        <h4><img src="/img/doc.png" /><a name='file_<%= count %>'><code><%= diff.b_path %></code></a></h4>
+        <div class="diff"><%= diff((diff.diff)) %></div>
+      <% end %>
+    </div>
   </div>
 </div>

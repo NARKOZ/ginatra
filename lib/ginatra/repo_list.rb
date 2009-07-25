@@ -27,14 +27,14 @@ module Ginatra
 
   class MultiRepoList < RepoList
     def initialize
-      @repo_list = []
+      self.list = []
       Ginatra::Config.git_dirs.each do |git_dir|
-        @repo_list << Dir.glob(git_dir).
+        self.list << Dir.glob(git_dir).
                           delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
                           map{ |e| File.expand_path(e) }
       end
-      @repo_list.flatten!
-      @repo_list.map!{ |e| MultiRepo.new(e) }
+      self.list.flatten!
+      self.list.map!{ |e| Repo.new(e) }
     end
   end
 end

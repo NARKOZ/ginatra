@@ -11,7 +11,7 @@ desc "Adds a Git Repository to Ginatra. Usage: `rake add repo='<git-repo-url>' [
 task "add" do |t|
   raise ArgumentError, "FATAL: You Must Specify a Git Repository to Clone" if ENV['repo'].empty?
   FileUtils.cd(repo_dir) do
-    puts %x(git clone --bare #{ENV['repo']} #{(ENV['name'] + ".git") unless ENV['name'].empty?})
+    puts %x(git clone --bare #{ENV['repo']} #{(ENV['name'] + ".git") unless ENV['name'].nil?})
   end
 end
 

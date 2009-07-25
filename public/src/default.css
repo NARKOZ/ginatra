@@ -108,3 +108,8 @@ pre .html .javascript,
 pre .html .vbscript {
   opacity: 0.5;
 }
+
+.right {
+  float: right;
+  text-align: right;
+}

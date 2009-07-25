@@ -12,44 +12,54 @@
   <% if @next_commits %>
     <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
   <% end %>
-  <div style="float:left">
-    <table cellpadding="0" class="repo-refs">
-      <tr><td><strong>Heads:</strong></td></tr>
-      <% @repo.heads.each do |head| %>
-        <tr><td>
-          <a href="/<%=h @repo.param %>/<%=h head.name %>">
-            <%=h head.name %>
-          </a>
-        </td></tr>
+  <div class='list'>
+    <div id='heads'>
+      <h3>Heads</h3>
+      <ul>
+        <% @repo.heads.each do |head| %>
+          <li>
+            <a href="/<%=h @repo.param %>/<%=h head.name %>">
+              <%=h head.name %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+   
+    <div id='tags'>
+      <h3>Tags</h3>
+      <% unless @repo.tags.empty? %>
+        <ul>
+          <% @repo.tags.each do |tag| %>
+            <li>
+              <a href="/<%=h @repo.param %>/commit/<%=h tag.name %>">
+                <%=h tag.name %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No tags</p>
       <% end %>
-      <tr><td><strong>Tags:</strong></td></tr>
-      <% @repo.tags.each do |tag| %>
-        <tr><td>
-          <a href="/<%=h @repo.param %>/commit/<%=h tag.name %>">
-            <%=h tag.name %>
-          </a>
-        </td></tr>
-      <% end %>
-    </table>
-    <table cellpadding="0" class="commit-log">
-      <% @commits.each do |commit| %>
-        <tr>
-          <td rowspan="3"></td>
-          <td class="date"><%= nicetime(commit.committed_date) %></td>
-          <td class="id"><a href="/<%= @repo.param %>/commit/<%= commit.id_abbrev %>"><%= commit.id %></a></td>
-          <td class="refs"><%= commit_refs(commit, @repo.param) %></td>
-          <td rowspan="3"></td>
-        </tr>
-        <tr>
-          <td class="author" colspan="3">
-              <%= commit.author.name %> <span class="quiet">(author)</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="mesg" colspan="3"><%= truncate(h(commit.short_message), { :length => 140, :separator => ' '}) %></td>
-        </tr>
-      <% end %>
-    </table>
+    </div>
+  </div>
+  <div id='commit-log'>
+    <% @commits.each do |commit| %>
+    <% url = "/#{@repo.param}/commit/#{commit.id_abbrev}" %>
+      <div id='commit_<%= commit.id_abbrev %>' class='commit' onclick="location.href='<%= url %>'">
+        <div class='right'>
+          <span class='id'>
+            <code><a href="<%= url %>"><%= commit.id %></a></code>
+          </span>
+          <br>
+          <span class='refs'><%= commit_refs(commit, @repo.param) %></span>
+        </div>
+        <span class='date'><%= nicetime(commit.committed_date) %></span><br>
+        
+        <span class='message'><%= truncate(h(commit.short_message), { :length => 140, :separator => ' '}) %></span><br>
+        <span class='author'><%= commit.author.name %> <small>(author)</small></span>
+      </div>
+    <% end %>
   </div>
   <div class="clearfix">&nbsp;</div>
 </div>

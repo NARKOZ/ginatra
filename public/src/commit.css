@@ -1,10 +1,8 @@
-.commit {
-	float: right;
-}
 /*.commit-message,*/
 .commit-message {
 	padding-right: 3.75em;
 }
+
 .commit-info,
 .ginatra-info, 
 .commit-author, 
@@ -17,6 +15,7 @@
 	padding: 1ex;
 	font-size: 12px;
 }
+
 .commit-author img, 
 .commit-committer img {
   float: left;
@@ -26,6 +25,7 @@
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 }
+
 .commit-info tr:first-child td,
 .commit-author tr:first-child td,
 .commit-committer tr:first-child td,
@@ -34,43 +34,118 @@
 .repo-refs tr:first-child td {
 	border-top: 0;
 }
+
 .first-no-border {
 	border-top: 0;
 }
+
 .commit-files,
-.commit-log {
+#commit-log {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	padding: 0;
 	margin: 1ex 0;
 }
+
+#commit-log {
+  width: 50em;
+}
+
+#commit-log .commit {
+  margin: 10px;
+  padding: 10px;
+  -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+#commit-log .commit .id a {
+  text-decoration: underline;
+}
+
+#commit-info {
+  background: #123;
+}
+
+#commit-info dl dt {
+  float: left;
+}
+
+#commit-info dl dd {
+  float: right;
+}
+
+#commit-info dl dd a {
+  text-decoration: underline;
+}
+
+#commit .diff {
+  border: 1px solid black;
+}
+
+#commit .file_diff {
+  font-family: Menlo, Monaco, Monospace;
+}
+
+#commit .file_diff .rm {
+  background: #EB8E8B;
+}
+
+#commit .file_diff .add {
+  background:#91EB81;
+}
+
+#commit #files {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#commit .file_diff .rm .sign, #commit .file_diff .add .sign {
+  position: relative;
+  left: 10px;
+}
+
+.single-commit #message {
+  margin-top: 10px;
+  width: 50em;
+  background: #dcdcdc;
+  padding: 10px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
 .repo-refs {
   margin: 1ex;
   float: right;
 }
+
 .commit-files img {
 	width: 16px;
 }
+
 .commit-files td {
 	padding: 0 2px 0;
 }
+
 .commit-files td + td {
 	padding: 0 0.5ex;
 }
-.commit-log .mesg,
-.commit-log .date,
-.commit-log .author,
+
+#commit-log .mesg,
+#commit-log .date,
+#commit-log .author,
 .commit-shortlog .id,
 .commit-shortlog .author,
 .commit-shortlog .date {
 	font-size: 12px;
 }
-.commit-log .date,
+
+#commit-log .date,
 .commit-shortlog .id,
 .commit-shortlog .author,
 .commit-shortlog .date {
 	line-height: 24px;
 }
+
 .commit-diff,
 div.blob {
 	font-size: 12px;
@@ -81,11 +156,13 @@ div.blob {
 	-moz-border-radius: 3px;
 	clear: both;
 }
+
 .repo-info {
 	float: left;
 	font-size: 14px;
 	margin-left: 2em;
 }
+
 .commit-tree {
   clear:both;
 	padding: 0 1ex;
@@ -95,12 +172,15 @@ div.blob {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 }
+
 .commit-tree li {
 	padding-left:18px;
 }
+
 .short-commit-message {
 	float: left;
 }
+
 .commit-diff h4,
 .blob h4 {
   font-weight:bold;
@@ -111,22 +191,20 @@ div.blob {
   -webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 }
+
 h4 img{
   padding:0 4px;
 }
+
 .commit-diff pre code,
 div.blob pre code {
   padding: 0.5ex;
 }
+
 .diff {
   padding-left:18px;
 }
-.add {
-  padding-left:18px;
-}
-.rm {
-  padding-left:18px;
-}
+
 div.blob{
   margin-top:1ex;
   padding-top:0.5ex;
