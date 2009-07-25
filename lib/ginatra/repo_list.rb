@@ -2,18 +2,12 @@ module Ginatra
   # Convenience class for me!
   class RepoList
     include Singleton
-    attr_accessor :list
-    def initialize
-
-      self.list =  Dir.entries(Ginatra::Config.git_dir).
-                   delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
-                   map!{ |e| File.expand_path(e, Ginatra::Config.git_dir) }.
-                   map!{ |e| Repo.new(e) }
-    end
     
-    # For convinience
     def self.list
-      self.instance.list
+      Dir.entries(Ginatra::Config.git_dir).
+                     delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
+                     map!{ |e| File.expand_path(e, Ginatra::Config.git_dir) }.
+                     map!{ |e| Repo.new(e) }
     end
     
     def self.find(local_param)
@@ -26,15 +20,12 @@ module Ginatra
   end
 
   class MultiRepoList < RepoList
-    def initialize
-      self.list = []
-      Ginatra::Config.git_dirs.each do |git_dir|
-        self.list << Dir.glob(git_dir).
-                          delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
-                          map{ |e| File.expand_path(e) }
-      end
-      self.list.flatten!
-      self.list.map!{ |e| Repo.new(e) }
+    def self.list
+      Ginatra::Config.git_dirs.map! do |git_dir|
+        files = Dir.glob(git_dir)
+        files.delete_if { |e| Ginatra::Config.ignored_files.include?(e) }
+        files.map! { |e| File.expand_path(e) }
+      end.flatten.map! { |e| Repo.new(e) }
     end
   end
 end

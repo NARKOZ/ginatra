@@ -3,8 +3,8 @@ require File.join(File.dirname(__FILE__), "spec_helper")
 describe "Ginatra" do
   
   before do
-    @repo_list = Ginatra::RepoList.instance
-    @multi_repo_list = Ginatra::MultiRepoList.instance
+    @repo_list = Ginatra::RepoList
+    @multi_repo_list = Ginatra::MultiRepoList
   end
 
 
@@ -49,11 +49,11 @@ describe "Ginatra" do
     end
 
     it "should be an array of `Ginatra::Repo`s" do
-      @multi_repo_list.each { |r| r.should be_an_instance_of(Ginatra::MultiRepo)}
+      @multi_repo_list.list.each { |r| r.should be_an_instance_of(Ginatra::Repo)}
     end
 
     it "should contain the test repo" do
-      @multi_repo_list.include?(@repo)
+      @multi_repo_list.list.include?(@repo)
     end
 
   end
