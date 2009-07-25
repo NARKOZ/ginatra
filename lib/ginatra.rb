@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra/base'
-require 'sinatra/cache'
 require 'grit'
 require 'coderay'
 
@@ -32,8 +31,6 @@ module Ginatra
 
   class App < Sinatra::Base
 
-    register Sinatra::Cache
-
     configure do
       current_path = File.expand_path(File.dirname(__FILE__))
       Config.load!
@@ -47,9 +44,6 @@ module Ginatra
       set :static, true
       set :public, "#{current_path}/../public"
       set :views, "#{current_path}/../views"
-      set :cache_enabled, true
-      set :cache_page_extension, '.html'
-      set :cache_output_dir, ''
     end
 
     helpers do
@@ -116,7 +110,7 @@ module Ginatra
       @path = {}
       @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
       @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
-      cache erb(:tree)
+      erb(:tree)
     end
 
     get '/:repo/tree/:tree/*' do # for when we specify a path
@@ -130,14 +124,14 @@ module Ginatra
         @path = {}
         @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-        cache erb(:tree)
+        erb(:tree)
       end
     end
 
     get '/:repo/blob/:blob' do
       @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
-      cache erb(:blob)
+      erb(:blob)
     end
 
     get '/:repo/blob/:tree/*' do
@@ -158,7 +152,7 @@ module Ginatra
 
         @highlighter ||= 'ruby'
 
-        cache erb(:blob)
+        erb(:blob)
       end
     end
 
