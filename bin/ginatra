@@ -4,6 +4,11 @@ current_path = File.expand_path(File.dirname(__FILE__))
 
 require "#{current_path}/../lib/ginatra"
 require 'vegas'
-
+pid = Kernel.fork { system "git-daemon --base-path=#{Ginatra::Config.git_dir} --export-all" }
 Vegas::Runner.new(Ginatra::App, 'ginatra-app', :port => Ginatra::Config.port)
+
+trap("INT", "HUP", "TERM") do
+  Process.kill(pid)
+  puts "Farewell."
+end
 
