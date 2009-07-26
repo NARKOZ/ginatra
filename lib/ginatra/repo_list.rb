@@ -49,12 +49,12 @@ module Ginatra
   end
 
   class MultiRepoList < RepoList
-    def self.list
+    def refresh
       Ginatra::Config.git_dirs.map! do |git_dir|
         files = Dir.glob(git_dir)
         files.delete_if { |e| Ginatra::Config.ignored_files.include?(e) }
-        files.map! { |e| File.expand_path(e) }
-      end.flatten.map! { |e| Repo.new(e) }
+        files.each { |e| add(e) }
+      end
     end
   end
 end
