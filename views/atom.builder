@@ -17,8 +17,8 @@ xml.feed :'xml:lang' => 'en-US', :xmlns => 'http://www.w3.org/2005/Atom' do
   xml.updated(@commits.first ? rfc_date(@commits.first.committed_date) : rfc_date(Time.now.utc))
   @commits.each do |commit|
     xml.entry do |entry|
-      entry.id "#{base_url}/commits/#{commit.id_abbrev}"
-      entry.link :type => 'text/html', :href => "#{base_url}/commits/#{commit.id_abbrev}", :rel => 'alternate'
+      entry.id "#{base_url}/commit/#{commit.id_abbrev}"
+      entry.link :type => 'text/html', :href => "#{base_url}/commit/#{commit.id_abbrev}", :rel => 'alternate'
       entry.updated rfc_date(commit.committed_date)
       entry.title   "Commit #{commit.id_abbrev} to #{@repo.name}"
       entry.summary h(commit.short_message)
