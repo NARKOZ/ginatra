@@ -2,16 +2,45 @@ module Ginatra
   # Convenience class for me!
   class RepoList
     include Singleton
-    
-    def self.list
-      Dir.entries(Ginatra::Config.git_dir).
-                     delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
-                     map!{ |e| File.expand_path(e, Ginatra::Config.git_dir) }.
-                     map!{ |e| Repo.new(e) }
+    attr_accessor :list
+    def initialize
+      self.list = []
+      self.refresh
     end
     
+    def self.list
+      self.instance.refresh
+      self.instance.list
+    end
+
+    def refresh
+      Dir.entries(Ginatra::Config.git_dir).
+        delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
+        each { |e| add(e) }
+    end
+
+    def add(e, path = File.expand_path(e, Ginatra::Config.git_dir))
+      unless self.has_repo?(e)
+        list << Repo.new(path)
+      end
+    end
+
+    def has_repo?(local_param)
+      l = local_param.sub(/\.git$/,'')
+      list.find { |r| r.param == l } ? true : false
+    end
+
+    def find(local_param)
+      if repo = list.find { |r| r.param == local_param }
+        repo
+      else
+        refresh
+        list.find { |r| r.param == local_param }
+      end
+    end
+
     def self.find(local_param)
-      list.find { |r| r.param == local_param }
+      self.instance.find(local_param)
     end
 
     def self.method_missing(sym, *args, &block)

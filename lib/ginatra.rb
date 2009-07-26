@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra/base'
-require 'sinatra/cache'
 require 'grit'
 require 'coderay'
 
@@ -32,8 +31,6 @@ module Ginatra
 
   class App < Sinatra::Base
 
-    register Sinatra::Cache
-
     configure do
       current_path = File.expand_path(File.dirname(__FILE__))
       Config.load!
@@ -47,9 +44,6 @@ module Ginatra
       set :static, true
       set :public, "#{current_path}/../public"
       set :views, "#{current_path}/../views"
-      set :cache_enabled, true
-      set :cache_page_extension, '.html'
-      set :cache_output_dir, ''
     end
 
     helpers do
@@ -69,12 +63,14 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
       return "" if @commits.empty?
+      etag(@commits.first.id)
       builder :atom, :layout => nil
     end
 
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
+      etag(@commits.first.id)
       erb :log
     end
 
@@ -82,6 +78,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?
+      etag(@commits.first.id)
       builder :atom, :layout => nil
     end
 
@@ -89,6 +86,7 @@ module Ginatra
       params[:page] = 1
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
+      etag(@commits.first.id)
       erb :log
     end
 
@@ -101,6 +99,7 @@ module Ginatra
     get '/:repo/commit/:commit' do
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
+      etag(@commit.id)
       erb(:commit)
     end
 
@@ -112,11 +111,19 @@ module Ginatra
 
     get '/:repo/tree/:tree' do
       @repo = RepoList.find(params[:repo])
+
+      if (tag = @repo.git.method_missing('rev_parse', {}, '--verify', "#{params[:tree]}^{tree}")).empty?
+        # we don't have a tree.
+        not_found
+      else
+        etag(tag)
+      end
+
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
       @path = {}
       @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
       @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
-      cache erb(:tree)
+      erb(:tree)
     end
 
     get '/:repo/tree/:tree/*' do # for when we specify a path
@@ -127,17 +134,19 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
         redirect "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
       else
+        etag(@tree.id)
         @path = {}
         @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-        cache erb(:tree)
+        erb(:tree)
       end
     end
 
     get '/:repo/blob/:blob' do
       @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
-      cache erb(:blob)
+      etag(@blob.id)
+      erb(:blob)
     end
 
     get '/:repo/blob/:tree/*' do
@@ -148,6 +157,7 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
+        etag(@blob.id)
         extension = params[:splat].first.split(".").last
         @highlighter = case extension
           when 'js'
@@ -158,7 +168,7 @@ module Ginatra
 
         @highlighter ||= 'ruby'
 
-        cache erb(:blob)
+        erb(:blob)
       end
     end
 
