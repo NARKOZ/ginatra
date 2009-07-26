@@ -70,7 +70,7 @@ module Ginatra
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
-      etag(@commits.first.id) # this is broken if we used push -f.  So we shouldn't do that.
+      etag(@commits.first.id)
       erb :log
     end
 
