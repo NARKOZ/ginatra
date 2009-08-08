@@ -1,3 +1,10 @@
+# to make refs work!
+module Grit
+  class Commit
+    attr_accessor :refs
+  end
+end
+
 module Ginatra
   # Convenience class for me!
   class Repo
