@@ -7,7 +7,6 @@ current_path = File.expand_path(File.dirname(__FILE__))
 
 module Ginatra; end
 
-require "#{current_path}/grit/commit"
 require "#{current_path}/ginatra/requires"
 require "#{current_path}/ginatra/config"
 require "#{current_path}/ginatra/helpers"
