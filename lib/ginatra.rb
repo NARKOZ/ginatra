@@ -7,11 +7,9 @@ current_path = File.expand_path(File.dirname(__FILE__))
 
 module Ginatra; end
 
-require "#{current_path}/ginatra/requires"
-require "#{current_path}/ginatra/config"
-require "#{current_path}/ginatra/helpers"
-require "#{current_path}/ginatra/repo"
-require "#{current_path}/ginatra/repo_list"
+# Loading in reverse because RepoList needs to be loaded before MultiRepoList
+Dir.glob("#{current_path}/ginatra/*.rb").reverse.each { |f| require f }
+
 require "#{current_path}/sinatra/partials"
 
 # Written myself. i know, what the hell?!
