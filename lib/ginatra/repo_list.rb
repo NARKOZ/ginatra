@@ -52,8 +52,7 @@ module Ginatra
     def refresh
       Ginatra::Config.git_dirs.map! do |git_dir|
         files = Dir.glob(git_dir)
-        files.delete_if { |e| Ginatra::Config.ignored_files.include?(e) }
-        files.each { |e| add(e) }
+        files.each { |e| add(e) unless Ginatra::Config.ignored_files.include?(e) }
       end
     end
   end
