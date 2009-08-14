@@ -3,6 +3,7 @@ module Ginatra
   class RepoList
     include Singleton
     attr_accessor :list
+    
     def initialize
       self.list = []
       self.refresh
@@ -14,9 +15,8 @@ module Ginatra
     end
 
     def refresh
-      Dir.entries(Ginatra::Config.git_dir).
-        delete_if{ |e| Ginatra::Config.ignored_files.include?(e) }.
-        each { |e| add(e) }
+      entries = Dir.entries(Ginatra::Config.git_dir)
+      entries.each { |e| add(e) unless Ginatra::Config.ignored_files.include?(e) }
     end
 
     def add(e, path = File.expand_path(e, Ginatra::Config.git_dir))
