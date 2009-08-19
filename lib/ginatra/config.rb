@@ -4,9 +4,8 @@ module Ginatra
     current_path = File.expand_path("#{File.dirname(__FILE__)}")
     CONFIG_PATH = File.expand_path("~/.ginatra")
     DEFAULT_CONFIG = {
-      :git_dir => File.expand_path("#{current_path}/../../repos"),
-      :git_dirs => [File.expand_path("#{current_path}/../../repos/*.git")],
-      :ignored_files => ['.', '..', 'README.md'],
+      :git_dirs => [File.expand_path("#{current_path}/../../repos/*")],
+      :ignored_files => ['README.md'],
       :description => "View My Git Repositories",
       :port => 9797
     }

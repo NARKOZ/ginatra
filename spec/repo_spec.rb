@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), "spec_helper")
+current_path = File.expand_path(File.dirname(__FILE__))
+require File.join(current_path, "spec_helper")
 
 describe "Ginatra" do
   describe "Repo" do
@@ -6,12 +7,12 @@ describe "Ginatra" do
     before do
       @repo_list = Ginatra::RepoList
       @ginatra_repo = @repo_list.find("test")
-      @grit_repo = Grit::Repo.new(File.join(Ginatra::App.git_dir, "test.git"), {})
+      @grit_repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"), {})
       @commit = @ginatra_repo.commit("910ff56f585bcdfc3ba105c8846b1df0a6abf069")
     end
 
     it "should have a name" do
-      @ginatra_repo.name == "Test"
+      @ginatra_repo.name == "test"
     end
 
     it "should have a param for urls" do
@@ -19,20 +20,16 @@ describe "Ginatra" do
     end
 
     it "should have a description" do
-      @ginatra_repo.description == "Unnamed repository; edit this file to name it for gitweb."
+      @ginatra_repo.description =~ /description file for this repository and set the description for it./
     end
 
-    it "should have a descripton that matches the grit description" do
-      @ginatra_repo.description == @grit_repo.description
-    end
-
-    it "should have an array of commits that match the grit array of commits limited to 25 items" do
+    it "should have an array of commits that match the grit array of commits limited to 10 items" do
       @ginatra_repo.commits === @grit_repo.commits
       @ginatra_repo.commits.length == 10
     end
 
     it "should be the same thing using #find or #new" do
-      @repo_list.find("test") == Ginatra::Repo.new(File.join(Ginatra::App.git_dir, "test.git"))
+      @repo_list.find("test") == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
     end
     
     it "should contain this commit" do

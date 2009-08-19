@@ -1,4 +1,6 @@
-require File.join(File.dirname(__FILE__), "spec_helper")
+current_path = File.expand_path(File.dirname(__FILE__))
+require File.join(current_path, "spec_helper")
+
 describe "Ginatra" do
   
   describe "RepoList" do

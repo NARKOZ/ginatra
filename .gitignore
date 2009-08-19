@@ -1,4 +1,4 @@
-repos/*.git
+repos/*/
 public/*.esproj
 tmp/*
 .DS_Store

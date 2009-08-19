@@ -31,9 +31,6 @@ module Ginatra
     configure do
       current_path = File.expand_path(File.dirname(__FILE__))
       Config.load!
-      Config.each_pair do |k, v|
-        set k, v
-      end
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }
       set :dump_errors, true

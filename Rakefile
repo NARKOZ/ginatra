@@ -7,14 +7,6 @@ require "#{current_path}/lib/ginatra"
 
 task :default => ['rake:spec', 'rake:features']
 
-desc "Adds a Git Repository to Ginatra. Usage: `rake add repo='<git-repo-url>' [name='<name-in-ginatra>']`"
-task "add" do |t|
-  raise ArgumentError, "FATAL: You Must Specify a Git Repository to Clone" if ENV['repo'].empty?
-  FileUtils.cd(repo_dir) do
-    puts %x(git clone --bare #{ENV['repo']} #{(ENV['name'] + ".git") unless ENV['name'].nil?})
-  end
-end
-
 desc "Runs the Cucumber Feature Suite"
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "--format pretty"
@@ -55,8 +47,8 @@ namespace :setup do
 
   desc "Clones the Test Repository"
   task :repo do |t|
-    FileUtils.cd(repo_dir) do
-      puts `git clone --bare git://github.com/atmos/hancock-client.git test.git`
+    FileUtils.cd(File.join(current_path, "repos")) do
+      puts `git clone git://github.com/atmos/hancock-client.git test`
     end
   end
 
@@ -72,36 +64,4 @@ namespace :setup do
     puts %x(gem install #{gems.join(" ")})
   end
 
-end
-
-namespace :test do
-
-  task :spec => ['rake:spec'] do
-    puts ""
-    puts "DEPRECIATION WARNING: `rake test:spec` has been replaced with `rake spec` -- I'm making your life easier"
-    puts ""
-  end
-
-  task :features => ['rake:features'] do
-    puts ""
-    puts "DEPRECIATION WARNING: `rake test:features` has been replaced with `rake features` -- I'm making your life easier"
-    puts ""
-  end
-
-end
-
-def repo_dir
-  if Ginatra::App.git_dir
-    File.expand_path( Ginatra::App.git_dir )
-  elsif Ginatra::App.git_dirs
-    a = Dir.glob(Ginatra::App.git_dirs.first).first
-    if Dir.entries(a).include?"refs"
-      a = File.dirname(a)
-    else
-      a
-    end
-    File.expand_path( a )
-  else
-    raise ArgumentError, "You need to set `git_dir` or `git_dirs` for this rake task to work"
-  end
 end

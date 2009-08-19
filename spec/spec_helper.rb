@@ -16,6 +16,7 @@ Webrat.configure do |config|
 end
 
 Ginatra::App.set :environment, :test
+Ginatra::Config[:git_dirs] = ["#{current_path}/../repos/*"]
  
 Spec::Runner.configure do |config|
   def app

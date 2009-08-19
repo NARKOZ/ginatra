@@ -13,10 +13,10 @@ module Ginatra
 
     def initialize(path)
       @repo = Grit::Repo.new(path)
-      @param = File.split(path).last.gsub(/\.git$/, '')
-      @name = @param.capitalize
+      @param = File.split(path).last
+      @name = @param
       @description = @repo.description
-      @description = "Please edit the #{@param}.git/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
+      @description = "Please edit the #{@repo.path}/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
       @repo
     end
 
@@ -46,14 +46,5 @@ module Ginatra
       @repo.send(sym, *args, &block)
     end
 
-  end
-
-  class MultiRepo < Repo
-
-    attr_reader :name, :param, :description
-
-    def self.create!(param)
-      @repo = MultiRepoList.find { |r| r.param =~ /^#{Regexp.escape param }$/ }
-    end
   end
 end
