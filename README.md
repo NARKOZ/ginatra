@@ -2,9 +2,18 @@ Ginatra
 =======
 
 This project  is to make a  clone of gitweb in  Ruby and Sinatra. It  serves git
-repositories out  of a specified  directory at the moment,  but i have  plans to
-make  it function  just  as gitweb  does, including  leeching  config files  and
-suchlike.
+repositories out of a set of  specified directories using an array of glob-based
+paths. I have plans to make it  function just as gitweb does, including leeching
+config files and suchlike.
+
+Updating to Multiple directory repositories:
+============================================
+
+- Remove any bare cloned repositories from `./repos/`
+- Execute the following: `rake setup:repo` which creates a non-bare test repo in
+  `./repos/`
+
+Simple eh?
 
 Installation
 ------------
