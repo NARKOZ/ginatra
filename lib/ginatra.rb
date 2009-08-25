@@ -23,13 +23,15 @@ module Ginatra
     end
   end
 
-  VERSION = "1.1.0"
+  current_path = File.expand_path(File.dirname(__FILE__))
+  VERSION = File.new("#{current_path}/../VERSION").read
 
   class App < Sinatra::Base
 
     configure do
       current_path = File.expand_path(File.dirname(__FILE__))
       Config.load!
+      set :port, Ginatra::Config[:port]
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }
       set :dump_errors, true
