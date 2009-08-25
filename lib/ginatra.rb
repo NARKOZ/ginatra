@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'sinatra/base'
 require 'grit'
 require 'coderay'

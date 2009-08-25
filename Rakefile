@@ -65,3 +65,21 @@ namespace :setup do
   end
 
 end
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "ginatra"
+    gemspec.summary = "A Gitweb Clone in Sinatra and Grit"
+    gemspec.description = "Host your own git repository browser through the power of Sinatra and Grit"
+    gemspec.email = "sam@lenary.co.uk"
+    gemspec.homepage = "http://lenary.github.com/ginatra"
+    gemspec.authors = ["Sam Elliott", "Ryan Bigg"]
+    gemspec.add_dependency('sinatra', '>=0.9.4')
+    gemspec.add_dependency('grit', '>=1.1.1')
+    gemspec.add_dependency('coderay', '>=0.8.0')
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install jeweler"
+end
+

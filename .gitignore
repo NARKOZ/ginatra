@@ -7,7 +7,7 @@ webrat*
 spec/*.html
 public/*/
 public/*.html
-_site
-_layouts
+_site/
+_layouts/
 **/*.swp
 *.swp
