@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
      "features/pages.feature",
      "features/step_definitions/page_steps.rb",
      "features/support/env.rb",
+     "ginatra.gemspec",
      "lib/ginatra.rb",
      "lib/ginatra/config.rb",
      "lib/ginatra/helpers.rb",
