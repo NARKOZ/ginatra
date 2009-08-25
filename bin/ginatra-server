@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+current_path = File.expand_path(File.dirname(__FILE__))
+
+require "#{current_path}/../lib/ginatra"
+require "#{current_path}/../vendor/vegas/lib/vegas"
+Vegas::Runner.new(Ginatra::App, 'ginatra-server', :port => Ginatra::Config.port) do |runner, opts, app|
+  
+  opts.banner = "Usage: ginatra-server [[options] start | stop | status]"
+
+  opts.separator "  start  - Start the Ginatra HTTP Server"
+  opts.separator "  stop   - Stop the Ginatra Server"
+  opts.separator "  status - How's your Ginatra Server holding up?"
+
+  if ARGV[-1] == "start"
+  elsif ARGV[-1] == "stop"
+    runner.kill!
+    exit
+  elsif ARGV[-1] == "status"
+    runner.status
+    exit!
+  elsif ARGV.length == 0 || ARGV[-1] !~ /^(start|stop|status)$/
+    runner.options[:start] = false
+    at_exit { puts opts }
+  end
+  
+end
+

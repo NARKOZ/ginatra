@@ -3,11 +3,58 @@
 current_path = File.expand_path(File.dirname(__FILE__))
 
 require "#{current_path}/../lib/ginatra"
-require 'vegas'
-pid = Kernel.fork { system "git daemon --base-path=#{Ginatra::Config.git_dir} --export-all" }
-Vegas::Runner.new(Ginatra::App, 'ginatra-app', :port => Ginatra::Config.port)
-trap("INT", "HUP", "TERM") do
-  Process.kill(pid)
-  puts "Farewell."
+
+module Ginatra::Executable
+  HELP = <<HELP
+Usage: ginatra [ version | server <options> <command> |
+                 daemon <command> | directory <command> <args> ]
+
+Ginatra Commands:
+  version - Pretty Self explanatory. Print version number and exit
+
+Ginatra Server Commands:
+  start   - Start the Ginatra HTTP Server.
+  stop    - Stop the Ginatra Server.
+  status  - How's your Ginatra Server holding up?
+
+Ginatra Daemon Commands:
+  start   - Starts the Git Daemon servimg Ginatra's Repositories
+  stop    - Stops the Git Daemon
+  restart - Restarts the Git Daemon
+  status  - Is the Git Daemon on or off?
+
+
+Ginatra Directory Commands:
+  add     - Adds the <globs> to the array of dirs that Ginatra
+              looks in for repositories.
+  remove  - Removes the <globs> from the aforementioned array.
+  list    - Lists the globs Ginatra looks in for repositories
+
+HELP
+
+  @current_path = File.expand_path(File.dirname(__FILE__))
+
+  def self.daemon(*args)
+    system("#{@current_path}/ginatra-daemon #{args.join(" ")}")
+  end
+
+  def self.directory(*args)
+    system("#{@current_path}/ginatra-directory #{args.join(" ")}")
+  end
+
+  def self.server(*args)
+    system("#{@current_path}/ginatra-server #{args.join(" ")}")
+  end
+
+  def self.version(*args)
+    puts Ginatra::VERSION
+  end
 end
+
+command, *args = ARGV[0], ARGV[1..-1]
+if command !~ /^(version|daemon|directory|server)$/
+  puts Ginatra::Executable::HELP
+  exit
+end
+Ginatra::Executable.send(command, *args)
 

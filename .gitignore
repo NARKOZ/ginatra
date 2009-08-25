@@ -9,3 +9,5 @@ public/*/
 public/*.html
 _site
 _layouts
+**/*.swp
+*.swp

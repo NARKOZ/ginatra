@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+current_path = File.expand_path(File.dirname(__FILE__))
+
+require "#{current_path}/../lib/ginatra"
+require "logger"
+
+def logger
+  return @logger if @logger
+  @logger = Logger.new(STDOUT)
+  @logger.level = Logger::INFO
+  @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
+  @logger
+end
+
+module Ginatra::Directory
+
+  HELP = <<HELP
+Usage: ginatra-directory [ list | add <globs> | remove <globs> ]
+
+Commands:
+  add    - Adds the <globs> to the array of dirs that Ginatra 
+             looks in for repositories.
+  remove - Removes the <globs> from the aforementioned array.
+  list   - Lists the globs Ginatra looks in for repositories
+
+HELP
+
+  def self.add(globs)
+    Ginatra::Config.load!
+    Ginatra::Config[:git_dirs] << globs
+    Ginatra::Config[:git_dirs].flatten
+    logger.info "Added #{globs.join(" ")} to your config"
+    Ginatra::Config.dump!
+  end
+
+  def self.remove(globs)
+    Ginatra::Config.load!
+    globs.each do |glob|
+      Ginatra::Config[:git_dirs].delete(glob)
+    end
+    logger.info "Removed #{globs.join(" ")} from your config"
+    Ginatra::Config.dump!
+  end
+
+  def self.list(*args)
+    Ginatra::Config.load!
+    puts "Directories Ginatra will look for repos in:"
+    puts Ginatra::Config[:git_dirs].map{|r| "  - #{r}"}.join("\n")
+    puts ""
+  end
+end
+
+command, *args = ARGV[0], ARGV[1..-1]
+if command !~ /^(add|remove|list)$/
+  puts Ginatra::Directory::HELP
+  exit
+end
+Ginatra::Directory.send(command, *args)
+
