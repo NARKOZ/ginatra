@@ -78,6 +78,7 @@ begin
     gemspec.add_dependency('sinatra', '>=0.9.4')
     gemspec.add_dependency('grit', '>=1.1.1')
     gemspec.add_dependency('coderay', '>=0.8.0')
+    gemspec.files.include 'vendor/**/*'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
