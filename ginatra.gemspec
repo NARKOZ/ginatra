@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ginatra}
-  s.version = "2.0.1"
+  s.version = "2.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Elliott", "Ryan Bigg"]
-  s.date = %q{2009-08-25}
+  s.date = %q{2009-08-26}
   s.description = %q{Host your own git repository browser through the power of Sinatra and Grit}
   s.email = %q{sam@lenary.co.uk}
   s.executables = ["ginatra", "ginatra-daemon", "ginatra-directory", "ginatra-server"]
@@ -63,6 +63,19 @@ Gem::Specification.new do |s|
      "spec/repo_list_spec.rb",
      "spec/repo_spec.rb",
      "spec/spec_helper.rb",
+     "vendor/vegas/History.txt",
+     "vendor/vegas/LICENSE",
+     "vendor/vegas/Manifest.txt",
+     "vendor/vegas/README.rdoc",
+     "vendor/vegas/Rakefile",
+     "vendor/vegas/lib/vegas.rb",
+     "vendor/vegas/lib/vegas/runner.rb",
+     "vendor/vegas/test/test_app/bin/test_app",
+     "vendor/vegas/test/test_app/test_app.rb",
+     "vendor/vegas/test/test_apps.rb",
+     "vendor/vegas/test/test_helper.rb",
+     "vendor/vegas/test/test_vegas_runner.rb",
+     "vendor/vegas/vegas.gemspec",
      "views/_actor_box.erb",
      "views/_commit_info_box.erb",
      "views/_header.erb",
