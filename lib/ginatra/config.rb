@@ -3,6 +3,7 @@ module Ginatra
 
     current_path = File.expand_path("#{File.dirname(__FILE__)}")
     CONFIG_PATH = File.expand_path("~/.ginatra/config.yml")
+      
     DEFAULT_CONFIG = {
       :git_dirs => [File.expand_path("#{current_path}/../../repos/*")],
       :ignored_files => ['README.md'],
@@ -16,6 +17,12 @@ module Ginatra
       end
     end
 
+    unless File.exist?(CONFIG_PATH)
+      require 'fileutils'
+      FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
+      setup!
+    end
+    
     def self.load!
       @config = {}
       begin
