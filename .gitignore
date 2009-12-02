@@ -11,3 +11,6 @@ _site/
 _layouts/
 **/*.swp
 *.swp
+.yardoc
+doc/*
+pkg/*
