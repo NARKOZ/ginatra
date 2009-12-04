@@ -6,14 +6,18 @@ repositories out of a set of  specified directories using an array of glob-based
 paths. I have plans to make it  function just as gitweb does, including leeching
 config files and suchlike.
 
-Updating to Multiple directory repositories:
-============================================
+Updating to the Most Recent Release (Gem):
+------------------------------------------
 
-- Remove any bare cloned repositories from `./repos/`
-- Execute the following: `rake setup:repo` which creates a non-bare test repo in
-  `./repos/`
+- ` $ gem install ginatra`
+- (re)Move `~/.ginatra`
+- Run the following to open an irb with Ginatra loaded: ` $ irb -r 'rubygems' -r 'rubygems'`
+- In this irb session, run the following then close it: `>> Ginatra::Config.setup!`
 
-Simple eh?
+**BEWARE**: The last method that you just called will dump a config to `~/.ginatra/config.yml`.
+This ignores anything already there, so be careful. You have been warned.
+
+You can now copy the contents your old `~/.ginatra/` file into `~/.ginatra/config.yml`.
 
 Installation
 ------------
@@ -23,65 +27,68 @@ You should be using Git 1.6.3 or later just to be sure that it all works:
     $ git --version
     git version 1.6.3
 
-You'll need a few gems just to serve git repositories, for page caching, syntax highlighting & a sinatra daemon runner:
+Next, just do the following (your setup may require sudo):
 
-    $ (sudo) gem install grit kematzy-sinatra-cache coderay vegas
+    $ gem install ginatra
 
-To run the test suite, you also need:
+This pulls down all the required dependencies too.
 
-    $ (sudo) gem install rspec webrat rack-test cucumber
+If you want to play around with the code, you can clone the repository. This also allows you
+to use a special rackup file to mount it where you wish. I am yet to sort out some of the
+details of running Ginatra from a gem with a rackup.ru file.
 
-To do both these steps more quickly, run the following rake tasks:
-
-    $ rake setup:gems
-    $ rake setup:test
-    
-Then clone this repository:
-
-    $ git clone git://github.com/lenary/ginatra.git
-    
-You'll  also need  to  (`--bare`) clone  `atmos/hancock-client`  into the  repos
-directory and call it test: (don't ask, it was just a repo i chose at random)
-
-    $ cd repos && git clone --bare git://github.com/atmos/hancock-client.git test.git
-
-This can be done much quicker by doing the following rake task
-
-    $ rake setup:repo
-    
 Usage
 -----
-        
-If you're just using it in development, use the following to run Ginatra:
 
-    $ ruby ginatra.rb
-    
-Ginatra  also runs  on thin.  **BEWARE:** There  are issues  running Ginatra  on
-Passenger. We discourage Ginatra's use on Passenger until we can make it stable.
+If you're just using it in development, use the following to start, check and stop Ginatra
+respectively:
 
-I have made a rake task so that  you can easily add repositories to Ginatra. Use
-the following to add repositories to Ginatra, without fear of getting it wrong:
+    $ ginatra server start
+    $ ginatra server status
+    $ ginatra server stop
 
-    $ rake add repo='git://github.com/lenary/ginatra.git'
-    $ rake add repo='git://github.com/mojombo/grit.git' name='fun'
+Ginatra  also runs  on thin, with the approach outlined above.
 
-Authors & Thanks
-----------------
+**BEWARE:** There are issues running Ginatra on Passenger. We discourage Ginatra's use
+on Passenger until we can make it stable.
+
+Ginatra can also start a git-daemon serving all the repositories that ginatra serves:
+
+    $ ginatra daemon start
+    $ ginatra daemon status
+    $ ginatra daemon stop
+
+This runs on the default git daemon port.
+
+You can add a glob specified list of git repositories for ginatra to serve using the
+following commands:
+
+    $ ginatra directory add '~/Git/ginatra/*'
+    $ ginatra directory list
+    $ ginatra directory remove '~/Git/ginatra/*'
+
+These should be fairly self explanatory. Help is shown with either the --help option
+or by not specifying a sub-command like start, status, stop, add, list or remove.
+
+
+Attribution
+-----------
 
 **Authors:**
 
 - Samuel Elliott (lenary)
 - Ryan Bigg (radar)
 
+**Patches**
+
+- James Tucker (raggi)
+- Elia Schito (elia)
+- Scott Wisely (Syd)
+- Jonathan Stott (namelessjon)
+
 **Thanks**
 
-- tekkub - For help with Grit
-- schacon - For help with Grit
-- cirwin - For moral support and design help
-- irc://irc.freenode.net/git - for any other problems I had
-- Picol Project (http://picol.org) - for the icons
-- sr - For help with a large sinatra error
-- raggi - For a refactor and several feature suggestions
+Too many to name. Thanks be to you all.
 
 Screenshots
 -----------
