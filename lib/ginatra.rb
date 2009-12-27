@@ -1,3 +1,8 @@
+# We only want Rubygems if it exists. Else, we assume they know what they're doing.
+begin
+  require 'rubygems'
+rescue LoadError
+end
 require 'sinatra/base'
 require 'grit'
 require 'coderay'
