@@ -1,3 +1,0 @@
-[submodule "vendor/vegas"]
-	path = vendor/vegas
-	url = git://github.com/quirkey/vegas.git

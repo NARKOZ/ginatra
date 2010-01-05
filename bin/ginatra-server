@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
+require "vegas"
+
 $:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 
 require "ginatra"
 
-$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../vendor/vegas/lib")
-
-require "vegas"
 
 Vegas::Runner.new(Ginatra::App, 'ginatra-server', :port => Ginatra::Config.port) do |runner, opts, app|
   

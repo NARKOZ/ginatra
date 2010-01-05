@@ -55,7 +55,7 @@ namespace :setup do
 
   desc "Installs the Required Gems"
   task :gems do |t|
-    gems = %w(grit kematzy-sinatra-cache vegas)
+    gems = %w(grit kematzy-sinatra-cache)
     puts %x(gem install #{gems.join(" ")})
   end
 
@@ -79,8 +79,8 @@ begin
     gemspec.add_dependency('sinatra', '>=0.9.4')
     gemspec.add_dependency('grit', '>=1.1.1')
     gemspec.add_dependency('coderay', '>=0.8.0')
-    gemspec.files.include 'vendor/**/*'
     gemspec.version = Ginatra::VERSION
+    gemspec.add_dependency('vegas', '>=0.1.0')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
