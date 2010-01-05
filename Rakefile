@@ -2,8 +2,9 @@ require 'rubygems'
 require 'cucumber/rake/task'
 require 'spec/rake/spectask'
 
-current_path = File.expand_path(File.dirname(__FILE__))
-require "#{current_path}/lib/ginatra"
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/lib")
+
+require "ginatra"
 
 task :default => ['rake:spec', 'rake:features']
 
@@ -79,6 +80,7 @@ begin
     gemspec.add_dependency('grit', '>=1.1.1')
     gemspec.add_dependency('coderay', '>=0.8.0')
     gemspec.files.include 'vendor/**/*'
+    gemspec.version = Ginatra::VERSION
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
