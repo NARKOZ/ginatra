@@ -7,15 +7,19 @@ require 'sinatra/base'
 require 'grit'
 require 'coderay'
 
-current_path = File.expand_path(File.dirname(__FILE__))
-
 # The Ginatra Namespace Module
 module Ginatra; end
 
-# Loading in reverse because RepoList needs to be loaded before MultiRepoList
-Dir.glob("#{current_path}/ginatra/*.rb").reverse.each { |f| require f }
+# i feel this is cleaner than the #{current_path} shenanigans ($: is the load path)
+$:.unshift File.dirname(__FILE__)
 
-require "#{current_path}/sinatra/partials"
+# Loading in whichever order
+require "ginatra/repo"
+require "ginatra/repo_list"
+require "ginatra/config"
+require "ginatra/helpers"
+
+require "sinatra/partials"
 
 # Written myself. i know, what the hell?!
 module Ginatra
@@ -26,7 +30,7 @@ module Ginatra
 
   # An error related to a commit somewhere.
   # @todo Look for a refactor.
-  class CommitsError < Error; end
+  class CommitsError < Ginatra::Error; end
 
   # Error raised when commit ref passed in parameters
   # does not exist in repository
@@ -36,9 +40,7 @@ module Ginatra
     end
   end
 
-  current_path = File.expand_path(File.dirname(__FILE__))
-  # @todo look for a refactor that is rip compatible
-  VERSION = File.new("#{current_path}/../VERSION").read
+  VERSION = "2.1.0"
 
   # The main application class.
   #
@@ -47,7 +49,6 @@ module Ginatra
   class App < Sinatra::Base
 
     configure do
-      current_path = File.expand_path(File.dirname(__FILE__))
       Config.load!
       set :port, Ginatra::Config[:port]
       set :raise_errors, Proc.new { test? }
@@ -55,6 +56,7 @@ module Ginatra
       set :dump_errors, true
       set :logging, Proc.new { !test? }
       set :static, true
+      current_path = File.expand_path(File.dirname(__FILE__))
       set :public, "#{current_path}/../public"
       set :views, "#{current_path}/../views"
     end
@@ -79,8 +81,7 @@ module Ginatra
     end
 
     # The root route
-    #
-    # @todo how does this work?
+    # This works by interacting with the Ginatra::Repolist singleton.
     get '/' do
       erb :index
     end

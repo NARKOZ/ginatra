@@ -1,9 +1,13 @@
 #!/usr/bin/env ruby
 
-current_path = File.expand_path(File.dirname(__FILE__))
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 
-require "#{current_path}/../lib/ginatra"
-require "#{current_path}/../vendor/vegas/lib/vegas"
+require "ginatra"
+
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../vendor/vegas/lib")
+
+require "vegas"
+
 Vegas::Runner.new(Ginatra::App, 'ginatra-server', :port => Ginatra::Config.port) do |runner, opts, app|
   
   opts.banner = "Usage: ginatra-server [[options] start | stop | status]"

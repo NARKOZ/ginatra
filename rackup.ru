@@ -1,6 +1,6 @@
-current_path = File.expand_path(File.dirname(__FILE__))
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/lib")
 
-require "#{current_path}/lib/ginatra"
+require "ginatra"
 
 map '/' do
   run Ginatra::App
