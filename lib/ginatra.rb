@@ -25,12 +25,14 @@ require "sinatra/partials"
 module Ginatra
 
   # A standard error class for inheritance.
-  # @todo Look for a refactor.
   class Error < StandardError; end
 
   # An error related to a commit somewhere.
-  # @todo Look for a refactor.
-  class CommitsError < Ginatra::Error; end
+  class CommitsError < Error
+    def initialize(repo)
+      super("Something went wrong looking for the commits for #{repo}")
+    end
+  end
 
   # Error raised when commit ref passed in parameters
   # does not exist in repository
@@ -176,6 +178,7 @@ module Ginatra
     get '/:repo/tree/:tree' do
       @repo = RepoList.find(params[:repo])
 
+      # this might look silly but it's needed to pass the --verify.
       if (tag = @repo.git.method_missing('rev_parse', {}, '--verify', "#{params[:tree]}^{tree}")).empty?
         # we don't have a tree.
         not_found

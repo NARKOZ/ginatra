@@ -82,5 +82,10 @@ module Ginatra
       @repo.send(sym, *args, &block)
     end
 
+    # to correspond to the #method_missing definition
+    def respond_to?(sym)
+      @repo.respond_to?(sym) || super
+    end
+
   end
 end

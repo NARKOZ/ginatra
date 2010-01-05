@@ -26,13 +26,12 @@ module Ginatra
 
     # searches through the configured directory globs to find all the repositories
     # and adds them if they're not already there.
-    #
-    # @todo Docs: what the hell does this return?
     def refresh
       Ginatra::Config.git_dirs.map! do |git_dir|
         files = Dir.glob(git_dir)
         files.each { |e| add(e) unless Ginatra::Config.ignored_files.include?(File.split(e).last) }
       end
+      list
     end
 
     # adds a Repo corresponding to the path it found a git repo at in the configured
@@ -41,12 +40,11 @@ module Ginatra
     # @param [String] path the path of the git repo
     # @param [String] param the param of the repo if it differs, 
     #   for looking to see if it's already on the list
-    #
-    # @todo Docs: what does this return?
     def add(path, param = File.split(path).last)
       unless self.has_repo?(param)
         list << Repo.new(path)
       end
+      list
     end
 
     # checks to see if the list contains a repo with a param 
@@ -83,12 +81,14 @@ module Ginatra
 
     # allows missing methods to cascade to the instance,
     #
-    # @todo do we need this?
-    # @todo update the respond_to? method if we do.
-    #
     # Caution! contains: Magic
     def self.method_missing(sym, *args, &block)
       instance.send(sym, *args, &block)
+    end
+
+    # updated to correspond to the method_missing definition
+    def self.respond_to?(sym)
+      instance.respond_to?(sym) || super
     end
   end
 end

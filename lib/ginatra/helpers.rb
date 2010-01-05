@@ -209,8 +209,7 @@ module Ginatra
     end
 
     # Returns the Hostname of the given install. 
-    #
-    # @todo Where is this used?
+    # used in the atom feeds.
     #
     # stolen from Marley
     # 
