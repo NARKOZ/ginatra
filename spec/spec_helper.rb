@@ -1,12 +1,12 @@
 require 'rubygems'
 
-gem 'rspec'
+#gem 'rspec'
 require 'spec'
 
-current_path = File.expand_path(File.dirname(__FILE__))
-require "#{current_path}/../lib/ginatra"
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
+require "ginatra"
 
-gem 'webrat', '>=0.4.4'
+#gem 'webrat', '>=0.4.4'
 begin
   # When using webrat 0.6.0, there is no webrat/sinatra.rb file.
   # Looking at the gem's code, it looks like it autoloads the sinatra adapter at webrat/adapters/sinatra.rb.
@@ -17,23 +17,25 @@ rescue LoadError
   require 'webrat'
 end
 
-gem 'rack-test', '>=0.3.0'
+#gem 'rack-test', '>=0.3.0'
 require 'rack/test'
 
 Webrat.configure do |config|
   config.mode = :sinatra
 end
 
+current_path = File.expand_path(File.dirname(__FILE__))
+
 Ginatra::App.set :environment, :test
 Ginatra::Config[:git_dirs] = ["#{current_path}/../repos/*"]
- 
+
 Spec::Runner.configure do |config|
   def app
     Ginatra::App
   end
-  
+
   config.include(Rack::Test::Methods)
   config.include(Webrat::Methods)
   config.include(Webrat::Matchers)
-end 
+end
 

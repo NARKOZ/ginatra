@@ -1,5 +1,5 @@
-current_path = File.expand_path(File.dirname(__FILE__))
-require "#{current_path}/../../spec/spec_helper"
+$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../../spec")
+require "spec_helper"
 
 World do
   def app

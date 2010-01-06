@@ -48,7 +48,7 @@ namespace :setup do
 
   desc "Clones the Test Repository"
   task :repo do |t|
-    FileUtils.cd(File.join(current_path, "repos")) do
+    FileUtils.cd(File.join(Dir.pwd, "repos")) do
       puts `git clone git://github.com/atmos/hancock-client.git test`
     end
   end

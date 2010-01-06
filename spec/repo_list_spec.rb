@@ -1,9 +1,13 @@
-current_path = File.expand_path(File.dirname(__FILE__))
-require File.join(current_path, "spec_helper")
+$:.unshift File.dirname(__FILE__)
+require "spec_helper"
 
 describe "Ginatra" do
 
   describe "RepoList" do
+
+    def current_path
+      File.expand_path(File.dirname(__FILE__))
+    end
 
     before do
       @repo_list = Ginatra::RepoList.list
@@ -28,9 +32,6 @@ describe "Ginatra" do
 
     describe "New repos added to repo directory" do
 
-      NEW_REPO_NAME = "temp-new-repo"
-      REPO_DIR = File.join(current_path, "..", "repos")
-
       def print_repos_found
         Ginatra::Config.git_dirs.map! do |git_dir|
           files = Dir.glob(git_dir)
@@ -39,9 +40,12 @@ describe "Ginatra" do
       end
 
       before(:each) do
-        FileUtils.cd(REPO_DIR) do |dir|
-          FileUtils.mkdir(NEW_REPO_NAME)
-          FileUtils.cd(NEW_REPO_NAME) do |dir|
+        @new_repo_name = "temp-new-repo"
+        @repo_dir = File.join(current_path, "..", "repos")
+
+        FileUtils.cd(@repo_dir) do |dir|
+          FileUtils.mkdir(@new_repo_name)
+          FileUtils.cd(@new_repo_name) do |dir|
             `git init`
           end
         end
@@ -50,31 +54,31 @@ describe "Ginatra" do
       it "should detect new repo after refresh" do
         repo_list = Ginatra::RepoList.list # calling this should refresh the list
 
-        Ginatra::RepoList.instance.has_repo?(NEW_REPO_NAME).should == true
+        Ginatra::RepoList.instance.has_repo?(@new_repo_name).should == true
 
-        new_repo = Ginatra::RepoList.find(NEW_REPO_NAME)
+        new_repo = Ginatra::RepoList.find(@new_repo_name)
         repo_list.should include(new_repo)
       end
 
       it "should detect when a repo has been removed after refresh" do
         repo_list = Ginatra::RepoList.list # calling this should refresh the list
 
-        Ginatra::RepoList.instance.has_repo?(NEW_REPO_NAME).should == true
+        Ginatra::RepoList.instance.has_repo?(@new_repo_name).should == true
 
-        new_repo = Ginatra::RepoList.find(NEW_REPO_NAME)
+        new_repo = Ginatra::RepoList.find(@new_repo_name)
         repo_list.should include(new_repo)
 
         # remove the new repository from the file system
-        FileUtils.rm_rf File.join(REPO_DIR, NEW_REPO_NAME), :secure => true
+        FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), :secure => true
 
         repo_list = Ginatra::RepoList.list # refresh the repo list
 
-        Ginatra::RepoList.instance.has_repo?(NEW_REPO_NAME).should == false
+        Ginatra::RepoList.instance.has_repo?(@new_repo_name).should == false
         repo_list.should_not include(new_repo)
       end
 
       after(:each) do
-        FileUtils.rm_rf File.join(REPO_DIR, NEW_REPO_NAME), :secure => true
+        FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), :secure => true
       end
     end
   end
