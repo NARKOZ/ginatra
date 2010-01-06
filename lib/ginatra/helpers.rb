@@ -242,6 +242,8 @@ module Ginatra
         [stdout, stderr].each {|io| io.close }
       end
       html_output
+    rescue Errno::ENOENT
+      return "<div class=\"highlight\"><pre>#{content}</pre></div>"
     end
 
     def pygmentize_type(filename)
@@ -251,6 +253,8 @@ module Ginatra
         [stdin, stdout, stderr].each {|io| io.close }
       end
       type
+    rescue Errno::ENOENT
+      return "text"
     end
   end
 end
