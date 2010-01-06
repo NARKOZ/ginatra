@@ -5,7 +5,6 @@ rescue LoadError
 end
 require 'sinatra/base'
 require 'grit'
-require 'coderay'
 
 # The Ginatra Namespace Module
 module Ginatra; end
@@ -249,16 +248,6 @@ module Ginatra
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
         etag(@blob.id)
-        extension = params[:splat].first.split(".").last
-        @highlighter = case extension
-          when 'js'
-            'javascript'
-          when 'css'
-            'css'
-        end
-
-        @highlighter ||= 'ruby'
-
         erb(:blob)
       end
     end

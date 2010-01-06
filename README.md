@@ -31,7 +31,19 @@ Next, just do the following (your setup may require sudo):
 
     $ gem install ginatra
 
-This pulls down all the required dependencies too.
+This pulls down most of the required dependencies too.
+
+The last dependency you need is pygments, an awesome python syntax highlighter. 
+To check whether you have it, run:
+
+   $ which pygmentize
+
+If this returns a path pointing to a 'pygmentize' binary, then you're all set. 
+If not you'll need to install pygments. Look at the [jekyll wiki page][jekyll-install] 
+to see how to install it. Also make sure again that the `pygmentize` binary 
+is on your path.
+
+[jekyll-wiki-page]:http://wiki.github.com/mojombo/jekyll/install
 
 If you want to play around with the code, you can clone the repository. This also allows you
 to use a special rackup file to mount it where you wish. I am yet to sort out some of the

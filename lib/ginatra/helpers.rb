@@ -1,4 +1,5 @@
 require "digest/md5"
+require "open4"
 
 module Ginatra
   # Helpers used in the views usually,
@@ -134,14 +135,6 @@ module Ginatra
       "<ul id='files'>#{out.join}</ul>"
     end
 
-    # returns some html containing the Coderay'd diff files.
-    #
-    # @param [String] diff the diff you want highlighted
-    # @return [String] the highlighted diff
-    def diff(diff)
-      diff = CodeRay.scan(diff, :diff).div(:line_numbers => :table, :css => :class)
-    end
-
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #
@@ -239,5 +232,25 @@ module Ginatra
       "<a href=\"" + prefix_url("#{repo_param}#{"/#{ref}" if !ref.nil?}.atom") + "\" title=\"Atom Feed\" class=\"atom\">Feed</a>"
     end
 
+    def pygmentize(content, filename=nil)
+      type = !filename ? "diff" : pygmentize_type(filename)
+      html_output = ''
+      Open4.popen4("pygmentize -l #{type} -f html") do |pid, stdin, stdout, stderr|
+        stdin.puts content
+        stdin.close
+        html_output = stdout.read.strip
+        [stdout, stderr].each {|io| io.close }
+      end
+      html_output
+    end
+
+    def pygmentize_type(filename)
+      type =''
+      Open4.popen4("pygmentize -N #{filename}") do |pid, stdin, stdout, stderr|
+        type = stdout.read.strip
+        [stdin, stdout, stderr].each {|io| io.close }
+      end
+      type
+    end
   end
 end

@@ -76,11 +76,11 @@ begin
     gemspec.email = "sam@lenary.co.uk"
     gemspec.homepage = "http://lenary.github.com/ginatra"
     gemspec.authors = ["Sam Elliott", "Ryan Bigg"]
+    gemspec.version = Ginatra::VERSION
     gemspec.add_dependency('sinatra', '>=0.9.4')
     gemspec.add_dependency('grit', '>=1.1.1')
-    gemspec.add_dependency('coderay', '>=0.8.0')
-    gemspec.version = Ginatra::VERSION
     gemspec.add_dependency('vegas', '>=0.1.0')
+    gemspec.add_dependency('open4', '>= 0.9.6')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"

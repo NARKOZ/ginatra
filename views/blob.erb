@@ -3,7 +3,7 @@
 <div class="active">
   <div class="blob">
     <h4><img src="<%= prefix_url("img/doc.png") %>" /><%= @blob.name %></h4>
-    <%= CodeRay.scan(@blob.data, @highlighter).div(:line_numbers => :table, :css => :class) %>
+    <%= pygmentize(@blob.data, @blob.name) %>
   </div>
   <div class="clearfix">&nbsp;</div>
 </div>
