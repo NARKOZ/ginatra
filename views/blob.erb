@@ -2,7 +2,7 @@
 <h3>Blob: <%= params[:splat].first %></h3>
 <div class="active">
   <div class="blob">
-    <h4><img src="/img/doc.png" /><%= @blob.name %></h4>
+    <h4><img src="<%= prefix_url("img/doc.png") %>" /><%= @blob.name %></h4>
     <%= CodeRay.scan(@blob.data, @highlighter).div(:line_numbers => :table, :css => :class) %>
   </div>
   <div class="clearfix">&nbsp;</div>

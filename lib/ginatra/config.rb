@@ -15,7 +15,9 @@ module Ginatra
       :git_dirs => [File.expand_path("#{current_path}/../../repos/*")],
       :ignored_files => ['README.md'],
       :description => "View My Git Repositories",
-      :port => 9797
+      :port => 9797,
+      :host => "0.0.0.0",
+      :prefix => "/"
     }
 
     # Dumps the Default configuration to +CONFIG_PATH+,

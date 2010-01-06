@@ -52,6 +52,7 @@ module Ginatra
 
     configure do
       Config.load!
+      set :host, Ginatra::Config[:host]
       set :port, Ginatra::Config[:port]
       set :raise_errors, Proc.new { test? }
       set :show_exceptions, Proc.new { development? }

@@ -5,7 +5,7 @@
   </div>
   <dl>
     <% Ginatra::RepoList.list.each do |repo| %>
-      <dt><a href="/<%= repo.param %>"><%= repo.name %></a></dt>
+      <dt><a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a></dt>
       <dd><%=h repo.description %></dd>
     <% end %>
   </dl>

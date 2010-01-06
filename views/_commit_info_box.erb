@@ -3,21 +3,21 @@
     <dl>
       <dt>commit:</dt>
       <dd>
-        <a href='/<%= repo.param %>/commit/<%= commit.id_abbrev %>'>
+        <a href='<%= prefix_url(repo.param) %>/commit/<%= commit.id_abbrev %>'>
           <code><%= commit.id %></code>
         </a>
       </dd><br>
       
       <dt>tree:</dt>
       <dd>
-        <a href='/<%= repo.param %>/tree/<%= commit.tree.id[0..7] %>'>
+        <a href='<%= prefix_url(repo.param) %>/tree/<%= commit.tree.id[0..7] %>'>
           <code><%= commit.tree.id %></code>
         </a>
       </dd><br>
       <% commit.parents.each do |parent| %>
         <dt>parent:</dt>
         <dd>
-          <a href='/<%= repo.param %>/commit/<%= parent.id_abbrev %>'>
+          <a href='<%= prefix_url(repo.param) %>/commit/<%= parent.id_abbrev %>'>
             <code><%= parent.id %></code>
           </a>
         </dd>

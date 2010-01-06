@@ -1,7 +1,7 @@
 xml.instruct! :xml, :version => '1.0', :encoding => 'utf-8'
 xml.feed :'xml:lang' => 'en-US', :xmlns => 'http://www.w3.org/2005/Atom' do
   base_title = "#{@repo.name}: "
-  base_url = "http://#{hostname}/#{@repo.param}"
+  base_url = "http://#{hostname}" + prefix_url("#{@repo.param}")
   if params[:ref]
     url = base_url + "/#{params[:ref]}"
     title = base_title + params[:ref]

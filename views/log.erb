@@ -2,7 +2,7 @@
 <h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %> <%= atom_feed_link(@repo.param, params[:ref]) %></h3>
 <div class="active">
   <% if @previous_commits %>
-    <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
+    <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
   <% end %>
 
   <% if @separator %>
@@ -10,7 +10,7 @@
   <% end %>
 
   <% if @next_commits %>
-    <a href='/<%= params[:repo] %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
+    <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
   <% end %>
   <div class='list'>
     <div id='heads'>
@@ -18,7 +18,7 @@
       <ul>
         <% @repo.heads.each do |head| %>
           <li>
-            <a href="/<%=h @repo.param %>/<%=h head.name %>">
+            <a href="<%=h prefix_url(@repo.param) %>/<%=h head.name %>">
               <%=h head.name %>
             </a>
           </li>
@@ -32,7 +32,7 @@
         <ul>
           <% @repo.tags.each do |tag| %>
             <li>
-              <a href="/<%=h @repo.param %>/commit/<%=h tag.name %>">
+              <a href="<%=h prefix_url(@repo.param) %>/commit/<%=h tag.name %>">
                 <%=h tag.name %>
               </a>
             </li>
@@ -45,7 +45,7 @@
   </div>
   <div id='commit-log'>
     <% @commits.each do |commit| %>
-    <% url = "/#{@repo.param}/commit/#{commit.id_abbrev}" %>
+    <% url = prefix_url("#{@repo.param}/commit/#{commit.id_abbrev}") %>
       <div id='commit_<%= commit.id_abbrev %>' class='commit' onclick="location.href='<%= url %>'">
         <div class='right'>
           <span class='id'>

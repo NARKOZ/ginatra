@@ -12,7 +12,7 @@
       <% count = 0 %>
       <% @commit.diffs.select { |d| !d.deleted_file && !d.new_file }.each do |diff| %>
         <% count += 1 %>    
-        <h4><img src="/img/doc.png" /><a name='file_<%= count %>'><code><%= diff.b_path %></code></a></h4>
+        <h4><img src="<%= prefix_url("img/doc.png") %>" /><a name='file_<%= count %>'><code><%= diff.b_path %></code></a></h4>
         <div class="diff"><%= diff((diff.diff)) %></div>
       <% end %>
     </div>

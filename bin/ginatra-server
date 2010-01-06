@@ -6,8 +6,7 @@ $:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 
 require "ginatra"
 
-
-Vegas::Runner.new(Ginatra::App, 'ginatra-server', :port => Ginatra::Config.port) do |runner, opts, app|
+Vegas::Runner.new(Ginatra::App, 'ginatra-server', {:port => Ginatra::Config.port, :host => Ginatra::Config.host}) do |runner, opts, app|
   
   opts.banner = "Usage: ginatra-server [[options] start | stop | status]"
 
