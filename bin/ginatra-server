@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+begin
+  require 'rubygems'
+rescue LoadError
+end
 require "vegas"
 
 $:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
