@@ -50,6 +50,11 @@ module Ginatra
   # and is what is mounted by the +rackup.ru+ files.
   class App < Sinatra::Base
 
+    # logger that can be used with the Sinatra code
+    def logger
+      Ginatra::Config.logger
+    end
+
     configure do
       Config.load!
       set :host, Ginatra::Config[:host]
