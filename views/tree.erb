@@ -11,7 +11,7 @@
             <%= partial(:tree_part, :locals => {:current_tree => next_tree, :tree_path => new_path, :path => @path }) %>
           <% end %>
           <% tree.blobs.each do |next_blob| %>
-            <li class="blob"><a href="<%= prefix_url(@path[:blob]) %><%= tree_path %>/<%= next_blob.basename %>"><%= next_blob.basename %></a></li>
+            <li class="blob"><a href="<%= prefix_url(@path[:blob]) %>/<%= tree_path %>/<%= next_blob.basename %>"><%= next_blob.basename %></a></li>
           <% end %>
         </ul>
       </li>

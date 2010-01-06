@@ -194,8 +194,8 @@ module Ginatra
 
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
       @path = {}
-      @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}"
-      @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}"
+      @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}"
+      @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}"
       erb(:tree)
     end
 
@@ -212,12 +212,12 @@ module Ginatra
       if @tree.is_a?(Grit::Blob)
         # we need @tree to be a tree. if it's a blob, send it to the blob page
         # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
-        redirect "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+        redirect "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
       else
         etag(@tree.id)
         @path = {}
-        @path[:tree] = "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
-        @path[:blob] = "/#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+        @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+        @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
         erb(:tree)
       end
     end
