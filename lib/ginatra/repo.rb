@@ -87,5 +87,9 @@ module Ginatra
       @repo.respond_to?(sym) || super
     end
 
+    # not sure why we need this but whatever.
+    def to_s
+      @name.to_s
+    end
   end
 end

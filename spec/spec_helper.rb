@@ -7,7 +7,16 @@ current_path = File.expand_path(File.dirname(__FILE__))
 require "#{current_path}/../lib/ginatra"
 
 gem 'webrat', '>=0.4.4'
-require 'webrat/sinatra'
+begin
+  # When using webrat 0.6.0, there is no webrat/sinatra.rb file.
+  # Looking at the gem's code, it looks like it autoloads the sinatra adapter at webrat/adapters/sinatra.rb.
+  # So requiring just 'webrat' will also load the sinatra adapater, which is done in the rescue clause.
+  require 'webrat/sinatra'
+rescue LoadError
+  STDERR.puts "WARNING: could not load webrat/sinatra: #{__FILE__}:#{__LINE__}"
+  require 'webrat'
+end
+
 gem 'rack-test', '>=0.3.0'
 require 'rack/test'
 
