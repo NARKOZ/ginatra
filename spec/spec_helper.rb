@@ -22,7 +22,7 @@ end
 require 'rack/test'
 
 Webrat.configure do |config|
-  config.mode = :sinatra
+  config.mode = :rack
 end
 
 current_path = File.expand_path(File.dirname(__FILE__))
