@@ -7,6 +7,7 @@ $:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 require "ginatra"
 
 #gem 'webrat', '>=0.4.4'
+require 'webrat'
 begin
   # When using webrat 0.6.0, there is no webrat/sinatra.rb file.
   # Looking at the gem's code, it looks like it autoloads the sinatra adapter at webrat/adapters/sinatra.rb.
