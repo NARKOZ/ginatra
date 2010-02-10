@@ -12,7 +12,7 @@ describe "Ginatra" do
       @repo_list = Ginatra::RepoList
       @ginatra_repo = @repo_list.find("test")
       @grit_repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"), {})
-      @commit = @ginatra_repo.commit("910ff56f585bcdfc3ba105c8846b1df0a6abf069")
+      @commit = @ginatra_repo.commit("f41dfe45f0af1863f6309eef1b1a5980c59ccd16")
     end
 
     it "should have a name" do
