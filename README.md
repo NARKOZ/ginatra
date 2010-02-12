@@ -96,6 +96,9 @@ Attribution
 - Elia Schito (elia)
 - Scott Wisely (Syd)
 - Jonathan Stott (namelessjon)
+- Michael James (umjames)
+
+In a new spirit of openness, all those who submit a patch that gets applied will gain commit access to the main (lenary/ginatra) repository.
 
 **Thanks**
 
