@@ -22,14 +22,14 @@ Feature: Page
   Scenario: Viewing a commit
     When I follow "test"
     And I should see "description file for this repository and set the description for it."
-    When I follow "f41dfe45f0af1863f6309eef1b1a5980c59ccd16"
-    And I should see "Commit: f41dfe4"
-    And I should see "changes required for the client to work for now"
+    When I follow "095955b6402c30ef24520bafdb8a8687df0a98d3"
+    And I should see "Commit: 095955b"
+    And I should see "first pass at having the hancock client"
     
   Scenario: Viewing a file on a commit
-    When I open '/test/tree/24f701fd'
+    When I open '/test/tree/6f27ba2f'
     And I should see "test"
     And I should see "description file for this repository and set the description for it."
-    And I should see "Tree: 24f701fd"
+    And I should see "Tree: 6f27ba2f"
     And I should see "README.md"
     And I should see ".gitignore"
