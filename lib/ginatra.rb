@@ -183,8 +183,7 @@ module Ginatra
     get '/:repo/tree/:tree' do
       @repo = RepoList.find(params[:repo])
 
-      # this might look silly but it's needed to pass the --verify.
-      if (tag = @repo.git.method_missing('rev_parse', {}, '--verify', "#{params[:tree]}^{tree}")).empty?
+      if (tag = @repo.git.rev_parse({'--verify' => ''}, "#{params[:tree]}^{tree}")).empty?
         # we don't have a tree.
         not_found
       else
