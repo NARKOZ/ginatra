@@ -1,5 +1,4 @@
 require "digest/md5"
-require "open4"
 
 module Ginatra
   # Helpers used in the views usually,

@@ -80,7 +80,6 @@ begin
     gemspec.add_dependency('sinatra', '>=0.9.4')
     gemspec.add_dependency('grit', '>=1.1.1')
     gemspec.add_dependency('vegas', '>=0.1.0')
-    gemspec.add_dependency('open4', '>= 0.9.6')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
