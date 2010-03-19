@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Ginatra
 
   # A Wrapper for the ginatra configuration variables,
