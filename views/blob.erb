@@ -3,7 +3,7 @@
 <div class="active">
   <div class="blob">
     <h4><img src="<%= prefix_url("img/doc.png") %>" /><%= @blob.name %></h4>
-    <%= pygmentize(@blob.data, @blob.name) %>
+    <pre><code><%= @blob.data %></code></pre>
   </div>
   <div class="clearfix">&nbsp;</div>
 </div>

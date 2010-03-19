@@ -231,30 +231,5 @@ module Ginatra
     def atom_feed_link(repo_param, ref=nil)
       "<a href=\"" + prefix_url("#{repo_param}#{"/#{ref}" if !ref.nil?}.atom") + "\" title=\"Atom Feed\" class=\"atom\">Feed</a>"
     end
-
-    def pygmentize(content, filename=nil)
-      type = !filename ? "diff" : pygmentize_type(filename)
-      html_output = ''
-      Open4.popen4("pygmentize -l #{type} -f html") do |pid, stdin, stdout, stderr|
-        stdin.puts content
-        stdin.close
-        html_output = stdout.read.strip
-        [stdout, stderr].each {|io| io.close }
-      end
-      html_output
-    rescue Errno::ENOENT
-      return "<div class=\"highlight\"><pre>#{content}</pre></div>"
-    end
-
-    def pygmentize_type(filename)
-      type =''
-      Open4.popen4("pygmentize -N #{filename}") do |pid, stdin, stdout, stderr|
-        type = stdout.read.strip
-        [stdin, stdout, stderr].each {|io| io.close }
-      end
-      type
-    rescue Errno::ENOENT
-      return "text"
-    end
   end
 end
