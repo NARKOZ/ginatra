@@ -102,7 +102,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
       return "" if @commits.empty?
-      etag(@commits.first.id)
+      etag(@commits.first.id) if Ginatra::App.environment?(:production)
       builder :atom, :layout => nil
     end
 
@@ -114,7 +114,7 @@ module Ginatra
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
-      etag(@commits.first.id)
+      etag(@commits.first.id) if Ginatra::App.environment?(:production)
       erb :log
     end
 
@@ -126,7 +126,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?
-      etag(@commits.first.id)
+      etag(@commits.first.id) if Ginatra::App.environment?(:production)
       builder :atom, :layout => nil
     end
 
@@ -140,7 +140,7 @@ module Ginatra
       params[:page] = 1
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
-      etag(@commits.first.id)
+      etag(@commits.first.id) if Ginatra::App.environment?(:production)
       erb :log
     end
 
@@ -161,7 +161,7 @@ module Ginatra
     get '/:repo/commit/:commit' do
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
-      etag(@commit.id)
+      etag(@commit.id) if Ginatra::App.environment?(:production)
       erb(:commit)
     end
 
@@ -187,7 +187,7 @@ module Ginatra
         # we don't have a tree.
         not_found
       else
-        etag(tag)
+        etag(tag) if Ginatra::App.environment?(:production)
       end
 
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
@@ -212,7 +212,7 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
         redirect "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
       else
-        etag(@tree.id)
+        etag(@tree.id) if Ginatra::App.environment?(:production)
         @path = {}
         @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
@@ -227,7 +227,7 @@ module Ginatra
     get '/:repo/blob/:blob' do
       @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
-      etag(@blob.id)
+      etag(@blob.id) if Ginatra::App.environment?(:production)
       erb(:blob)
     end
 
@@ -246,7 +246,7 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
-        etag(@blob.id)
+        etag(@blob.id) if Ginatra::App.environment?(:production)
         erb(:blob)
       end
     end
