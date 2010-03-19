@@ -67,10 +67,7 @@ module Ginatra
     # @param [Grit::Commit] commit the commit you want refs added to
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
     def add_refs(commit)
-      commit.refs = []
-      refs = @repo.refs.select { |ref| ref.commit.id == commit.id }
-      commit.refs << refs
-      commit.refs.flatten!
+      commit.refs = @repo.refs.select {|ref| ref.commit.id == commit.id }
     end
 
     # Catch all
