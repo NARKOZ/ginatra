@@ -5,6 +5,7 @@ rescue LoadError
 end
 require 'sinatra/base'
 require 'grit'
+require 'yaml'
 
 # The Ginatra Namespace Module
 module Ginatra; end
