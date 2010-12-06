@@ -1,5 +1,6 @@
-Ginatra
-=======
+# Ginatra
+[![](http://stillmaintained.com/user/project.png)](http://stillmaintained.com/user/project)
+
 
 This project  is to make a  clone of gitweb in  Ruby and Sinatra. It  serves git
 repositories out of a set of  specified directories using an array of glob-based
