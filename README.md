@@ -1,5 +1,5 @@
 # Ginatra
-[![](http://stillmaintained.com/user/project.png)](http://stillmaintained.com/user/project)
+[![](http://stillmaintained.com/lenary/ginatra.png)](http://stillmaintained.com/lenary/ginatra)
 
 
 This project  is to make a  clone of gitweb in  Ruby and Sinatra. It  serves git
