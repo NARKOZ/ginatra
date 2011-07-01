@@ -1,6 +1,8 @@
 # Ginatra
 [![](http://stillmaintained.com/lenary/ginatra.png)](http://stillmaintained.com/lenary/ginatra)
 
+[![](http://travis-ci.org/lenary/ginatra.png)](http://travis-ci.org/lenary/ginatra)
+
 
 This project  is to make a  clone of gitweb in  Ruby and Sinatra. It  serves git
 repositories out of a set of  specified directories using an array of glob-based
@@ -34,15 +36,15 @@ Next, just do the following (your setup may require sudo):
 
 This pulls down most of the required dependencies too.
 
-The last dependency you need is pygments, an awesome python syntax highlighter. 
+The last dependency you need is pygments, an awesome python syntax highlighter.
 To check whether you have it, run:
 
     $ which pygmentize
 
-If this returns a path pointing to a 'pygmentize' binary, then you're all set. 
+If this returns a path pointing to a 'pygmentize' binary, then you're all set.
 If not you'll need to install pygments. Look at the last section of the
-[jekyll wiki "install" page](http://wiki.github.com/mojombo/jekyll/install) 
-to see how to install it. Also make sure again that the `pygmentize` binary 
+[jekyll wiki "install" page](http://wiki.github.com/mojombo/jekyll/install)
+to see how to install it. Also make sure again that the `pygmentize` binary
 is on your path.
 
 If you want to play around with the code, you can clone the repository. This also allows you
