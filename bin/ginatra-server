@@ -1,17 +1,12 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'rubygems'
-rescue LoadError
-end
+require "bundler"
+Bundler.setup(:default)
+require "ginatra"
 require "vegas"
 
-$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
-
-require "ginatra"
-
 Vegas::Runner.new(Ginatra::App, 'ginatra-server', {:port => Ginatra::Config.port, :host => Ginatra::Config.host}) do |runner, opts, app|
-  
+
   opts.banner = "Usage: ginatra-server [[options] start | stop | status]"
 
   opts.separator "  start  - Start the Ginatra HTTP Server"
@@ -29,6 +24,6 @@ Vegas::Runner.new(Ginatra::App, 'ginatra-server', {:port => Ginatra::Config.port
     runner.options[:start] = false
     at_exit { puts opts }
   end
-  
+
 end
 

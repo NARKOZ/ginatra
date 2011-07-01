@@ -1,3 +1,6 @@
+require "yaml"
+require 'fileutils'
+
 module Ginatra
 
   # A Wrapper for the ginatra configuration variables,
@@ -27,7 +30,7 @@ module Ginatra
 
       # create log_file location
       # The log_file config option should be an absolute file system path
-      # It doesn't have to exist, but ginatra should have the proper file system privileges to create the directories 
+      # It doesn't have to exist, but ginatra should have the proper file system privileges to create the directories
       # and files along the specified path
       unless log_file == STDOUT
         parent_dir, separator, file_component = log_file.rpartition("/")
@@ -53,33 +56,27 @@ module Ginatra
       @logger
     end
 
-    # Dumps the Default configuration to +CONFIG_PATH+,
-    # WITHOUT regard for what's already there.
-    #
-    # Very Destructive Method. Use with care!
-    def self.setup!
+    unless File.exist?(CONFIG_PATH)
+      FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
       File.open(CONFIG_PATH, 'w') do |f|
         YAML.dump(DEFAULT_CONFIG, f)
       end
     end
 
-    unless File.exist?(CONFIG_PATH)
-      require 'fileutils'
-      FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
-      setup!
-    end
-    
     # Loads the configuration and merges it with
     # the default configuration.
     #
     # @return [Hash] config a hash of the configuration options
     def self.load!
-      @config = {}
-      begin
-        @config = YAML.load_file(CONFIG_PATH)
-      rescue Errno::ENOENT
+      loaded_config = {}
+      @config = DEFAULT_CONFIG.dup
+      if File.size(CONFIG_PATH) == 0
+        dump!
+      else
+        loaded_config = YAML.load_file(CONFIG_PATH)
+        @config.merge!(loaded_config)
       end
-      @config = DEFAULT_CONFIG.merge(@config)
+      @config
     end
 
     # Dumps the _current_ configuration to +CONFIG_PATH+

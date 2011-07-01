@@ -1,28 +1,18 @@
-# We only want Rubygems if it exists. Else, we assume they know what they're doing.
-begin
-  require 'rubygems'
-rescue LoadError
-end
+
+require "bundler"
+Bundler.setup(:default)
 require 'sinatra/base'
-require 'grit'
-require 'yaml'
 
-# The Ginatra Namespace Module
-module Ginatra; end
-
-# i feel this is cleaner than the #{current_path} shenanigans ($: is the load path)
-$:.unshift File.dirname(__FILE__)
-
-# Loading in whichever order
-require "ginatra/repo"
-require "ginatra/repo_list"
-require "ginatra/config"
-require "ginatra/helpers"
 
 require "sinatra/partials"
 
 # Written myself. i know, what the hell?!
 module Ginatra
+
+  autoload :Config, "ginatra/config"
+  autoload :Helpers, "ginatra/helpers"
+  autoload :Repo, "ginatra/repo"
+  autoload :RepoList, "ginatra/repo_list"
 
   # A standard error class for inheritance.
   class Error < StandardError; end
@@ -41,8 +31,6 @@ module Ginatra
       super("Could not find a commit with the id of #{id}")
     end
   end
-
-  VERSION = "2.2.1"
 
   # The main application class.
   #
@@ -69,17 +57,7 @@ module Ginatra
       set :views, "#{current_path}/../views"
     end
 
-    helpers do
-
-      # Ginatra::Helpers module full of goodness
-      include Helpers
-
-      # My Sinatra Partials implementation.
-      #
-      # check out http://gist.github.com/119874
-      # for more details
-      include ::Sinatra::Partials
-    end
+    helpers Helpers, Sinatra::Partials
 
     # Let's handle a CommitsError.
     #

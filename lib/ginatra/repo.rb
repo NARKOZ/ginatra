@@ -1,3 +1,5 @@
+require "grit"
+
 module Grit
   class Commit
     # this lets us add a link between commits and refs directly
@@ -30,7 +32,7 @@ module Ginatra
 
     # Return a commit corresponding to the commit to the repo,
     # but with the refs already attached.
-    # 
+    #
     # @see Ginatra::Repo#add_refs
     #
     # @raise [Ginatra::InvalidCommit] if the commit doesn't exist.
@@ -56,10 +58,10 @@ module Ginatra
     def commits(start = 'master', max_count = 10, skip = 0)
       raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
       @repo.commits(start, max_count, skip).each do |commit|
-        add_refs(commit) 
+        add_refs(commit)
       end
     end
-    
+
     # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
     #
     # @todo Perhaps move into commit class.
