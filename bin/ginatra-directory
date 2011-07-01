@@ -42,7 +42,7 @@ HELP
     Ginatra::Config.dump!
   end
 
-  def self.list(*args)
+  def self.list(args)
     Ginatra::Config.load!
     puts "Directories Ginatra will look for repos in:"
     puts Ginatra::Config[:git_dirs].map{|r| "  - #{r}"}.join("\n")

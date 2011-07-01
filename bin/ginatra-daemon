@@ -75,7 +75,8 @@ end
 command = ARGV[0]
 if command !~ /^(stop|status|start|restart)$/
   puts Ginatra::Daemon::HELP
-  exit
+else
+  Ginatra::Daemon.send(command)
 end
-Ginatra::Daemon.send(command)
+
 
