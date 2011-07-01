@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
-
+require "bundler"
+Bundler.setup(:default)
 require "ginatra"
 require "logger"
 
@@ -19,7 +19,7 @@ module Ginatra::Directory
 Usage: ginatra-directory [ list | add <globs> | remove <globs> ]
 
 Commands:
-  add    - Adds the <globs> to the array of dirs that Ginatra 
+  add    - Adds the <globs> to the array of dirs that Ginatra
              looks in for repositories.
   remove - Removes the <globs> from the aforementioned array.
   list   - Lists the globs Ginatra looks in for repositories

@@ -1,8 +1,6 @@
-$:.unshift File.expand_path("#{File.dirname(__FILE__)}/lib")
-
+require "bundler"
+Bundler.setup(:default)
 require "ginatra"
-
-
 
 map '/' do
   run Ginatra::App

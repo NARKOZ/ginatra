@@ -15,3 +15,4 @@ _layouts/
 doc/*
 pkg/*
 ginatra.gemspec
+Gemfile.lock
