@@ -2,16 +2,14 @@
 require "bundler"
 Bundler.setup(:default)
 require 'sinatra/base'
-
-
 require "sinatra/partials"
 
 # Written myself. i know, what the hell?!
 module Ginatra
 
-  autoload :Config, "ginatra/config"
-  autoload :Helpers, "ginatra/helpers"
-  autoload :Repo, "ginatra/repo"
+  autoload :Config,   "ginatra/config"
+  autoload :Helpers,  "ginatra/helpers"
+  autoload :Repo,     "ginatra/repo"
   autoload :RepoList, "ginatra/repo_list"
 
   # A standard error class for inheritance.

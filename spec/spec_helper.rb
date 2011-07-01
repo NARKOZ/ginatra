@@ -2,7 +2,7 @@
 require 'bundler'
 Bundler.setup(:default, :test)
 require 'rspec'
-require "ginatra"
+require 'ginatra'
 require 'webrat'
 require 'rack/test'
 
