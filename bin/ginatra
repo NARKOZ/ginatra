@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require "bundler"
-Bundler.setup(:default)
 require "ginatra"
 
 module Ginatra::Executable
