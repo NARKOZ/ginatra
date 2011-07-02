@@ -27,7 +27,7 @@ module Ginatra
     def self.logger
       return @logger if @logger
 
-      log_file = Ginatra::Config[:log_file].to_s || STDOUT
+      log_file = Ginatra::Config[:log_file] || STDOUT
 
       # create log_file location
       # The log_file config option should be an absolute file system path
