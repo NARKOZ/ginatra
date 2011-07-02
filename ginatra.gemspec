@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "ginatra"
-  s.version = "2.2.5"
+  s.version = "2.2.6"
   s.summary = "A Gitweb Clone in Sinatra and Grit"
   s.description = "Host your own git repository browser through the power of Sinatra and Grit"
   s.email = "sam@lenary.co.uk"
