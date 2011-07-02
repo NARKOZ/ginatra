@@ -1,15 +1,6 @@
 #!/usr/bin/env ruby
 
 require "ginatra"
-require "logger"
-
-def logger
-  return @logger if @logger
-  @logger = Logger.new(STDOUT)
-  @logger.level = Logger::INFO
-  @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
-  @logger
-end
 
 module Ginatra::Directory
 
@@ -27,7 +18,7 @@ HELP
   def self.add(globs)
     Ginatra::Config.load!
     Ginatra::Config[:git_dirs] += globs
-    logger.info "Added #{globs.join(" ")} to your config"
+    Ginatra::Config.logger.info "Added #{globs.join(" ")} to your config"
     Ginatra::Config.dump!
   end
 
@@ -36,7 +27,7 @@ HELP
     globs.each do |glob|
       Ginatra::Config[:git_dirs].delete(glob)
     end
-    logger.info "Removed #{globs.join(" ")} from your config"
+    Ginatra::Config.logger.info "Removed #{globs.join(" ")} from your config"
     Ginatra::Config.dump!
   end
 

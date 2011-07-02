@@ -1,15 +1,6 @@
 #!/usr/bin/env ruby
 
 require "ginatra"
-require "logger"
-
-def logger
-  return @logger if @logger
-  @logger = Logger.new(STDOUT)
-  @logger.level = Logger::INFO
-  @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
-  @logger
-end
 
 module Ginatra::Daemon
 
@@ -27,6 +18,8 @@ Commands:
 HELP
 
   def self.start
+    logger = Ginatra::Config.logger
+
     # Create Symlinks
     FileUtils.mkdir_p(SYMLINK_DIR)
     logger.info "Creating Symlinks"
@@ -44,6 +37,8 @@ HELP
   end
 
   def self.stop
+    logger = Ginatra::Config.logger
+
     # Stop Process
     pid = File.new(PID_FILE).read.to_i
     logger.warn "Sending INT to #{pid}"
@@ -61,6 +56,8 @@ HELP
   end
 
   def self.status
+    logger = Ginatra::Config.logger
+
     if File.exists?(PID_FILE)
       logger.info "Ginatra Daemon running at pid:#{File.new(PID_FILE).read}"
     else

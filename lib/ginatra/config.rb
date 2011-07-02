@@ -1,5 +1,6 @@
 require "yaml"
-require 'fileutils'
+require "fileutils"
+require "logger"
 
 module Ginatra
 
