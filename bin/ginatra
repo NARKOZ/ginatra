@@ -32,27 +32,28 @@ HELP
 
   @current_path = File.expand_path(File.dirname(__FILE__))
 
-  def self.daemon(*args)
+  def self.daemon(args)
     system("#{@current_path}/ginatra-daemon #{args.join(" ")}")
   end
 
-  def self.directory(*args)
+  def self.directory(args)
     system("#{@current_path}/ginatra-directory #{args.join(" ")}")
   end
 
-  def self.server(*args)
+  def self.server(args)
     system("#{@current_path}/ginatra-server #{args.join(" ")}")
   end
 
-  def self.version(*args)
+  def self.version(args)
     puts Ginatra::VERSION
   end
 end
 
-command, *args = ARGV[0], ARGV[1..-1]
+command, args = ARGV[0], ARGV[1..-1]
 if command !~ /^(version|daemon|directory|server)$/
   puts Ginatra::Executable::HELP
-  exit
+else
+  Ginatra::Executable.send(command, args)
 end
-Ginatra::Executable.send(command, *args)
+
 
