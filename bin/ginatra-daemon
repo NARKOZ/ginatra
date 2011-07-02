@@ -18,8 +18,6 @@ Commands:
 HELP
 
   def self.start
-    logger = Ginatra::Config.logger
-
     # Create Symlinks
     FileUtils.mkdir_p(SYMLINK_DIR)
     logger.info "Creating Symlinks"
@@ -37,8 +35,6 @@ HELP
   end
 
   def self.stop
-    logger = Ginatra::Config.logger
-
     # Stop Process
     pid = File.new(PID_FILE).read.to_i
     logger.warn "Sending INT to #{pid}"
@@ -56,8 +52,7 @@ HELP
   end
 
   def self.status
-    logger = Ginatra::Config.logger
-
+    logger.level = Logger::INFO
     if File.exists?(PID_FILE)
       logger.info "Ginatra Daemon running at pid:#{File.new(PID_FILE).read}"
     else
@@ -65,13 +60,28 @@ HELP
     end
   end
 
+  def self.logger
+    Ginatra::Config.logger
+  end
+
+  def self.execute(command)
+    case command
+    when "start"
+      start
+    when "stop"
+      stop
+    when "restart"
+      restart
+    when "status"
+      status
+    else
+      puts Ginatra::Daemon::HELP
+    end
+  end
+
 end
 
-command = ARGV[0]
-if command !~ /^(stop|status|start|restart)$/
-  puts Ginatra::Daemon::HELP
-else
-  Ginatra::Daemon.send(command)
-end
+Ginatra::Daemon.execute ARGV[0]
+
 
 

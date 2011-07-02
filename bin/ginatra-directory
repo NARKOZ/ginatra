@@ -31,17 +31,25 @@ HELP
     Ginatra::Config.dump!
   end
 
-  def self.list(args)
+  def self.list
     Ginatra::Config.load!
     puts "Directories Ginatra will look for repos in:"
     puts Ginatra::Config[:git_dirs].map{|r| "  - #{r}"}.join("\n")
     puts ""
   end
+
+  def self.execute(command, args)
+    case command
+    when "add"
+      add(args)
+    when "remove"
+      remove(args)
+    when "list"
+      list
+    else
+      puts Ginatra::Directory::HELP
+    end
+  end
 end
 
-command, args = ARGV[0], ARGV[1..-1]
-if command !~ /^(add|remove|list)$/
-  puts Ginatra::Directory::HELP
-else
-  Ginatra::Directory.send(command, args)
-end
+Ginatra::Directory.execute ARGV[0], ARGV[1..-1]
