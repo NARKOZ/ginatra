@@ -4,8 +4,10 @@ require "ginatra"
 
 module Ginatra::Executable
   HELP = <<HELP
-Usage: ginatra [ version | server <options> <command> |
-                 daemon <command> | directory <command> <args> ]
+Usage: ginatra [ version |
+                 server <options> <command> |
+                 daemon <command> |
+                 directory <command> <globs> ]
 
 Ginatra Commands:
   version - Pretty Self explanatory. Print version number and exit
