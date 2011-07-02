@@ -28,7 +28,7 @@ module Ginatra
     end
   end
 
-  VERSION = "2.2.6"
+  VERSION = "2.2.7"
 
   # The main application class.
   #
