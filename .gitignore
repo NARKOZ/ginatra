@@ -5,7 +5,6 @@ tmp/*
 *.log
 webrat*
 spec/*.html
-public/*/
 public/*.html
 _site/
 _layouts/
