@@ -14,7 +14,7 @@ Updating to the Most Recent Release (Gem):
 
 - ` $ gem install ginatra`
 - (re)Move `~/.ginatra`
-- Run the following to open an irb with Ginatra loaded: ` $ irb -r 'rubygems' -r 'rubygems'`
+- Run the following to open an irb with Ginatra loaded: ` $ irb -r 'rubygems' -r 'ginatra'`
 - In this irb session, run the following then close it: `>> Ginatra::Config.setup!`
 
 **BEWARE**: The last method that you just called will dump a config to `~/.ginatra/config.yml`.
