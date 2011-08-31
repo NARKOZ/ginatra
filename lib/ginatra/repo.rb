@@ -8,6 +8,72 @@ module Grit
 end
 
 module Ginatra
+  class GraphCommit
+    attr_accessor :time, :space
+    def initialize(commit)
+      @_commit = commit
+      @time = 0
+      @space = 0
+    end
+    def method_missing(m, *args, &block)
+	  @_commit.send(m, *args, &block)
+    end
+    def self.index_commits (commits)
+	  days = []
+	  heads = []
+	  map = {}
+      i=0
+	  day = nil
+	  commits.reverse.each{|c|
+		c.time = i+=1
+		if day != c.committed_date.day
+			days[i]=c.committed_date.day 
+		else 
+		    days[i]=nil
+		end
+		day = c.committed_date.day
+		map[c.id] = c
+		heads += c.refs unless c.refs.nil?
+	  }
+	  j=0
+	  
+	  heads.select!{|h|h.is_a? Grit::Head or h.is_a? Grit::Remote}
+	  heads.sort!{|a,b|
+	    if a.name == "master"
+			-1
+	    elsif  b.name == "master" 
+			1
+	    else
+			b.commit.committed_date <=> a.commit.committed_date
+		end
+	  }
+		
+      heads.each do |h|
+	    if map.include? h.commit.id then
+          j = mark_chain(j+=1,map[h.commit.id], map)        
+        end
+      end
+	  return days
+	end
+	
+    # Add space on parent branches to the one given
+    #
+    # @param [String] id the commit id
+    # @return [Grit::Commit] the commit object.	
+	def self.mark_chain(mark, commit, map)
+	    commit.space = mark  if commit.space == 0
+	    m1 = mark-1
+	    marks = commit.parents.collect do |p|
+			if map.include? p.id  and map[p.id].space == 0 then
+			  mark_chain(m1+=1, map[p.id],map) 
+			else
+			  m1+1
+			end
+	    end
+	    marks << mark
+	    return marks.compact.max
+	end
+  end
   # A thin wrapper to the Grit::repo class so that we can add a name and a url-sanitised-name
   # to a repo, and also intercept and add refs to the commit objects.
   class Repo
@@ -61,7 +127,23 @@ module Ginatra
         add_refs(commit)
       end
     end
-
+    
+    # Return a list of commits like --all, including pagination options and all the refs.
+    #
+    # @param [Integer] max_count the maximum count of commits
+    # @param [Integer] skip the number of commits in the branch to skip before taking the count.
+    #
+    # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
+    #
+    # @return [Array<GraphCommit>] the array of commits.
+	def all_commits(max_count = 10, skip = 0)
+      raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
+      commits = Grit::Commit.find_all(@repo, nil, {:max_count => max_count, :skip => skip})
+      commits.collect do |commit|
+        add_refs(commit)
+        GraphCommit.new(commit)
+      end	
+	end
     # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
     #
     # @todo Perhaps move into commit class.

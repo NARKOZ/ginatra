@@ -1,6 +1,7 @@
 
 require 'sinatra/base'
 require "sinatra/partials"
+require 'json'
 
 # Written myself. i know, what the hell?!
 module Ginatra
@@ -93,6 +94,32 @@ module Ginatra
       @commits = @repo.commits
       etag(@commits.first.id) if Ginatra::App.production?
       erb :log
+    end
+
+    get '/graph/:repo' do
+      @repo = RepoList.find(params[:repo])
+      max_count = 5000
+      max_count = params[:max_count].to_i unless params[:max_count].nil?
+ 	  commits = @repo.all_commits(max_count)
+ 
+      days = GraphCommit.index_commits(commits)
+      @days_json = days.to_json
+      @commits_json = commits.collect do |c|
+		  h = {}
+		  h[:parents] = c.parents.collect do |p|
+			[p.id,0,0]
+		  end
+		  h[:author] = c.author.name.force_encoding("UTF-8")
+		  h[:time] = c.time
+		  h[:space] = c.space
+		  h[:refs] = c.refs.collect{|r|r.name}.join(" ") unless c.refs.nil?
+		  h[:id] = c.sha
+		  h[:date] = c.date
+		  h[:message] = c.message.force_encoding("UTF-8")
+		  h[:login] = c.author.email
+		  h
+      end.to_json
+      erb :graph, :layout => false 
     end
 
     # The atom feed of recent commits to a certain branch of a +repo+.
