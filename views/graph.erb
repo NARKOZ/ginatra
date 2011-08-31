@@ -66,16 +66,17 @@
                     for (var j = 0, jj = commits[i].parents.length; j < jj; j++) {
                         var c = comms[commits[i].parents[j][0]];
                         if (c) {
+							var cx = 10 + 20 * c.time,
+								cy = 30 + 20 * c.space;
                             if (c.space == commits[i].space) {
                                 fillPixels(r.path("M" + (x - 5) + "," + (y + .0001) + "L" + (15 + 20 * c.time) + "," + (y + .0001)).attr({stroke: colors[c.space], "stroke-width": 2}), x - 5, y, 15 + 20 * c.time, y);
                             
                             } else if (c.space < commits[i].space) {
-                                //fillPixels(r.path(["M", x - 5, y + .0001, "l-5-2,0,4,5,-2L", 10.0001 + 20 * c.time, y + .0001, 10.0001 + 20 * c.time, (15.0001 + 20 * c.space)]).attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, 10 + 20 * c.time, 15 + 20 * c.space);
-                                fillPixels(r.path(["M", x - 5, y + .0001, "l-5-2,0,4,5,-2S", 10.0001 + 20 * c.time, y + .0001, 10.0001 + 20 * c.time, (35.0001 + 20 * c.space)]).attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, 10 + 20 * c.time, 15 + 20 * c.space);
-                                
+                                fillPixels(r.path(["M", x - 5, y + .0001, "l-5-2,0,4,5,-2C",x-5,y,x -17, y+2, x -20, y-10,"L", cx,y-10,cx , cy])
+                                .attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, cx, cy);
                             } else {
-                                //fillPixels(r.path(["M", x + .0001, y + 5, "l-2,5,4,0-2-5L", x + .0001, 10.0001 + 20 * c.space, 15.0001 + 20 * c.time, 10.0001 + 20 * c.space]).attr({stroke: colors[c.space < commits[i].space ? commits[i].space : c.space], "stroke-width": 2}), x, y + 5, 15 + 20 * c.time, 10 + 20 * c.space);
-                                fillPixels(r.path(["M", x + .0001, y + 5, "l-2,5,4,0-2-5S", x + .0001, 30.0001 + 20 * c.space, 15.0001 + 20 * c.time, 30.0001 + 20 * c.space]).attr({stroke: colors[c.space < commits[i].space ? commits[i].space : c.space], "stroke-width": 2}), x, y + 5, 15 + 20 * c.time, 10 + 20 * c.space);
+                                fillPixels(r.path(["M", x-5, y, "l-5-2,0,4,5,-2C",x-5,y,x -17, y-2, x -20, y+10,"L", cx,y+10,cx , cy])
+                                .attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, cx, cy);
                             }
                         }
                     }
