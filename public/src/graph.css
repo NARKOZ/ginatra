@@ -1,0 +1,8 @@
+#holder {
+    border: solid 1px #999;
+    cursor: move;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}

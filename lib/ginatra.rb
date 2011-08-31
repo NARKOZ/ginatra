@@ -96,14 +96,14 @@ module Ginatra
       erb :log
     end
 
-    get '/graph/:repo' do
+    get '/:repo/graph' do
       @repo = RepoList.find(params[:repo])
-      max_count = 5000
+      max_count = 200
       max_count = params[:max_count].to_i unless params[:max_count].nil?
  	  commits = @repo.all_commits(max_count)
  
       days = GraphCommit.index_commits(commits)
-      @days_json = days.to_json
+      @days_json = days.compact.collect{|d|[d.day,d.strftime("%b")]}.to_json
       @commits_json = commits.collect do |c|
 		  h = {}
 		  h[:parents] = c.parents.collect do |p|
@@ -119,7 +119,7 @@ module Ginatra
 		  h[:login] = c.author.email
 		  h
       end.to_json
-      erb :graph, :layout => false 
+      erb :graph
     end
 
     # The atom feed of recent commits to a certain branch of a +repo+.

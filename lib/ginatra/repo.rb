@@ -23,15 +23,9 @@ module Ginatra
 	  heads = []
 	  map = {}
       i=0
-	  day = nil
 	  commits.reverse.each{|c|
 		c.time = i+=1
-		if day != c.committed_date.day
-			days[i]=c.committed_date.day 
-		else 
-		    days[i]=nil
-		end
-		day = c.committed_date.day
+		days[i]=c.committed_date 
 		map[c.id] = c
 		heads += c.refs unless c.refs.nil?
 	  }

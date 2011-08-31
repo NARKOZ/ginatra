@@ -15,6 +15,7 @@ div.active{
   border-top: 3px solid #dde;
 	background: #EFEFF7;
 }
+div.graph {background: #F7F7FF;}
 a         { color: #333; }
 a:visited { color: #555; }
 a:hover,

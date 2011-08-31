@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %> <%= atom_feed_link(@repo.param, params[:ref]) %></h3>
+<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %> <%= atom_feed_link(@repo.param, params[:ref]) %>  <a class="branch-graph" href="<%=h prefix_url(@repo.param) %>/graph">Branch graph</a></h3>
 <div class="active">
   <% if @previous_commits %>
     <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
