@@ -24,10 +24,8 @@
                 mtime = Math.max(mtime, commits[i].time);
                 mspace = Math.max(mspace, commits[i].space);
             }
-            //@jtt
             mtime = mtime + 10;
             mspace = mspace + 10;
-            //*jtt
             for (i = 0; i < ii; i++) {
                 if (commits[i].id in parents) {
                     commits[i].isParent = true;
@@ -60,8 +58,10 @@
                     var x = 10 + 20 * commits[i].time,
                         y = 30 + 20 * commits[i].space;
                     fillPixels(r.circle(x, y, 3).attr({fill: colors[commits[i].space], stroke: "none"}), x - 3, y - 3, x + 3, y + 3);
-					if (commits[i].refs != null) {
-						r.text(x+5,y+5,commits[i].refs).attr({font: "12px Fontin-Sans, Arial", fill: "#666", "text-anchor": "start"});
+					if (commits[i].refs != null && commits[i].refs != "") {
+						var t = r.text(x+5,y+5,commits[i].refs).attr({font: "12px Fontin-Sans, Arial", fill: "#666", rotation: "90"});
+						var textbox = t.getBBox();
+						t.translate(textbox.height/-4,textbox.width/2);
 					}
                     for (var j = 0, jj = commits[i].parents.length; j < jj; j++) {
                         var c = comms[commits[i].parents[j][0]];
