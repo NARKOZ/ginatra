@@ -117,8 +117,9 @@ module Ginatra
     # @return [Array<Grit::Commit>] the array of commits.
     def commits(start = 'master', max_count = 10, skip = 0)
       raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
+      refs_cache = {}
       @repo.commits(start, max_count, skip).each do |commit|
-        add_refs(commit)
+        add_refs(commit,refs_cache)
       end
     end
     
@@ -133,8 +134,9 @@ module Ginatra
 	def all_commits(max_count = 10, skip = 0)
       raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
       commits = Grit::Commit.find_all(@repo, nil, {:max_count => max_count, :skip => skip})
+      ref_cache = {}
       commits.collect do |commit|
-        add_refs(commit)
+        add_refs(commit, ref_cache)
         GraphCommit.new(commit)
       end	
 	end
@@ -143,9 +145,14 @@ module Ginatra
     # @todo Perhaps move into commit class.
     #
     # @param [Grit::Commit] commit the commit you want refs added to
+    # @param [Hash] empty hash with scope out of loop to speed things up
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
-    def add_refs(commit)
-      commit.refs = @repo.refs.select {|ref| ref.commit.id == commit.id }
+    def add_refs(commit, ref_cache)
+      if ref_cache.empty? 
+         ref_cache = @repo.refs.each {|ref| ref_cache[ref.commit.id] ||= [];ref_cache[ref.commit.id] << ref}
+      end
+      commit.refs = ref_cache[commit.id] if ref_cache.include? commit.id
+      commit.refs ||= []
     end
 
     # Catch all

@@ -98,7 +98,7 @@ module Ginatra
 
     get '/:repo/graph' do
       @repo = RepoList.find(params[:repo])
-      max_count = 200
+      max_count = 650
       max_count = params[:max_count].to_i unless params[:max_count].nil?
  	  commits = @repo.all_commits(max_count)
  
