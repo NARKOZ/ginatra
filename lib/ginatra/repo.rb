@@ -72,15 +72,15 @@ module Ginatra
     # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
     #
     # @return [Array<GraphCommit>] the array of commits.
-	def all_commits(max_count = 10, skip = 0)
+    def all_commits(max_count = 10, skip = 0)
       raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
       commits = Grit::Commit.find_all(@repo, nil, {:max_count => max_count, :skip => skip})
       ref_cache = {}
       commits.collect do |commit|
         add_refs(commit, ref_cache)
         GraphCommit.new(commit)
-      end	
-	end
+      end
+    end
     # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
     #
     # @todo Perhaps move into commit class.
@@ -90,7 +90,7 @@ module Ginatra
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
     def add_refs(commit, ref_cache)
       if ref_cache.empty? 
-         ref_cache = @repo.refs.each {|ref| ref_cache[ref.commit.id] ||= [];ref_cache[ref.commit.id] << ref}
+         @repo.refs.each {|ref| ref_cache[ref.commit.id] ||= [];ref_cache[ref.commit.id] << ref}
       end
       commit.refs = ref_cache[commit.id] if ref_cache.include? commit.id
       commit.refs ||= []
