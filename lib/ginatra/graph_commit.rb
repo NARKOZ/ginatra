@@ -6,7 +6,7 @@ module Ginatra
     attr_accessor :time, :space
     def initialize(commit)
       @_commit = commit
-      @time = 0
+      @time = -1
       @space = 0
     end
     
@@ -24,9 +24,9 @@ module Ginatra
     def self.index_commits(commits)
       days, heads = [], []
       map = {}
-      i=0
-      commits.reverse.each do |c|
-        c.time = i+=1
+      
+      commits.reverse.each_with_index do |c,i|
+        c.time = i
         days[i]=c.committed_date 
         map[c.id] = c
         heads += c.refs unless c.refs.nil?

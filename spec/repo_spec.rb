@@ -15,20 +15,20 @@ describe "Ginatra" do
     end
 
     it "should have a name" do
-      @ginatra_repo.name == "test"
+      @ginatra_repo.name.should  == "test"
     end
 
     it "should have a param for urls" do
-      @ginatra_repo.param == 'test'
+      @ginatra_repo.param.should  == 'test'
     end
 
     it "should have a description" do
-      @ginatra_repo.description =~ /description file for this repository and set the description for it./
+      @ginatra_repo.description.should  =~ /description file for this repository and set the description for it./
     end
 
     it "should have an array of commits that match the grit array of commits limited to 10 items" do
       @ginatra_repo.commits === @grit_repo.commits
-      @ginatra_repo.commits.length == 10
+      @ginatra_repo.commits.length.should  == 10
     end
 
     it "should be the same thing using #find or #new" do
