@@ -100,24 +100,24 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       max_count = 650
       max_count = params[:max_count].to_i unless params[:max_count].nil?
- 	  commits = @repo.all_commits(max_count)
+      commits = @repo.all_commits(max_count)
  
       days = GraphCommit.index_commits(commits)
       @days_json = days.compact.collect{|d|[d.day,d.strftime("%b")]}.to_json
       @commits_json = commits.collect do |c|
-		  h = {}
-		  h[:parents] = c.parents.collect do |p|
-			[p.id,0,0]
-		  end
-		  h[:author] = c.author.name.force_encoding("UTF-8")
-		  h[:time] = c.time
-		  h[:space] = c.space
-		  h[:refs] = c.refs.collect{|r|r.name}.join(" ") unless c.refs.nil?
-		  h[:id] = c.sha
-		  h[:date] = c.date
-		  h[:message] = c.message.force_encoding("UTF-8")
-		  h[:login] = c.author.email
-		  h
+        h = {}
+        h[:parents] = c.parents.collect do |p|
+          [p.id,0,0]
+        end
+        h[:author] = c.author.name.force_encoding("UTF-8")
+        h[:time] = c.time
+        h[:space] = c.space
+        h[:refs] = c.refs.collect{|r|r.name}.join(" ") unless c.refs.nil?
+        h[:id] = c.sha
+        h[:date] = c.date
+        h[:message] = c.message.force_encoding("UTF-8")
+        h[:login] = c.author.email
+        h
       end.to_json
       erb :graph
     end

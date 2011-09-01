@@ -53,7 +53,7 @@ describe "Ginatra" do
 
     it "should be able to add refs to a commit" do
       @commit.refs = []
-      @ginatra_repo.add_refs(@commit)
+      @ginatra_repo.add_refs(@commit,{})
       @commit.refs.should_not be_empty
     end
 
