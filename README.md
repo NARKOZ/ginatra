@@ -127,6 +127,7 @@ Screenshots
 ![Ginatra Tree](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYpB8M&w=500&h=500 "Ginatra Tree")
 
 **Branch graph**
+
 ![Ginatra Tree](http://cloud.github.com/downloads/simcha/ginatra/branch-graph.png "Branch graph")
 
 
