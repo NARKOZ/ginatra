@@ -128,7 +128,7 @@ Screenshots
 
 **Branch graph**
 
-![Ginatra Tree](http://cloud.github.com/downloads/simcha/ginatra/branch-graph.png "Branch graph")
+![Branch graph](http://cloud.github.com/downloads/simcha/ginatra/branch-graph.png)
 
 
 Licence
