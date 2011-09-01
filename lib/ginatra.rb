@@ -10,7 +10,8 @@ module Ginatra
   autoload :Helpers,  "ginatra/helpers"
   autoload :Repo,     "ginatra/repo"
   autoload :RepoList, "ginatra/repo_list"
-
+  autoload :GraphCommit, "ginatra/graph_commit"
+  
   # A standard error class for inheritance.
   class Error < StandardError; end
 

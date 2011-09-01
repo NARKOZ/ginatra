@@ -1,6 +1,6 @@
 require "grit"
 
-module Grit
+module Ginatra
 
   class GraphCommit
     attr_accessor :time, :space
