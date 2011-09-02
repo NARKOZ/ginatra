@@ -11,7 +11,7 @@ module Ginatra
   autoload :Repo,     "ginatra/repo"
   autoload :RepoList, "ginatra/repo_list"
   autoload :GraphCommit, "ginatra/graph_commit"
-  
+
   # A standard error class for inheritance.
   class Error < StandardError; end
 
@@ -30,7 +30,7 @@ module Ginatra
     end
   end
 
-  VERSION = "2.3.0"
+  VERSION = "3.0.0"
 
   # The main application class.
   #
@@ -102,7 +102,7 @@ module Ginatra
       max_count = 650
       max_count = params[:max_count].to_i unless params[:max_count].nil?
       commits = @repo.all_commits(max_count)
- 
+
       days = GraphCommit.index_commits(commits)
       @days_json = days.compact.collect{|d|[d.day,d.strftime("%b")]}.to_json
       @commits_json = commits.collect do |c|
