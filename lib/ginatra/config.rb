@@ -57,10 +57,12 @@ module Ginatra
       @logger
     end
 
-    unless File.exist?(CONFIG_PATH)
-      FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
-      File.open(CONFIG_PATH, 'w') do |f|
-        YAML.dump(DEFAULT_CONFIG, f)
+    def self.safe_setup
+      unless File.exist?(CONFIG_PATH)
+        FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
+        File.open(CONFIG_PATH, 'w') do |f|
+          YAML.dump(DEFAULT_CONFIG, f)
+        end
       end
     end
 

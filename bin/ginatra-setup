@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require "ginatra"
+require "rbconfig"
+
+if RbConfig::CONFIG["ruby_version"] < "1.9"
+  $stderr.puts "You need Ruby 1.9.2 to run ginatra"
+  exit(1)
+end
+
+if `which pygmentize` !~ /pygmentize/
+  $stderr.puts "You need Pygmentize to run ginatra"
+  exit(1)
+end
+
+if `git --version` < "git version 1.6.3"
+  $stderr.puts "You need at least git version 1.6.3 to run ginatra"
+  exit(1)
+end
+
+puts "checked deps"
+Ginatra::Config.safe_setup
+puts "installed config"
+
+exit(0)

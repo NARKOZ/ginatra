@@ -9,34 +9,30 @@ repositories out of a set of  specified directories using an array of glob-based
 paths. I have plans to make it  function just as gitweb does, including leeching
 config files and suchlike.
 
-Updating to the Most Recent Release (Gem):
-------------------------------------------
-
-- ` $ gem install ginatra`
-- (re)Move `~/.ginatra`
-- Run the following to open an irb with Ginatra loaded: ` $ irb -r 'rubygems' -r 'ginatra'`
-- In this irb session, run the following then close it: `>> Ginatra::Config.setup!`
-
-**BEWARE**: The last method that you just called will dump a config to `~/.ginatra/config.yml`.
-This ignores anything already there, so be careful. You have been warned.
-
-You can now copy the contents your old `~/.ginatra/` file into `~/.ginatra/config.yml`.
-
 Installation
 ------------
+
+**NEW: You should be using Ruby 1.9.2: because it's awesome!**
+
+To install ginatra:
+
+    $ gem install ginatra
+    ...
+    $ ginatra setup
+    checked deps
+    installed config
+
+If you get those two lines of output, you're sorted. anything else and something
+has gone wrong.
+
+### External Dependencies
 
 You should be using Git 1.6.3 or later just to be sure that it all works:
 
     $ git --version
     git version 1.6.3
 
-Next, just do the following (your setup may require sudo):
-
-    $ gem install ginatra
-
-This pulls down most of the required dependencies too.
-
-The last dependency you need is pygments, an awesome python syntax highlighter.
+The other dependency you need is pygments, an awesome python syntax highlighter.
 To check whether you have it, run:
 
     $ which pygmentize
@@ -92,6 +88,7 @@ Attribution
 
 - Samuel Elliott (lenary)
 - Ryan Bigg (radar)
+- Jan Topiński (simcha)
 
 **Patches**
 
@@ -103,32 +100,28 @@ Attribution
 
 In a new spirit of openness, all those who submit a patch that gets applied will gain commit access to the main (lenary/ginatra) repository.
 
-**Thanks**
-
-Too many to name. Thanks be to you all.
-
 Screenshots
 -----------
 
 **Index**
 
-![Ginatra Index](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYox8M&w=500&h=500 "Ginatra Index")
+![Ginatra Index](http://cloud.github.com/downloads/lenary/ginatra/o%20\(5\).png "Ginatra Index")
 
 **Log**
 
-![Ginatra Log](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYvRcM&w=500&h=500 "Ginatra Log")
+![Ginatra Log](http://cloud.github.com/downloads/lenary/ginatra/o%20\(3\).png "Ginatra Log")
 
 **Commit**
 
-![Ginatra Commit](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYvBcM&w=500&h=500 "Ginatra Commit")
+![Ginatra Commit](http://cloud.github.com/downloads/lenary/ginatra/o%20\(4\).png "Ginatra Commit")
 
 **Tree**
 
-![Ginatra Tree](http://lenary-uploads.appspot.com/img/i?id=ag5sZW5hcnktdXBsb2Fkc3IMCxIFSW1hZ2UYpB8M&w=500&h=500 "Ginatra Tree")
+![Ginatra Tree](http://cloud.github.com/downloads/lenary/ginatra/o%20\(2\).png "Ginatra Tree")
 
 **Branch graph**
 
-![Branch graph](http://cloud.github.com/downloads/simcha/ginatra/branch-graph.png)
+![Branch graph](http://cloud.github.com/downloads/simcha/ginatra/branch-graph.png "Branch Graph")
 
 
 Licence
