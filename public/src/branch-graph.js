@@ -25,15 +25,6 @@ var colors = ["#000"];
 for (var k = 0; k < mspace; k++) {
     colors.push(Raphael.getColor());
 }
-function fillPixels(obj, x1, y1, x2, y2) {
-    obj.bb = {
-        x1: Math.min(x1, x2),
-        y1: Math.min(y1, y2),
-        x2: Math.max(x1, x2),
-        y2: Math.max(y1, y2)
-    };
-    return obj;
-}
 function branchGraph(holder) {
     var ch = mspace * 20 + 20, cw = mtime * 20 + 20,
         r = Raphael("holder", cw, ch),
@@ -57,9 +48,16 @@ function branchGraph(holder) {
     for (i = 0; i < ii; i++) {
         var x = 10 + 20 * commits[i].time,
             y = 70 + 20 * commits[i].space;
-        fillPixels(r.circle(x, y, 3).attr({fill: colors[commits[i].space], stroke: "none"}), x - 3, y - 3, x + 3, y + 3);
+        r.circle(x, y, 3).attr({fill: colors[commits[i].space], stroke: "none"});
         if (commits[i].refs != null && commits[i].refs != "") {
-            var t = r.text(x+5,y+5,commits[i].refs).attr({font: "12px Fontin-Sans, Arial", fill: "#666", rotation: "90"});
+            var longrefs = commits[i].refs
+            var shortrefs = commits[i].refs;
+            if (shortrefs.length > 15){
+              shortrefs = shortrefs.substr(0,13) + "...";
+            }
+            var t = r.text(x+5,y+5,shortrefs).attr({font: "12px Fontin-Sans, Arial", fill: "#666",
+            title: longrefs, cursor: "pointer", rotation: "90"});
+            
             var textbox = t.getBBox();
             t.translate(textbox.height/-4,textbox.width/2);
         }
@@ -69,26 +67,27 @@ function branchGraph(holder) {
                 var cx = 10 + 20 * c.time,
                     cy = 70 + 20 * c.space;
                 if (c.space == commits[i].space) {
-                    fillPixels(r.path("M" + (x - 5) + "," + (y + .0001) + "L" + (15 + 20 * c.time) + "," + (y + .0001)).attr({stroke: colors[c.space], "stroke-width": 2}), x - 5, y, 15 + 20 * c.time, y);
+                    r.path("M" + (x - 5) + "," + (y + .0001) + "L" + (15 + 20 * c.time) + "," + (y + .0001))
+                    .attr({stroke: colors[c.space], "stroke-width": 2});
                 
                 } else if (c.space < commits[i].space) {
-                    fillPixels(r.path(["M", x - 5, y + .0001, "l-5-2,0,4,5,-2C",x-5,y,x -17, y+2, x -20, y-10,"L", cx,y-10,cx , cy])
-                    .attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, cx, cy);
+                    r.path(["M", x - 5, y + .0001, "l-5-2,0,4,5,-2C",x-5,y,x -17, y+2, x -20, y-10,"L", cx,y-10,cx , cy])
+                    .attr({stroke: colors[commits[i].space], "stroke-width": 2});
                 } else {
-                    fillPixels(r.path(["M", x-5, y, "l-5-2,0,4,5,-2C",x-5,y,x -17, y-2, x -20, y+10,"L", cx,y+10,cx , cy])
-                    .attr({stroke: colors[commits[i].space], "stroke-width": 2}), x - 5, y, cx, cy);
+                    r.path(["M", x-5, y, "l-5-2,0,4,5,-2C",x-5,y,x -17, y-2, x -20, y+10,"L", cx,y+10,cx , cy])
+                    .attr({stroke: colors[commits[i].space], "stroke-width": 2});
                 }
             }
         }
         (function (c, x, y) {
-            top.push(fillPixels(r.circle(x, y, 10).attr({fill: "#000", opacity: 0, cursor: "pointer"})
+            top.push(r.circle(x, y, 10).attr({fill: "#000", opacity: 0, cursor: "pointer"})
             .hover(function () {
                 var s = r.text(100, 100,c.author + "\n \n" +c.id + "\n \n" + c.message).attr({fill: "#fff"});
                 this.popup = r.popupit(x, y + 5, s, 0);
                 top.push(this.popup.insertBefore(this));
             }, function () {
                 this.popup && this.popup.remove() && delete this.popup;
-            }), x - 10, y - 10, x + 10, y + 10));
+            }));
         }(commits[i], x, y));
     }
     top.toFront();
@@ -98,37 +97,11 @@ function branchGraph(holder) {
         h = r.rect(0, hh - 8, Math.pow(hw, 2) / cw, 4, 2).attr({fill: "#000", opacity: 0}),
         bars = r.set(v, h),
         drag,
-        setBars = function () {
-            var sl = holder.scrollLeft, st = holder.scrollTop;
-            if (st > ch - hh) {
-                st = holder.scrollTop = ch - hh;
-            }
-            v.attr({x: hw - 8 + sl, y: st + st * hh / ch});
-            h.attr({x: sl + sl * hw / cw, y: hh - 8 + st});
-            var x = sl + hw,
-                y = st + hh,
-                el = r.bottom;
-            while (el) {
-                if (el.bb) {
-                    var x1 = el.bb.x1,
-                        y1 = el.bb.y1,
-                        x2 = el.bb.x2,
-                        y2 = el.bb.y2;
-                    if (x2 > sl && x1 < x && y2 > st && y1 < y) {
-                        el.show();
-                    } else {
-                        el.hide();
-                    }
-                }
-                el = el.next;
-            }
-        },
         dragger = function (e) {
             if (drag) {
                 e = e || window.event;
                 holder.scrollLeft = drag.sl - (e.clientX - drag.x);
                 holder.scrollTop = drag.st - (e.clientY - drag.y);
-                setBars();
             }
         };
     holder.onmousedown = function (e) {
@@ -143,7 +116,6 @@ function branchGraph(holder) {
         bars.animate({opacity: 0}, 300);
     };
     holder.scrollLeft = cw;
-    setBars();
 };
 Raphael.fn.popupit = function (x, y, set, dir, size) {
     dir = dir == null ? 2 : dir;
