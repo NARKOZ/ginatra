@@ -30,7 +30,7 @@ module Ginatra
     end
   end
 
-  VERSION = "3.0.0"
+  VERSION = "3.0.1"
 
   # The main application class.
   #
