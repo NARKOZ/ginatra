@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 
-require "ginatra"
-
-module Ginatra::Executable
-  HELP = <<HELP
+module Ginatra
+  module Executable
+    HELP = <<-HELP
 Usage: ginatra [ setup |
                  version |
                  server <options> <command> |
@@ -32,42 +31,44 @@ Ginatra Directory Commands:
   remove  - Removes the <globs> from the aforementioned array.
   list    - Lists the globs Ginatra looks in for repositories
 
-HELP
+    HELP
 
-  def self.daemon
-    path = File.expand_path(File.dirname(__FILE__))
-    load "#{path}/ginatra-daemon"
-  end
+    def self.daemon
+      path = File.expand_path(File.dirname(__FILE__))
+      load "#{path}/ginatra-daemon"
+    end
 
-  def self.directory
-    path = File.expand_path(File.dirname(__FILE__))
-    load "#{path}/ginatra-directory"
-  end
+    def self.directory
+      path = File.expand_path(File.dirname(__FILE__))
+      load "#{path}/ginatra-directory"
+    end
 
-  def self.server
-    path = File.expand_path(File.dirname(__FILE__))
-    load("#{path}/ginatra-server")
-  end
+    def self.server
+      path = File.expand_path(File.dirname(__FILE__))
+      load("#{path}/ginatra-server")
+    end
 
-  def self.setup
-    path = File.expand_path(File.dirname(__FILE__))
-    load("#{path}/ginatra-setup")
-  end
+    def self.setup
+      path = File.expand_path(File.dirname(__FILE__))
+      load("#{path}/ginatra-setup")
+    end
 
-  def self.execute(command, args)
-    case command
-    when "version"
-      puts Ginatra::VERSION
-    when "setup"
-      setup
-    when "daemon"
-      daemon
-    when "directory"
-      directory
-    when "server"
-      server
-    else
-      puts Ginatra::Executable::HELP
+    def self.execute(command, args)
+      case command
+      when "version"
+        require "ginatra"
+        puts Ginatra::VERSION
+      when "setup"
+        setup
+      when "daemon"
+        daemon
+      when "directory"
+        directory
+      when "server"
+        server
+      else
+        puts Ginatra::Executable::HELP
+      end
     end
   end
 end

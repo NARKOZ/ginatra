@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "ginatra"
+require "ginatra/config"
 require "rbconfig"
 
 if RbConfig::CONFIG["ruby_version"] < "1.9"
