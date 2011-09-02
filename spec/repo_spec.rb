@@ -27,12 +27,12 @@ describe "Ginatra" do
     end
 
     it "should have an array of commits that match the grit array of commits limited to 10 items" do
-      @ginatra_repo.commits === @grit_repo.commits
+      @ginatra_repo.commits.should == @grit_repo.commits
       @ginatra_repo.commits.length.should  == 10
     end
 
     it "should be the same thing using #find or #new" do
-      @repo_list.find("test") == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
+      @repo_list.find("test").should == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
     end
 
     it "should contain this commit" do

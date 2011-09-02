@@ -4,6 +4,10 @@ module Grit
   class Commit
     # this lets us add a link between commits and refs directly
     attr_accessor :refs
+
+    def ==(other_commit)
+      id == other_commit.id
+    end
   end
 end
 
@@ -28,7 +32,11 @@ module Ginatra
       @name = @param
       @description = @repo.description
       @description = "Please edit the #{@repo.path}/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
-      @repo
+    end
+
+    def ==(other_repo)
+      # uses method_missing
+      path == other_repo.path
     end
 
     # Return a commit corresponding to the commit to the repo,
@@ -63,7 +71,7 @@ module Ginatra
         add_refs(commit,refs_cache)
       end
     end
-    
+
     # Return a list of commits like --all, including pagination options and all the refs.
     #
     # @param [Integer] max_count the maximum count of commits
@@ -89,7 +97,7 @@ module Ginatra
     # @param [Hash] empty hash with scope out of loop to speed things up
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
     def add_refs(commit, ref_cache)
-      if ref_cache.empty? 
+      if ref_cache.empty?
          @repo.refs.each {|ref| ref_cache[ref.commit.id] ||= [];ref_cache[ref.commit.id] << ref}
       end
       commit.refs = ref_cache[commit.id] if ref_cache.include? commit.id
@@ -102,7 +110,11 @@ module Ginatra
     #
     # @todo update respond_to? method
     def method_missing(sym, *args, &block)
-      @repo.send(sym, *args, &block)
+      if @repo.respond_to?(sym)
+        @repo.send(sym, *args, &block)
+      else
+        super
+      end
     end
 
     # to correspond to the #method_missing definition
