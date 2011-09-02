@@ -3,4 +3,5 @@ rvm:
 - 1.9.2
 script: "bundle exec rake spec"
 before_script:
+- "bundle exec ./bin/ginatra setup"
 - "bundle exec rake repo"
