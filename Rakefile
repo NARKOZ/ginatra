@@ -2,9 +2,10 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
 task :default => :spec
+task :travis  => ['clone_repo', 'spec']
 
 desc "Clones the Test Repository"
-task :repo do
+task :clone_repo do
   repos_dir = File.expand_path('./repos')
   FileUtils.cd(repos_dir) do
     puts `git clone git://github.com/atmos/hancock-client.git test`

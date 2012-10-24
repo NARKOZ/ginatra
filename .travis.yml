@@ -1,7 +1,3 @@
----
-rvm:
-- 1.9.2
-script: "bundle exec rake spec"
-before_script:
-- "bundle exec ./bin/ginatra setup"
-- "bundle exec rake repo"
+rvm: 1.9.3
+script: "bundle exec rake travis"
+before_script: "bundle exec ./bin/ginatra setup"
