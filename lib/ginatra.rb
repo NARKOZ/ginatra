@@ -30,8 +30,6 @@ module Ginatra
     end
   end
 
-  VERSION = "3.0.1"
-
   # The main application class.
   #
   # This class contains all the core application logic

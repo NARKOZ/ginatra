@@ -56,7 +56,7 @@ Ginatra Directory Commands:
     def self.execute(command, args)
       case command
       when "version"
-        require "ginatra"
+        require File.expand_path('../../lib/ginatra/version', __FILE__)
         puts Ginatra::VERSION
       when "setup"
         setup

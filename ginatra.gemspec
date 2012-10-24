@@ -1,21 +1,29 @@
-Gem::Specification.new do |s|
-  s.name = "ginatra"
-  s.version = "3.0.1"
-  s.summary = "A Gitweb Clone in Sinatra and Grit"
-  s.description = "Host your own git repository browser through the power of Sinatra and Grit"
-  s.email = "sam@lenary.co.uk"
-  s.homepage = "http://lenary.co.uk/ginatra"
-  s.authors = ["Sam Elliott", "Ryan Bigg"]
-  s.add_dependency('bundler', '~> 1.0.15')
-  s.add_dependency('sinatra', '~> 1.2.6')
-  s.add_dependency('grit', '~> 2.4.1')
-  s.add_dependency('vegas', '~> 0.1.8')
-  s.add_dependency('builder', '~> 3.0.0')
-  s.add_dependency('erubis', '~> 2.7.0')
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'ginatra/version'
 
+Gem::Specification.new do |gem|
+  gem.name          = "ginatra"
+  gem.version       = Ginatra::VERSION
+  gem.summary       = "A Gitweb Clone in Sinatra and Grit"
+  gem.description   = "Host your own git repository browser through the power of Sinatra and Grit"
+  gem.email         = "sam@lenary.co.uk"
+  gem.homepage      = "http://lenary.co.uk/ginatra"
+  gem.authors       = ["Sam Elliott", "Ryan Bigg"]
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- spec`.split("\n")
-  s.executables   = `git ls-files -- bin`.split("\n").map {|f| File.basename(f) }
-  s.require_paths = ["lib"]
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ["lib"]
+
+  gem.add_dependency 'sinatra', '~> 1.2.6'
+  gem.add_dependency 'grit',    '~> 2.4.1'
+  gem.add_dependency 'vegas',   '~> 0.1.8'
+  gem.add_dependency 'builder', '~> 3.0.0'
+  gem.add_dependency 'erubis',  '~> 2.7.0'
+
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'webrat'
+  gem.add_development_dependency 'rack-test'
 end
