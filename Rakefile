@@ -1,19 +1,18 @@
-require "bundler"
-Bundler.setup(:default, :development)
+require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
-task :default => ['rake:spec']
+task :default => :spec
 
 desc "Clones the Test Repository"
-task :repo do |t|
-  FileUtils.cd(File.join(File.dirname(__FILE__), "repos")) do
+task :repo do
+  repos_dir = File.expand_path('./repos')
+  FileUtils.cd(repos_dir) do
     puts `git clone git://github.com/atmos/hancock-client.git test`
   end
 end
 
 desc "Runs the RSpec Test Suite"
-RSpec::Core::RakeTask.new(:spec) do |r|
-  r.pattern = 'spec/*_spec.rb'
-  r.rspec_opts = ['--color']
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern    = FileList['spec/**/*_spec.rb']
+  spec.rspec_opts = ['--color']
 end
-
