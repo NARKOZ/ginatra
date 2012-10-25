@@ -104,20 +104,17 @@ module Ginatra
     #
     # @return [String] a +<ul>+ with lots of +<li>+ children.
     def file_listing(commit)
-      # The only reason this doesn't work 100% of the time is because grit doesn't :/
-      # if i find a fix, it'll go upstream :D
-      count = 0
-      out = commit.diffs.map do |diff|
-        count = count + 1
+      list = []
+      commit.diffs.each_with_index do |diff, index|
         if diff.deleted_file
-          "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>"
+          list << "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
         else
           cls = diff.new_file ? "added" : "changed"
           ico = diff.new_file ? "icon-ok" : "icon-edit"
-          "<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>"
+          list << "<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
         end
       end
-      "<ul class='unstyled'>#{out.join}</ul>"
+      "<ul class='unstyled'>#{list.join}</ul>"
     end
 
     # Formats the text to remove multiple spaces and newlines, and then inserts

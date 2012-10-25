@@ -63,7 +63,7 @@
 <div id="diff">
   <%= file_listing(@commit) %>
 
-  <% @commit.diffs.select { |d| !d.deleted_file && !d.new_file }.each_with_index do |diff, index| %>
+  <% @commit.diffs.each_with_index do |diff, index| %>
     <p><i class="icon-file"></i> <a name='file-<%= index + 1 %>'><%= diff.b_path %></a></p>
     <pre><code><%= diff.diff %></code></pre>
   <% end %>
