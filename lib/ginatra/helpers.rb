@@ -20,8 +20,8 @@ module Ginatra
     #
     # @param [String] email the email address
     # @return [String] the url to the gravatar
-    def gravatar_url(email)
-      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=40"
+    def gravatar_url(email, size=40)
+      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
     end
 
     # reformats the date into a user friendly date with html entities

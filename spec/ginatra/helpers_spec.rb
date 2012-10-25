@@ -8,9 +8,18 @@ describe Ginatra::Helpers do
   end
 
   describe "#gravatar_url" do
-    it "should return a gravatar url" do
-      gravatar_url('john@example.com').should ==
-        'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=40'
+    context "when size passed" do
+      it "should return a gravatar url" do
+        gravatar_url('john@example.com', 100).should ==
+          'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=100'
+      end
+    end
+
+    context "when size not passed" do
+      it "should return a gravatar url" do
+        gravatar_url('john@example.com').should ==
+          'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=40'
+      end
     end
   end
 
