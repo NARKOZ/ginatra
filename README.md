@@ -1,13 +1,18 @@
 # Ginatra
 [![](http://stillmaintained.com/lenary/ginatra.png)](http://stillmaintained.com/lenary/ginatra)
 
-[![](http://travis-ci.org/lenary/ginatra.png)](http://travis-ci.org/lenary/ginatra)
+[![](https://travis-ci.org/lenary/ginatra.png)](https://travis-ci.org/lenary/ginatra)
 
 
 This project  is to make a  clone of gitweb in  Ruby and Sinatra. It  serves git
 repositories out of a set of  specified directories using an array of glob-based
 paths. I have plans to make it  function just as gitweb does, including leeching
 config files and suchlike.
+
+**New Maintainer:** Nihad Abbasov has offered to become the new maintainer of 
+ginatra. This will remain the canonical repository, but expect more updates.
+Nihad is also on the [Gitlab](http://gitlabhq.com/) team, which means things 
+are very much looking up.
 
 Installation
 ------------
@@ -84,7 +89,11 @@ or by not specifying a sub-command like start, status, stop, add, list or remove
 Attribution
 -----------
 
-**Authors:**
+**Maintainer:**
+
+- Nihad Abbasov (narkoz)
+
+**Significant Authors:**
 
 - Samuel Elliott (lenary)
 - Ryan Bigg (radar)
