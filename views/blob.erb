@@ -1,9 +1,12 @@
-<%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Blob: <%= params[:splat].first %></h3>
-<div class="active">
-  <div class="blob">
-    <h4><img src="<%= prefix_url("img/doc.png") %>" /><%= @blob.name %></h4>
-    <pre><code><%= @blob.data %></code></pre>
+<%= partial :header, :locals => {:repo => @repo} %>
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <span class="brand">
+      Blob: <%= params[:splat].first %>
+    </span>
   </div>
-  <div class="clearfix">&nbsp;</div>
 </div>
+
+<p><i class="icon-file"></i> <%= @blob.name %></p>
+<pre><code><%= @blob.data %></code></pre>

@@ -1,64 +1,82 @@
-<%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Commits<% if params[:ref] %>: <%= params[:ref] %><% end %> <%= atom_feed_link(@repo.param, params[:ref]) %>  <a class="branch-graph" href="<%=h prefix_url(@repo.param) %>/graph">Branch graph</a></h3>
-<div class="active">
-  <% if @previous_commits %>
-    <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
-  <% end %>
+<%= partial :header, :locals => {:repo => @repo} %>
 
-  <% if @separator %>
-    |
-  <% end %>
-
-  <% if @next_commits %>
-    <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
-  <% end %>
-  <div class='list'>
-    <div id='heads'>
-      <h3>Heads</h3>
-      <ul>
-        <% @repo.heads.each do |head| %>
-          <li>
-            <a href="<%=h prefix_url(@repo.param) %>/<%=h head.name %>">
-              <%=h head.name %>
-            </a>
-          </li>
-        <% end %>
-      </ul>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <span class="brand">
+          Commits <% if params[:ref] %>:<%= params[:ref] %><% end %>
+          <%#= commit_refs(@commits.first, @repo.param) %>
+        </span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><%= atom_feed_link(@repo.param, params[:ref]) %></li>
+          <li class="divider-vertical"></li>
+          <li><a href="<%= h prefix_url(@repo.param) %>/graph">Branch graph</a></li>
+        </ul>
+      </div>
     </div>
-   
-    <div id='tags'>
-      <h3>Tags</h3>
-      <% unless @repo.tags.empty? %>
-        <ul>
-          <% @repo.tags.each do |tag| %>
+
+    <div class="row-fluid">
+      <div class="span8">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>Commit message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @commits.each do |commit| %>
+              <% url = prefix_url("#{@repo.param}/commit/#{commit.id}") %>
+              <tr class="js-nav" data-href="<%= url %>">
+                <td><img src="<%= gravatar_url(commit.author.email) %>" class="img-rounded"> <%= commit.author.name %></td>
+                <td><a href="<%= url %>"><%= truncate(h(commit.short_message), {:length => 140, :separator => ' '}) %></a></td>
+                <td><%= nicetime(commit.committed_date) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <!-- FIXME -->
+        <% if @previous_commits %>
+          <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
+        <% end %>
+        <% if @separator %>|<% end %>
+        <% if @next_commits %>
+          <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
+        <% end %>
+        <!-- FIXME -->
+      </div>
+
+      <div class="span4">
+        <ul class="nav nav-list">
+          <li class="nav-header">Heads</li>
+          <% @repo.heads.each do |head| %>
             <li>
-              <a href="<%=h prefix_url(@repo.param) %>/commit/<%=h tag.name %>">
-                <%=h tag.name %>
+              <a href="<%=h prefix_url(@repo.param) %>/<%=h head.name %>">
+                <%=h head.name %>
               </a>
             </li>
           <% end %>
+
+          <li class="divider"></li>
+
+          <li class="nav-header">Tags</li>
+          <% if @repo.tags.any? %>
+            <% @repo.tags.each do |tag| %>
+              <li>
+                <a href="<%=h prefix_url(@repo.param) %>/commit/<%=h tag.name %>">
+                  <%=h tag.name %>
+                </a>
+              </li>
+            <% end %>
+          <% else %>
+            <li>No tags</li>
+          <% end %>
         </ul>
-      <% else %>
-        <p>No tags</p>
-      <% end %>
+      </div>
     </div>
   </div>
-  <div id='commit-log'>
-    <% @commits.each do |commit| %>
-    <% url = prefix_url("#{@repo.param}/commit/#{commit.id_abbrev}") %>
-      <div id='commit_<%= commit.id_abbrev %>' class='commit' onclick="location.href='<%= url %>'">
-        <div class='right'>
-          <span class='id'>
-            <code><a href="<%= url %>"><%= commit.id %></a></code>
-          </span>
-          <span class='refs'><%= commit_refs(commit, @repo.param) %></span>
-        </div>
-        <span class='date'><%= nicetime(commit.committed_date) %></span><br>
-        
-        <span class='message'><%= truncate(h(commit.short_message), { :length => 140, :separator => ' '}) %></span><br>
-        <span class='author'><%= commit.author.name %> <small>(author)</small></span>
-      </div>
-    <% end %>
-  </div>
-  <div class="clearfix">&nbsp;</div>
 </div>

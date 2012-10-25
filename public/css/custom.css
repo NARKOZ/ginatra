@@ -1,0 +1,16 @@
+body { padding-top: 20px; }
+
+.author-box { padding-top: 10px; }
+
+#diff { padding-top: 20px; }
+#diff .added a { color: #468847; }
+#diff .changed a { color: #3A87AD; }
+#diff .deleted a { color: #B94A48; }
+
+.info-box {
+  padding: 20px;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}

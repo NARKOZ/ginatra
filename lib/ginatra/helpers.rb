@@ -33,34 +33,6 @@ module Ginatra
       date.strftime("%b %d, %Y &ndash; %H:%M")
     end
 
-    # displays the actor box easily.
-    #
-    # Internally, it calls the +#partial+ method
-    # @see Sinatra::Partials#partial
-    #
-    # @param [Grit::Actor] actor the Grit Actor Object
-    # @param [#to_s] role the role that the object has.
-    # @param [#strftime] date the date that the actor acted on.
-    #
-    # @return [String] a string that contains the box for the actor.
-    def actor_box(actor, role, date)
-      partial(:actor_box, :locals => { :actor => actor, :role => role, :date => date })
-    end
-
-    # works out what actor boxes need to be displayed.
-    #
-    # Will always display the committer box, and will only display
-    # the author box if it's different to the committer
-    #
-    # @param [Grit::Commit] commit the commit in question
-    # @return [String] a string representing the HTML actor boxes
-    def actor_boxes(commit)
-      o = actor_box(commit.committer, :committer, commit.committed_date)
-      if commit.author.name != commit.committer.name
-        o = actor_box(commit.author, :author, commit.authored_date) + o
-      end
-    end
-
     # spits out a link to a certain reference.
     #
     # @param [Grit::Ref] ref grit ref object
@@ -86,7 +58,7 @@ module Ginatra
       commit.refs.map{ |r| commit_ref(r, repo_param) }.join("\n")
     end
 
-    # returns a string including the link to download a certain 
+    # returns a string including the link to download a certain
     # tree of the repo
     #
     # @param [Grit::Tree] tree the tree you want an archive link for
@@ -112,7 +84,7 @@ module Ginatra
 
     # returns a HTML (+<ul>+) list of the files altered in a given commit.
     #
-    # It includes classes for added/altered/deleted and also anchor links 
+    # It includes classes for added/altered/deleted and also anchor links
     # to the diffs for further down the page.
     #
     # @param [Grit::Commit] commit the commit you want the list of files for
@@ -125,24 +97,25 @@ module Ginatra
       out = commit.diffs.map do |diff|
         count = count + 1
         if diff.deleted_file
-          %(<li class='file_rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          %(<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>)
         else
-          cla = diff.new_file ? "add" : "diff"
-          %(<li class='file_#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          cls = diff.new_file ? "added" : "changed"
+          ico = diff.new_file ? "icon-ok" : "icon-edit"
+          %(<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>)
         end
       end
-      "<ul id='files'>#{out.join}</ul>"
+      "<ul class='unstyled'>#{out.join}</ul>"
     end
 
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #
     # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
-    # and simplified to just use <p> tags without any options, then modified 
+    # and simplified to just use <p> tags without any options, then modified
     # more later.
     #
     # @param [String] text the text you want formatted
-    # 
+    #
     # @return [String] the formatted text
     def simple_format(text)
       text.gsub!(/ +/, " ")
@@ -151,8 +124,8 @@ module Ginatra
       text
     end
 
-    # Cleans up the particularly volatile parts of HTML 
-    # and replaces them with their entities. Replaces the following 
+    # Cleans up the particularly volatile parts of HTML
+    # and replaces them with their entities. Replaces the following
     # characters:
     #  - &
     #  - >
@@ -183,7 +156,7 @@ module Ginatra
     # Truncates a given text to a certain number of letters, including a special ending if needed.
     #
     # Stolen and bastardised from rails
-    # 
+    #
     # @param [String] text the text to truncate
     # @option options [Integer] :length   (30) the length you want the output string
     # @option options [String]  :omission ("...") the string to show an omission.
@@ -211,11 +184,11 @@ module Ginatra
       datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
     end
 
-    # Returns the Hostname of the given install. 
+    # Returns the Hostname of the given install.
     # used in the atom feeds.
     #
     # stolen from Marley
-    # 
+    #
     # @return [String] the hostname of the server. Respects HTTP-X-Forwarded-For
     def hostname
       (request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/) ? request.env['HTTP_X_FORWARDED_SERVER'] : request.env['HTTP_HOST']

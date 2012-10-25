@@ -1,11 +1,20 @@
-<li class="tree"><a href="<%= path[:tree] %><%= tree_path %>"><%= current_tree.basename %></a>
-  <ul>
+<li class="tree">
+  <a href="<%= path[:tree] %><%= tree_path %>">
+    <i class="icon-folder-close"></i> <%= current_tree.basename %>
+  </a>
+
+  <ul class="unstyled">
     <% current_tree.trees.each do |next_tree| %>
       <% new_path = tree_path + "/#{next_tree.name}"%>
-      <%= partial(:tree_part, :locals => {:current_tree => next_tree, :tree_path => new_path, :path => path }) %>
+      <%= partial :tree_part, :locals => {:current_tree => next_tree, :tree_path => new_path, :path => path } %>
     <% end %>
+
     <% current_tree.blobs.each do |next_blob| %>
-      <li class="blob"><a href="<%= prefix_url(path[:blob]) %><%= tree_path %>/<%= next_blob.basename %>"><%= next_blob.basename %></a></li>
+      <li class="blob">
+        <a href="<%= prefix_url(path[:blob]) %><%= tree_path %>/<%= next_blob.basename %>">
+          <i class="icon-file"></i> <%= next_blob.basename %>
+        </a>
+      </li>
     <% end %>
   </ul>
 </li>

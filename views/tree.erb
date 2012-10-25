@@ -1,24 +1,49 @@
-<%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Tree: <%= @tree.id %> <%= archive_link @tree, @repo.param %></h3>
-<div class="active">
-  <ul class="commit-tree">
-    <% @tree.trees.each do |tree| %>
-      <% tree_path = "#{tree.name}"%>
-      <li class="tree"><a href="<%= prefix_url(@path[:tree]) %><%= tree_path %>"><%= tree.basename %></a>
-        <ul>
-          <% tree.trees.each do |next_tree| %>
-            <% new_path = "/#{tree_path}/#{next_tree.name}" %>
-            <%= partial(:tree_part, :locals => {:current_tree => next_tree, :tree_path => new_path, :path => @path }) %>
-          <% end %>
-          <% tree.blobs.each do |next_blob| %>
-            <li class="blob"><a href="<%= prefix_url(@path[:blob]) %>/<%= tree_path %>/<%= next_blob.basename %>"><%= next_blob.basename %></a></li>
-          <% end %>
-        </ul>
-      </li>
-    <% end %>
-    <% @tree.blobs.each do |blob| %>
-      <li class="blob"><a href="<%= prefix_url(@path[:blob]) %>/<%= blob.basename %>"><%= blob.basename %></a></li>
-    <% end %>
-  </ul>
-  <div class="clearfix">&nbsp;</div>
+<%= partial :header, :locals => {:repo => @repo} %>
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <span class="brand">
+      Tree: <%= @tree.id %>
+    </span>
+    <ul class="nav">
+      <li class="divider-vertical"></li>
+      <li><%= archive_link @tree, @repo.param %></li>
+      <li class="divider-vertical"></li>
+      <li><a href="<%= h prefix_url(@repo.param) %>/graph">Branch graph</a></li>
+    </ul>
+  </div>
 </div>
+
+<ul class="nav nav-tabs nav-stacked" id="tree">
+  <% @tree.trees.each do |tree| %>
+    <% tree_path = "#{tree.name}"%>
+    <li class="tree">
+      <a href="<%= prefix_url(@path[:tree]) %><%= tree_path %>">
+        <i class="icon-folder-close"></i> <%= tree.basename %>
+      </a>
+
+      <ul class="unstyled">
+        <% tree.trees.each do |next_tree| %>
+          <% new_path = "/#{tree_path}/#{next_tree.name}" %>
+          <%= partial :tree_part, :locals => {:current_tree => next_tree, :tree_path => new_path, :path => @path } %>
+        <% end %>
+
+        <% tree.blobs.each do |next_blob| %>
+          <li class="blob">
+            <a href="<%= prefix_url(@path[:blob]) %>/<%= tree_path %>/<%= next_blob.basename %>">
+              <i class="icon-file"></i> <%= next_blob.basename %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% @tree.blobs.each do |blob| %>
+    <li class="blob">
+      <a href="<%= prefix_url(@path[:blob]) %>/<%= blob.basename %>">
+        <i class="icon-file"></i> <%= blob.basename %>
+      </a>
+    </li>
+  <% end %>
+</ul>
