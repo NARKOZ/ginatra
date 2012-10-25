@@ -41,8 +41,8 @@ module Ginatra
     #
     # @return [String] HTML link to the given ref with class attached.
     def commit_ref(ref, repo_param)
-      ref_class = ref.class.to_s.split("::")[1].to_s
-      "<a class=\"ref #{ref_class}\" href=\"" + prefix_url("#{repo_param}/#{ref.name}") + "\">#{ref.name}</a>"
+      ref_url = prefix_url("#{repo_param}/#{ref.name}")
+      "<a href='#{ref_url}'>#{ref.name}</a>"
     end
 
     # calls +Ginatra::Helpers#commit_ref+ for each ref in the commit
@@ -55,7 +55,7 @@ module Ginatra
     #
     # @return [String] HTML containing all the ref links
     def commit_refs(commit, repo_param)
-      commit.refs.map{ |r| commit_ref(r, repo_param) }.join("\n")
+      commit.refs.map { |r| commit_ref(r, repo_param) }.join("\n")
     end
 
     # returns a string including the link to download a certain
@@ -67,7 +67,8 @@ module Ginatra
     #
     # @return [String] the HTML link to the archive.
     def archive_link(tree, repo_param)
-      "<a class=\"download\" href=\"" + prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz") + "\" title=\"Download a tar.gz snapshot of this Tree\">Download Archive</a>"
+      archive_url = prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz")
+      "<a href='#{archive_url}' title='Download a tar.gz snapshot of this Tree'>Download Archive</a>"
     end
 
     # returns a string including the link to download a patch for a certain
@@ -79,7 +80,19 @@ module Ginatra
     #
     # @return [String] the HTML link to the patch
     def patch_link(commit, repo_param)
-      "<a class=\"download\" href=\"" + prefix_url("#{repo_param}/commit/#{commit.id}.patch") + "\" title=\"Download a patch file of this Commit\">Download Patch</a>"
+      patch_url = prefix_url("#{repo_param}/commit/#{commit.id}.patch")
+      "<a href='#{patch_url}' title='Download a patch file of this Commit'>Download Patch</a>"
+    end
+
+    # Spits out a HTML link to the atom feed for a given ref of a given repo
+    #
+    # @param [Sting] repo_param the url-sanitised-name of a given repo
+    # @param [String] ref the ref to link to.
+    #
+    # @return [String] the HTML containing the link to the feed.
+    def atom_feed_link(repo_param, ref=nil)
+      feed_url = ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
+      "<a href='#{feed_url}' title='Atom Feed'>Feed</a>"
     end
 
     # returns a HTML (+<ul>+) list of the files altered in a given commit.
@@ -97,11 +110,11 @@ module Ginatra
       out = commit.diffs.map do |diff|
         count = count + 1
         if diff.deleted_file
-          %(<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>)
+          "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>"
         else
           cls = diff.new_file ? "added" : "changed"
           ico = diff.new_file ? "icon-ok" : "icon-edit"
-          %(<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>)
+          "<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{count}'>#{diff.a_path}</a></li>"
         end
       end
       "<ul class='unstyled'>#{out.join}</ul>"
@@ -192,16 +205,6 @@ module Ginatra
     # @return [String] the hostname of the server. Respects HTTP-X-Forwarded-For
     def hostname
       (request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/) ? request.env['HTTP_X_FORWARDED_SERVER'] : request.env['HTTP_HOST']
-    end
-
-    # Spits out a HTML link to the atom feed for a given ref of a given repo
-    #
-    # @param [Sting] repo_param the url-sanitised-name of a given repo
-    # @param [String] ref the ref to link to.
-    #
-    # @return [String] the HTML containing the link to the feed.
-    def atom_feed_link(repo_param, ref=nil)
-      "<a href=\"" + prefix_url("#{repo_param}#{"/#{ref}" if !ref.nil?}.atom") + "\" title=\"Atom Feed\" class=\"atom\">Feed</a>"
     end
   end
 end
