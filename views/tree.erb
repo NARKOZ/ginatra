@@ -18,7 +18,7 @@
   <% @tree.trees.each do |tree| %>
     <% tree_path = "#{tree.name}"%>
     <li class="tree">
-      <a href="<%= prefix_url(@path[:tree]) %><%= tree_path %>">
+      <a href="<%= prefix_url(@path[:tree]) %>/<%= tree_path %>">
         <i class="icon-folder-close"></i> <%= tree.basename %>
       </a>
 
