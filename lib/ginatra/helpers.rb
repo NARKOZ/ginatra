@@ -4,6 +4,10 @@ module Ginatra
   # Helpers used in the views usually,
   # but not exclusively.
   module Helpers
+    # checks X-PJAX header
+    def is_pjax?
+      request.env['HTTP_X_PJAX']
+    end
 
     # constructs the URL used in the layout's base tag
     def prefix_url(rest_of_url="")

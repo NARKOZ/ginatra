@@ -197,7 +197,7 @@ module Ginatra
       @path = {}
       @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}"
       @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}"
-      erb(:tree)
+      erb :tree, :layout => !is_pjax?
     end
 
     # HTML page for a given tree in a given +repo+.
@@ -219,7 +219,7 @@ module Ginatra
         @path = {}
         @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-        erb(:tree)
+        erb :tree, :layout => !is_pjax?
       end
     end
 
@@ -231,7 +231,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
       etag(@blob.id) if Ginatra::App.production?
-      erb(:blob)
+      erb :blob, :layout => !is_pjax?
     end
 
     # HTML page for a given blob in a given repo.
@@ -250,7 +250,7 @@ module Ginatra
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
         etag(@blob.id) if Ginatra::App.production?
-        erb(:blob)
+        erb :blob, :layout => !is_pjax?
       end
     end
 

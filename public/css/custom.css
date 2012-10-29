@@ -1,6 +1,7 @@
 body { padding-top: 20px; }
 
 .author-box { padding-top: 10px; }
+#loader { display: none; }
 
 #diff { padding-top: 20px; }
 #diff .added a { color: #468847; }
