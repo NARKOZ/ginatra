@@ -1,5 +1,5 @@
 <%= partial(:header, :locals => {:repo => @repo}) %>
-<h3>Blob: <%= params[:splat].first %></h3>
+<h3>Blob: <%= params[:blob] || params[:splat].first %></h3>
 <div class="active">
   <div class="blob">
     <h4><img src="<%= prefix_url("img/doc.png") %>" /><%= @blob.name %></h4>
