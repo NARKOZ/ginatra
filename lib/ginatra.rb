@@ -51,7 +51,7 @@ module Ginatra
       set :logging, Proc.new { !test? }
       set :static, true
       current_path = File.expand_path(File.dirname(__FILE__))
-      set :public, "#{current_path}/../public"
+      set :public_folder, "#{current_path}/../public"
       set :views, "#{current_path}/../views"
     end
 
