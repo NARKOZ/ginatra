@@ -20,7 +20,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'grit',    '~> 2.5.0'
   gem.add_dependency 'vegas',   '~> 0.1.8'
   gem.add_dependency 'builder', '~> 3.1.4'
-  gem.add_dependency 'erubis',  '~> 2.7.0'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
