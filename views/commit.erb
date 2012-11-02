@@ -1,19 +1,5 @@
 <%= partial :header, :locals => {:repo => @repo} %>
 
-<div class="navbar">
-  <div class="navbar-inner">
-    <span class="brand">
-      Commit: <%= @commit.id %>
-    </span>
-    <ul class="nav">
-      <li class="divider-vertical"></li>
-      <li><%= commit_refs(@commit, @repo.param) %></li>
-      <li class="divider-vertical"></li>
-      <li><%= patch_link(@commit, @repo.param) %></li>
-    </ul>
-  </div>
-</div>
-
 <div class="info-box">
   <div class="row-fluid">
     <div class="span5">
