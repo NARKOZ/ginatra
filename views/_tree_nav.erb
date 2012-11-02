@@ -1,4 +1,4 @@
-<% unless params[:splat].nil? %>
+<% unless params[:splat].nil? or params[:splat].empty? %>
   <% tree_nav = params[:splat].first.split('/') %>
   <ul class="breadcrumb" id="js-tree-nav">
     <li>
