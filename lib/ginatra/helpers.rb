@@ -4,6 +4,9 @@ module Ginatra
   # Helpers used in the views usually,
   # but not exclusively.
   module Helpers
+    include Rack::Utils
+    alias_method :h, :escape_html
+
     # checks X-PJAX header
     def is_pjax?
       request.env['HTTP_X_PJAX']
@@ -148,35 +151,6 @@ module Ginatra
       text.gsub!(/\n/, "<br />\n")
       text
     end
-
-    # Cleans up the particularly volatile parts of HTML
-    # and replaces them with their entities. Replaces the following
-    # characters:
-    #  - &
-    #  - >
-    #  - <
-    #  - '
-    #
-    # If you are using this with #simple_format, do not forget to call
-    # this one first, then put in unsanitised linebreaks. The other way around
-    # is full of fail.
-    #
-    # stolen from rails: ERB::Util
-    #
-    # @see Ginatra::Helpers#simple_format
-    #
-    # @param [#to_s] clean_me the object to clean.
-    #
-    # @return [String] the cleaned html text.
-    def html_escape(clean_me)
-      clean_me.to_s.gsub(/[&"<>]/) do |special|
-        { '&' => '&amp;',
-          '>' => '&gt;',
-          '<' => '&lt;',
-          '"' => '&quot;' }[special]
-      end
-    end
-    alias :h :html_escape
 
     # Truncates a given text to a certain number of letters, including a special ending if needed.
     #
