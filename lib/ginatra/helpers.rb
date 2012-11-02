@@ -72,7 +72,7 @@ module Ginatra
     # @return [String] the HTML link to the archive.
     def archive_link(tree, repo_param)
       archive_url = prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz")
-      "<a href='#{archive_url}' title='Download a tar.gz snapshot of this Tree'>Download Archive</a>"
+      "<a href='#{archive_url}'>Download Archive</a>"
     end
 
     # returns a string including the link to download a patch for a certain
@@ -85,7 +85,7 @@ module Ginatra
     # @return [String] the HTML link to the patch
     def patch_link(commit, repo_param)
       patch_url = prefix_url("#{repo_param}/commit/#{commit.id}.patch")
-      "<a href='#{patch_url}' title='Download a patch file of this Commit'>Download Patch</a>"
+      "<a href='#{patch_url}'>Download Patch</a>"
     end
 
     # Spits out a HTML link to the atom feed for a given ref of a given repo
@@ -96,7 +96,7 @@ module Ginatra
     # @return [String] the HTML containing the link to the feed.
     def atom_feed_link(repo_param, ref=nil)
       feed_url = ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
-      "<a href='#{feed_url}' title='Atom Feed'>Feed</a>"
+      "<a href='#{feed_url}'>Feed</a>"
     end
 
     # returns a HTML (+<ul>+) list of the files altered in a given commit.

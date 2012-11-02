@@ -31,28 +31,27 @@ describe Ginatra::Helpers do
 
   describe "#archive_link" do
     it "should return a link for a tree archive" do
-      archive_link(@repo.tree, 'test').should ==
-        "<a href='/test/archive/master.tar.gz' title='Download a tar.gz snapshot of this Tree'>Download Archive</a>"
+      archive_link(@repo.tree, 'test').should == "<a href='/test/archive/master.tar.gz'>Download Archive</a>"
     end
   end
 
   describe "#patch_link" do
     it "should return a link for a commit patch" do
       patch_link(@commit, 'test').should ==
-        "<a href='/test/commit/095955b6402c30ef24520bafdb8a8687df0a98d3.patch' title='Download a patch file of this Commit'>Download Patch</a>"
+        "<a href='/test/commit/095955b6402c30ef24520bafdb8a8687df0a98d3.patch'>Download Patch</a>"
     end
   end
 
   describe "#atom_feed_link" do
     context "when ref name passed" do
       it "should return a link to repo reference atom feed" do
-        atom_feed_link('test', 'master').should == "<a href='/test/master.atom' title='Atom Feed'>Feed</a>"
+        atom_feed_link('test', 'master').should == "<a href='/test/master.atom'>Feed</a>"
       end
     end
 
     context "when ref name not passed" do
       it "should return a link to repo atom feed" do
-        atom_feed_link('test').should == "<a href='/test.atom' title='Atom Feed'>Feed</a>"
+        atom_feed_link('test').should == "<a href='/test.atom'>Feed</a>"
       end
     end
   end
