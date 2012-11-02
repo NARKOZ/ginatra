@@ -5,7 +5,7 @@ $(function() {
     location.href = $(this).data('href');
   });
 
-  $('#pjax-container').pjax('#tree a').on('pjax:send', function(){
+  $('#pjax-container').pjax('#js-tree a, #js-tree-nav a').on('pjax:send', function(){
     $('#loader').show();
   });
 });

@@ -1,12 +1,5 @@
 <%= partial :header, :locals => {:repo => @repo} %>
-
-<div class="navbar">
-  <div class="navbar-inner">
-    <span class="brand">
-      Blob: <%= params[:splat].first %>
-    </span>
-  </div>
-</div>
+<%= partial :tree_nav %>
 
 <p><i class="icon-file"></i> <%= @blob.name %></p>
 <pre><code><%= @blob.data %></code></pre>

@@ -1,21 +1,8 @@
 <div id="pjax-container">
   <%= partial :header, :locals => {:repo => @repo} %>
+  <%= partial :tree_nav %>
 
-  <div class="navbar">
-    <div class="navbar-inner">
-      <span class="brand">
-        Tree: <%= @tree.id %>
-      </span>
-      <ul class="nav">
-        <li class="divider-vertical"></li>
-        <li><%= archive_link @tree, @repo.param %></li>
-        <li class="divider-vertical"></li>
-        <li><a href="<%= h prefix_url(@repo.param) %>/graph">Branch graph</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <ul class="nav nav-tabs nav-stacked" id="tree">
+  <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>"></div>
 
     <% @tree.trees.each do |tree| %>
