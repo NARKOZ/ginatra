@@ -1,9 +1,0 @@
-#holder {
-  border: solid 1px #999;
-  cursor: move;
-  height: 70%;
-  overflow: scroll;
-  position: absolute;
-  width: auto;
-	margin: 6ex 3ex 0ex 0ex;
-}

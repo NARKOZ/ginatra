@@ -22,3 +22,8 @@ footer {
      -moz-border-radius: 6px;
           border-radius: 6px;
 }
+
+#holder {
+  cursor: move;
+  overflow-y: hidden;
+}
