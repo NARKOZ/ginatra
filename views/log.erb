@@ -33,7 +33,7 @@
               <tr class="js-nav" data-href="<%= url %>">
                 <td><img src="<%= gravatar_url(commit.author.email) %>" class="img-rounded"> <%= commit.author.name %></td>
                 <td><a href="<%= url %>"><%= truncate(h(commit.short_message), {:length => 140, :separator => ' '}) %></a></td>
-                <td><%= nicetime(commit.committed_date) %></td>
+                <td><%= time_tag(commit.committed_date) %></td>
               </tr>
             <% end %>
           </tbody>

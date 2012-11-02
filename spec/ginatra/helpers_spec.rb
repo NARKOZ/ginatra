@@ -29,6 +29,13 @@ describe Ginatra::Helpers do
     end
   end
 
+  describe "#nicetime" do
+    it "should return a time in nice format" do
+      time_tag(Time.new(2012)).should ==
+        "<time datetime='2012-01-01T00:00:00+0400' title='2012-01-01 00:00:00'>January 01, 2012 00:00</time>"
+    end
+  end
+
   describe "#archive_link" do
     it "should return a link for a tree archive" do
       archive_link(@repo.tree, 'test').should == "<a href='/test/archive/master.tar.gz'>Download Archive</a>"

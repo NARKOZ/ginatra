@@ -37,6 +37,17 @@ module Ginatra
       date.strftime("%b %d, %Y &ndash; %H:%M")
     end
 
+    # Returns an html time tag for the given time
+    #
+    # @param [Time] time object
+    # @return [String] time tag formatted using
+    #   +"%B %d, %Y %H:%M"+
+    def time_tag(time)
+      datetime = time.strftime('%Y-%m-%dT%H:%M:%S%z')
+      title = time.strftime('%Y-%m-%d %H:%M:%S')
+      "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
+    end
+
     # spits out a link to a certain reference.
     #
     # @param [Grit::Ref] ref grit ref object

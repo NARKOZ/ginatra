@@ -22,13 +22,13 @@
       <div class="author-box">
         <img src="<%= gravatar_url(@commit.author.email) %>" class="img-rounded">
         <strong><%= @commit.author.name %></strong>
-        authored at <%= nicetime @commit.authored_date %>
+        authored at <%= time_tag @commit.authored_date %>
 
         <% unless @commit.committer.name == @commit.author.name %>
         <div class="author-box">
           <img src="<%= gravatar_url(@commit.committer.email) %>" class="img-rounded">
           <strong><%= @commit.committer.name %></strong>
-          committed at <%= nicetime(@commit.committed_date) %>
+          committed at <%= time_tag @commit.committed_date %>
         </div>
         <% end %>
       </div>
