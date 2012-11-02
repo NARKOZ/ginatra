@@ -2,7 +2,7 @@
   <% tree_nav = params[:splat].first.split('/') %>
   <ul class="breadcrumb" id="js-tree-nav">
     <li>
-      <a href="<%= prefix_url(@repo.param) %>"><%= @repo.name %></a>
+      <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>"><%= @repo.name %></a>
       <span class="divider">/</span>
     </li>
 
