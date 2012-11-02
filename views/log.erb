@@ -24,15 +24,19 @@
           </tbody>
         </table>
 
-        <!-- FIXME -->
-        <% if @previous_commits %>
-          <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>Previous</a>
-        <% end %>
-        <% if @separator %>|<% end %>
-        <% if @next_commits %>
-          <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next</a>
-        <% end %>
-        <!-- FIXME -->
+        <ul class="pager">
+          <% if @previous_commits %>
+            <li class="previous">
+              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>&larr; Previous</a>
+            </li>
+          <% end %>
+
+          <% if @next_commits %>
+            <li class="next">
+              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next &rarr;</a>
+            </li>
+          <% end %>
+        </ul>
       </div>
 
       <div class="span4">

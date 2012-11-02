@@ -91,6 +91,9 @@ module Ginatra
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
+      params[:page] = 1
+      params[:ref]  = @repo.get_head('master').nil? ? @repo.heads.first.name : 'master'
+      @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
       erb :log
     end
@@ -140,9 +143,10 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
     get '/:repo/:ref' do
-      params[:page] = 1
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
+      params[:page] = 1
+      @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
       erb :log
     end
@@ -268,7 +272,6 @@ module Ginatra
       if params[:page] - 1 > 0
         @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
       end
-      @separator = @next_commits && @previous_commits
       erb :log
     end
 
