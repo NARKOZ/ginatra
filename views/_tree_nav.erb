@@ -1,0 +1,20 @@
+<% unless params[:splat].nil? %>
+  <% tree_nav = params[:splat].first.split('/') %>
+  <ul class="breadcrumb" id="js-tree-nav">
+    <li>
+      <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>"><%= @repo.name %></a>
+      <span class="divider">/</span>
+    </li>
+
+    <% tree_nav.each_with_index do |path, index| %>
+      <% if index == tree_nav.size - 1 %>
+        <li class="active"><%= tree_nav.last %></li>
+      <% else %>
+        <li>
+          <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>/<%= tree_nav[0..index].join('/') %>"><%= path %></a>
+          <span class="divider">/</span>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>

@@ -1,0 +1,29 @@
+body { padding-top: 20px; }
+
+footer {
+  border-top: 1px #E5E5E5 solid;
+  padding: 15px 0;
+  margin-top: 20px;
+  background-color: #F5F5F5;
+}
+
+.author-box { padding-top: 10px; }
+#loader { display: none; }
+
+#diff { padding-top: 20px; }
+#diff .added a { color: #468847; }
+#diff .changed a { color: #3A87AD; }
+#diff .deleted a { color: #B94A48; }
+
+.info-box {
+  padding: 20px;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+#holder {
+  cursor: move;
+  overflow-y: hidden;
+}

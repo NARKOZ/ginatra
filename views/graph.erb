@@ -1,15 +1,16 @@
-<%= partial(:header, :locals => {:repo => @repo}) %>
-<script src="<%= prefix_url("src/raphael.js") %>" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8">
-	var chunk1={commits:<%=@commits_json%>}
-	var days=<%=@days_json%>
+<%= partial :header, :locals => {:repo => @repo} %>
+
+<script src="<%= prefix_url("js/raphael.js") %>"></script>
+<script>
+  var chunk1 = {commits: <%= @commits_json %>},
+      days = <%= @days_json %>;
 </script>
-<script src="<%= prefix_url("src/branch-graph.js") %>" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">
+<script src="<%= prefix_url("js/branch-graph.js") %>"></script>
+
+<script>
 	window.onload = function(){
 		branchGraph(document.getElementById("holder"));
 	}
 </script>
-<link rel="stylesheet" href="<%= prefix_url("src/graph.css") %>" type="text/css" media="screen" />
 
 <div id="holder" class="graph"></div>

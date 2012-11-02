@@ -91,6 +91,9 @@ module Ginatra
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
+      params[:page] = 1
+      params[:ref]  = @repo.get_head('master').nil? ? @repo.heads.first.name : 'master'
+      @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
       erb :log
     end
@@ -140,9 +143,10 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
     get '/:repo/:ref' do
-      params[:page] = 1
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
+      params[:page] = 1
+      @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
       erb :log
     end
@@ -197,7 +201,7 @@ module Ginatra
       @path = {}
       @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}"
       @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}"
-      erb(:tree)
+      erb :tree, :layout => !is_pjax?
     end
 
     # HTML page for a given tree in a given +repo+.
@@ -219,7 +223,7 @@ module Ginatra
         @path = {}
         @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
         @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-        erb(:tree)
+        erb :tree, :layout => !is_pjax?
       end
     end
 
@@ -231,7 +235,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @blob = @repo.blob(params[:blob])
       etag(@blob.id) if Ginatra::App.production?
-      erb(:blob)
+      erb :blob, :layout => !is_pjax?
     end
 
     # HTML page for a given blob in a given repo.
@@ -250,7 +254,7 @@ module Ginatra
         redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       else
         etag(@blob.id) if Ginatra::App.production?
-        erb(:blob)
+        erb :blob, :layout => !is_pjax?
       end
     end
 
@@ -268,7 +272,6 @@ module Ginatra
       if params[:page] - 1 > 0
         @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
       end
-      @separator = @next_commits && @previous_commits
       erb :log
     end
 

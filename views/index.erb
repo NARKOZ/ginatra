@@ -1,12 +1,15 @@
-<h3>Repositories</h3>
-<div class="active repo-list">
-  <div class="commit-info">
-    <%=h Ginatra::Config.description %>
-  </div>
-  <dl>
-    <% Ginatra::RepoList.list.each do |repo| %>
-      <dt><a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a></dt>
-      <dd><%=h repo.description %></dd>
-    <% end %>
-  </dl>
+<div class="page-header">
+  <h1>Repositories <small><%= h Ginatra::Config.description %></small></h1>
 </div>
+
+<ul class="nav nav-tabs nav-stacked">
+  <% Ginatra::RepoList.list.each do |repo| %>
+    <li>
+      <a href="<%= prefix_url(repo.param) %>">
+        <h2>
+          <%= repo.name %> <small><%= h repo.description %></small>
+        </h2>
+      </a>
+    </li>
+  <% end %>
+</ul>

@@ -4,6 +4,10 @@ module Ginatra
   # Helpers used in the views usually,
   # but not exclusively.
   module Helpers
+    # checks X-PJAX header
+    def is_pjax?
+      request.env['HTTP_X_PJAX']
+    end
 
     # constructs the URL used in the layout's base tag
     def prefix_url(rest_of_url="")
@@ -20,8 +24,8 @@ module Ginatra
     #
     # @param [String] email the email address
     # @return [String] the url to the gravatar
-    def gravatar_url(email)
-      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=40"
+    def gravatar_url(email, size=40)
+      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
     end
 
     # reformats the date into a user friendly date with html entities
@@ -33,32 +37,15 @@ module Ginatra
       date.strftime("%b %d, %Y &ndash; %H:%M")
     end
 
-    # displays the actor box easily.
+    # Returns an html time tag for the given time
     #
-    # Internally, it calls the +#partial+ method
-    # @see Sinatra::Partials#partial
-    #
-    # @param [Grit::Actor] actor the Grit Actor Object
-    # @param [#to_s] role the role that the object has.
-    # @param [#strftime] date the date that the actor acted on.
-    #
-    # @return [String] a string that contains the box for the actor.
-    def actor_box(actor, role, date)
-      partial(:actor_box, :locals => { :actor => actor, :role => role, :date => date })
-    end
-
-    # works out what actor boxes need to be displayed.
-    #
-    # Will always display the committer box, and will only display
-    # the author box if it's different to the committer
-    #
-    # @param [Grit::Commit] commit the commit in question
-    # @return [String] a string representing the HTML actor boxes
-    def actor_boxes(commit)
-      o = actor_box(commit.committer, :committer, commit.committed_date)
-      if commit.author.name != commit.committer.name
-        o = actor_box(commit.author, :author, commit.authored_date) + o
-      end
+    # @param [Time] time object
+    # @return [String] time tag formatted using
+    #   +"%B %d, %Y %H:%M"+
+    def time_tag(time)
+      datetime = time.strftime('%Y-%m-%dT%H:%M:%S%z')
+      title = time.strftime('%Y-%m-%d %H:%M:%S')
+      "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
     end
 
     # spits out a link to a certain reference.
@@ -69,8 +56,8 @@ module Ginatra
     #
     # @return [String] HTML link to the given ref with class attached.
     def commit_ref(ref, repo_param)
-      ref_class = ref.class.to_s.split("::")[1].to_s
-      "<a class=\"ref #{ref_class}\" href=\"" + prefix_url("#{repo_param}/#{ref.name}") + "\">#{ref.name}</a>"
+      ref_url = prefix_url("#{repo_param}/#{ref.name}")
+      "<a href='#{ref_url}'>#{ref.name}</a>"
     end
 
     # calls +Ginatra::Helpers#commit_ref+ for each ref in the commit
@@ -83,10 +70,10 @@ module Ginatra
     #
     # @return [String] HTML containing all the ref links
     def commit_refs(commit, repo_param)
-      commit.refs.map{ |r| commit_ref(r, repo_param) }.join("\n")
+      commit.refs.map { |r| commit_ref(r, repo_param) }.join("\n")
     end
 
-    # returns a string including the link to download a certain 
+    # returns a string including the link to download a certain
     # tree of the repo
     #
     # @param [Grit::Tree] tree the tree you want an archive link for
@@ -95,7 +82,8 @@ module Ginatra
     #
     # @return [String] the HTML link to the archive.
     def archive_link(tree, repo_param)
-      "<a class=\"download\" href=\"" + prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz") + "\" title=\"Download a tar.gz snapshot of this Tree\">Download Archive</a>"
+      archive_url = prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz")
+      "<a href='#{archive_url}'>Download Archive</a>"
     end
 
     # returns a string including the link to download a patch for a certain
@@ -107,42 +95,52 @@ module Ginatra
     #
     # @return [String] the HTML link to the patch
     def patch_link(commit, repo_param)
-      "<a class=\"download\" href=\"" + prefix_url("#{repo_param}/commit/#{commit.id}.patch") + "\" title=\"Download a patch file of this Commit\">Download Patch</a>"
+      patch_url = prefix_url("#{repo_param}/commit/#{commit.id}.patch")
+      "<a href='#{patch_url}'>Download Patch</a>"
+    end
+
+    # Spits out a HTML link to the atom feed for a given ref of a given repo
+    #
+    # @param [Sting] repo_param the url-sanitised-name of a given repo
+    # @param [String] ref the ref to link to.
+    #
+    # @return [String] the HTML containing the link to the feed.
+    def atom_feed_link(repo_param, ref=nil)
+      feed_url = ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
+      "<a href='#{feed_url}'>Feed</a>"
     end
 
     # returns a HTML (+<ul>+) list of the files altered in a given commit.
     #
-    # It includes classes for added/altered/deleted and also anchor links 
+    # It includes classes for added/altered/deleted and also anchor links
     # to the diffs for further down the page.
     #
     # @param [Grit::Commit] commit the commit you want the list of files for
     #
     # @return [String] a +<ul>+ with lots of +<li>+ children.
     def file_listing(commit)
-      # The only reason this doesn't work 100% of the time is because grit doesn't :/
-      # if i find a fix, it'll go upstream :D
-      count = 0
-      out = commit.diffs.map do |diff|
-        count = count + 1
+      list = []
+      commit.diffs.each_with_index do |diff, index|
         if diff.deleted_file
-          %(<li class='file_rm'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          list << "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
         else
-          cla = diff.new_file ? "add" : "diff"
-          %(<li class='file_#{cla}'><a href='#file_#{count}'>#{diff.a_path}</a></li>)
+          cls = diff.new_file ? "added" : "changed"
+          ico = diff.new_file ? "icon-ok" : "icon-edit"
+          list << "<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
         end
       end
-      "<ul id='files'>#{out.join}</ul>"
+      "<ul class='unstyled'>#{list.join}</ul>"
     end
 
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #
     # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
-    # and simplified to just use <p> tags without any options, then modified 
+    # and simplified to just use <p> tags without any options, then modified
     # more later.
     #
     # @param [String] text the text you want formatted
-    # 
+    #
     # @return [String] the formatted text
     def simple_format(text)
       text.gsub!(/ +/, " ")
@@ -151,8 +149,8 @@ module Ginatra
       text
     end
 
-    # Cleans up the particularly volatile parts of HTML 
-    # and replaces them with their entities. Replaces the following 
+    # Cleans up the particularly volatile parts of HTML
+    # and replaces them with their entities. Replaces the following
     # characters:
     #  - &
     #  - >
@@ -183,7 +181,7 @@ module Ginatra
     # Truncates a given text to a certain number of letters, including a special ending if needed.
     #
     # Stolen and bastardised from rails
-    # 
+    #
     # @param [String] text the text to truncate
     # @option options [Integer] :length   (30) the length you want the output string
     # @option options [String]  :omission ("...") the string to show an omission.
@@ -211,24 +209,14 @@ module Ginatra
       datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
     end
 
-    # Returns the Hostname of the given install. 
+    # Returns the Hostname of the given install.
     # used in the atom feeds.
     #
     # stolen from Marley
-    # 
+    #
     # @return [String] the hostname of the server. Respects HTTP-X-Forwarded-For
     def hostname
       (request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/) ? request.env['HTTP_X_FORWARDED_SERVER'] : request.env['HTTP_HOST']
-    end
-
-    # Spits out a HTML link to the atom feed for a given ref of a given repo
-    #
-    # @param [Sting] repo_param the url-sanitised-name of a given repo
-    # @param [String] ref the ref to link to.
-    #
-    # @return [String] the HTML containing the link to the feed.
-    def atom_feed_link(repo_param, ref=nil)
-      "<a href=\"" + prefix_url("#{repo_param}#{"/#{ref}" if !ref.nil?}.atom") + "\" title=\"Atom Feed\" class=\"atom\">Feed</a>"
     end
   end
 end
