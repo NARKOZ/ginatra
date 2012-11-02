@@ -5,6 +5,7 @@ describe Ginatra::Helpers do
     @repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"))
     @commit = @repo.commit("095955b6402c30ef24520bafdb8a8687df0a98d3")
     @ref = @repo.get_head("master")
+    Time.stub(:now).and_return(Time.new(2012, 12, 25, 0, 0, 0, '+00:00'))
   end
 
   describe "#gravatar_url" do
@@ -25,14 +26,14 @@ describe Ginatra::Helpers do
 
   describe "#nicetime" do
     it "should return a time in nice format" do
-      nicetime(Time.new(2012)).should == 'Jan 01, 2012 &ndash; 00:00'
+      nicetime(Time.now).should == 'Dec 25, 2012 &ndash; 00:00'
     end
   end
 
-  describe "#nicetime" do
+  describe "#time_tag" do
     it "should return a time in nice format" do
-      time_tag(Time.new(2012)).should ==
-        "<time datetime='2012-01-01T00:00:00+0400' title='2012-01-01 00:00:00'>January 01, 2012 00:00</time>"
+      time_tag(Time.now).should ==
+        "<time datetime='2012-12-25T00:00:00+0000' title='2012-12-25 00:00:00'>December 25, 2012 00:00</time>"
     end
   end
 
