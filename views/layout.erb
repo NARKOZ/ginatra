@@ -9,13 +9,14 @@
   </head>
   <body>
     <div class="container-fluid">
-
       <div class="well">
         <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
       </div>
 
       <%= yield %>
     </div>
+
+    <%= partial :footer %>
 
     <script src="<%= prefix_url("js/jquery.min.js") %>"></script>
     <script src="<%= prefix_url("js/bootstrap.min.js") %>"></script>

@@ -1,5 +1,11 @@
 body { padding-top: 20px; }
 
+footer {
+  border-top: 1px #E5E5E5 solid;
+  padding: 15px 0;
+  background-color: #F5F5F5;
+}
+
 .author-box { padding-top: 10px; }
 #loader { display: none; }
 
