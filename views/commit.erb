@@ -20,28 +20,36 @@
       </div>
     </div>
     <div class="span7">
-      <p>
-        <strong>commit:</strong>
-        <a href="<%= prefix_url(@repo.param) %>/commit/<%= @commit.id %>">
-          <%= @commit.id %>
-        </a>
-      </p>
+      <div class="row-fluid">
+        <div class="span1">
+          <p><strong>commit:</strong></p>
+          <p><strong>tree:</strong></p>
+          <% @commit.parents.size.times do %>
+            <p><strong>parent</strong></p>
+          <% end %>
+        </div>
+        <div class="span3">
+          <p>
+            <a href="<%= prefix_url(@repo.param) %>/commit/<%= @commit.id %>">
+              <%= @commit.id %>
+            </a>
+          </p>
 
-      <p>
-        <strong>tree:</strong>
-        <a href="<%= prefix_url(@repo.param) %>/tree/<%= @commit.tree.id %>">
-          <%= @commit.tree.id %>
-        </a>
-      </p>
+          <p>
+            <a href="<%= prefix_url(@repo.param) %>/tree/<%= @commit.tree.id %>">
+              <%= @commit.tree.id %>
+            </a>
+          </p>
 
-      <% @commit.parents.each do |parent| %>
-      <p>
-        <strong>parent:</strong>
-        <a href="<%= prefix_url(@repo.param) %>/commit/<%= parent.id %>">
-          <%= parent.id %>
-        </a>
-      </p>
-      <% end %>
+          <% @commit.parents.each do |parent| %>
+          <p>
+            <a href="<%= prefix_url(@repo.param) %>/commit/<%= parent.id %>">
+              <%= parent.id %>
+            </a>
+          </p>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
