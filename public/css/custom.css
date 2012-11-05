@@ -1,4 +1,3 @@
-body { padding-top: 20px; }
 html, body { height: 100%; }
 
 #wrap {
@@ -6,12 +5,10 @@ html, body { height: 100%; }
   height: auto !important;
   height: 100%;
   /* Negative indent footer by it's height */
-  margin: 0 auto -20px;
+  margin: 0 auto -60px;
 }
 
-#push, #footer {
-  height: 20px;
-}
+#push, #footer { height: 60px; }
 
 @media (max-width: 767px) {
   #footer {
@@ -24,11 +21,11 @@ html, body { height: 100%; }
 
 footer#footer {
   border-top: 1px #E5E5E5 solid;
-  padding: 15px 0;
-  margin-top: 20px;
   background-color: #F5F5F5;
 }
 
+#footer p { margin: 20px 0; }
+.header { margin-top: 15px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
 
