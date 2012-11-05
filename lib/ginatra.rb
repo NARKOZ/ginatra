@@ -25,8 +25,6 @@ module Ginatra
       Config.load!
       set :host, Ginatra::Config[:host]
       set :port, Ginatra::Config[:port]
-      set :raise_errors, Proc.new { test? }
-      set :show_exceptions, Proc.new { development? }
       set :dump_errors, true
       set :logging, Proc.new { !test? }
       set :static, true
