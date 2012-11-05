@@ -1,6 +1,28 @@
 body { padding-top: 20px; }
+html, body { height: 100%; }
 
-footer {
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -20px;
+}
+
+#push, #footer {
+  height: 20px;
+}
+
+@media (max-width: 767px) {
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+footer#footer {
   border-top: 1px #E5E5E5 solid;
   padding: 15px 0;
   margin-top: 20px;

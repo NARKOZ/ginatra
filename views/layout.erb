@@ -6,12 +6,16 @@
     <link href="<%= prefix_url("main.css") %>" rel="stylesheet">
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="well">
-        <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
+    <div id="wrap">
+      <div class="container-fluid">
+        <div class="well">
+          <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
+        </div>
+
+        <%= yield %>
       </div>
 
-      <%= yield %>
+      <div id="push"></div>
     </div>
 
     <%= partial :footer %>
