@@ -40,7 +40,7 @@ describe Ginatra::Repo do
   end
 
   it "should have a list of commits" do
-    @ginatra_repo.commits.should_not be_blank
+    @ginatra_repo.commits.should_not be_empty
   end
 
   it "should raise an error when asked to invert itself" do
