@@ -1,1 +1,2 @@
-rackup.ru
+require 'ginatra'
+run Ginatra::App
