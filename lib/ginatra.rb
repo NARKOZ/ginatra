@@ -1,25 +1,23 @@
 require 'sinatra/base'
 require 'sinatra/partials'
 require 'json'
+require 'ginatra/config'
 require 'ginatra/errors'
+require 'ginatra/helpers'
+require 'ginatra/repo'
+require 'ginatra/repo_list'
+require 'ginatra/graph_commit'
 
 module Ginatra
-  autoload :Config,   "ginatra/config"
-  autoload :Helpers,  "ginatra/helpers"
-  autoload :Repo,     "ginatra/repo"
-  autoload :RepoList, "ginatra/repo_list"
-  autoload :GraphCommit, "ginatra/graph_commit"
-
   # The main application class.
   #
   # This class contains all the core application logic
   # and is what is mounted by the +rackup.ru+ files.
   class App < Sinatra::Base
+    helpers Helpers, Sinatra::Partials
 
     # logger that can be used with the Sinatra code
-    def logger
-      Ginatra::Config.logger
-    end
+    def logger; Ginatra::Config.logger end
 
     configure do
       Config.load!
@@ -28,12 +26,9 @@ module Ginatra
       set :dump_errors, true
       set :logging, Proc.new { !test? }
       set :static, true
-      current_path = File.expand_path(File.dirname(__FILE__))
-      set :public_folder, "#{current_path}/../public"
-      set :views, "#{current_path}/../views"
+      set :public_folder, "#{settings.root}/../public"
+      set :views, "#{settings.root}/../views"
     end
-
-    helpers Helpers, Sinatra::Partials
 
     # Let's handle a CommitsError.
     #
@@ -78,8 +73,7 @@ module Ginatra
 
     get '/:repo/graph' do
       @repo = RepoList.find(params[:repo])
-      max_count = 650
-      max_count = params[:max_count].to_i unless params[:max_count].nil?
+      max_count = params[:max_count].nil? ? 650 : params[:max_count].to_i
       commits = @repo.all_commits(max_count)
 
       days = GraphCommit.index_commits(commits)
@@ -124,7 +118,6 @@ module Ginatra
       params[:page] = 1
       @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
-      erb :log
     end
 
     # The patch file for a given commit to a +repo+.
@@ -132,7 +125,7 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     # @param [String] commit the repository commit
     get '/:repo/commit/:commit.patch' do
-      response['Content-Type'] = "text/plain"
+      content_type :txt
       @repo = RepoList.find(params[:repo])
       @repo.git.format_patch({}, "--stdout", "-1", params[:commit])
     end
@@ -153,7 +146,7 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
     get '/:repo/archive/:tree.tar.gz' do
-      response['Content-Type'] = "application/x-tar-gz"
+      content_type :gz
       @repo = RepoList.find(params[:repo])
       @repo.archive_tar_gz(params[:tree])
     end
@@ -239,7 +232,7 @@ module Ginatra
     # @todo cleanup!
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
-    get '/:repo/:ref/:page' do
+    get '/:repo/:ref/page/:page' do
       pass unless params[:page] =~ /^(\d)+$/
       params[:page] = params[:page].to_i
       @repo = RepoList.find(params[:repo])

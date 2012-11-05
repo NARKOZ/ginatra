@@ -65,7 +65,7 @@ describe Ginatra do
 
     it "should return text/plain" do
       get "/test/commit/master.patch"
-      last_response.headers['Content-Type'].should == "text/plain"
+      last_response.headers['Content-Type'].should match("text/plain.*")
     end
   end
 
@@ -84,7 +84,7 @@ describe Ginatra do
 
     it "should return application/x-tar-gz" do
       get "/test/archive/master.tar.gz"
-      last_response.headers['Content-Type'].should == "application/x-tar-gz"
+      last_response.headers['Content-Type'].should == "application/x-gzip"
     end
   end
 
@@ -112,6 +112,13 @@ describe Ginatra do
   describe "repo blob page with path" do
     it "should respond with 200" do
       get '/test/blob/master/Gemfile'
+      last_response.status.should == 200
+    end
+  end
+
+  describe "repo log page" do
+    it "should respond with 200" do
+      get '/test/master/page/1'
       last_response.status.should == 200
     end
   end

@@ -27,13 +27,13 @@
         <ul class="pager">
           <% if @previous_commits %>
             <li class="previous">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] - 1 %>'>&larr; Previous</a>
+              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] - 1 %>'>&larr; Previous</a>
             </li>
           <% end %>
 
           <% if @next_commits %>
             <li class="next">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/<%= params[:page] + 1 %>'>Next &rarr;</a>
+              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] + 1 %>'>Next &rarr;</a>
             </li>
           <% end %>
         </ul>
