@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "ginatra"
+require 'ginatra'
 
 module Ginatra::Daemon
 
@@ -21,7 +21,7 @@ HELP
     # Create Symlinks
     FileUtils.mkdir_p(SYMLINK_DIR)
     logger.info "Creating Symlinks"
-    dirs = Ginatra::Config.git_dirs.map{|path| Dir.glob(path)}.flatten
+    dirs = Ginatra::Config.git_dirs.map {|path| Dir.glob(path) }.flatten
     FileUtils.ln_sf(dirs, SYMLINK_DIR)
     # Start Process
     if File.exists?(PID_FILE)
@@ -82,6 +82,3 @@ HELP
 end
 
 Ginatra::Daemon.execute ARGV[0]
-
-
-

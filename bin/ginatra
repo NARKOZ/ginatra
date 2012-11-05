@@ -74,5 +74,3 @@ Ginatra Directory Commands:
 end
 
 Ginatra::Executable.execute ARGV.shift, ARGV
-
-

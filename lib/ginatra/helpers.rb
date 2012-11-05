@@ -1,4 +1,4 @@
-require "digest/md5"
+require 'digest/md5'
 
 module Ginatra
   # Helpers used in the views usually,
@@ -13,10 +13,10 @@ module Ginatra
     end
 
     # constructs the URL used in the layout's base tag
-    def prefix_url(rest_of_url="")
+    def prefix_url(rest_of_url='')
       prefix = Ginatra::Config[:prefix].to_s
 
-      if prefix.length > 0 && prefix[-1].chr == "/"
+      if prefix.length > 0 && prefix[-1].chr == '/'
         prefix.chop!
       end
 
@@ -73,7 +73,7 @@ module Ginatra
     #
     # @return [String] HTML containing all the ref links
     def commit_refs(commit, repo_param)
-      commit.refs.map { |r| commit_ref(r, repo_param) }.join("\n")
+      commit.refs.map {|r| commit_ref(r, repo_param) }.join("\n")
     end
 
     # returns a string including the link to download a certain

@@ -1,11 +1,8 @@
-
 require 'sinatra/base'
-require "sinatra/partials"
+require 'sinatra/partials'
 require 'json'
 
-# Written myself. i know, what the hell?!
 module Ginatra
-
   autoload :Config,   "ginatra/config"
   autoload :Helpers,  "ginatra/helpers"
   autoload :Repo,     "ginatra/repo"
@@ -105,20 +102,18 @@ module Ginatra
       commits = @repo.all_commits(max_count)
 
       days = GraphCommit.index_commits(commits)
-      @days_json = days.compact.collect{|d|[d.day,d.strftime("%b")]}.to_json
+      @days_json = days.compact.collect {|d| [d.day, d.strftime('%b')] }.to_json
       @commits_json = commits.collect do |c|
         h = {}
-        h[:parents] = c.parents.collect do |p|
-          [p.id,0,0]
-        end
-        h[:author] = c.author.name.force_encoding("UTF-8")
-        h[:time] = c.time
-        h[:space] = c.space
-        h[:refs] = c.refs.collect{|r|r.name}.join(" ") unless c.refs.nil?
-        h[:id] = c.sha
-        h[:date] = c.date
-        h[:message] = c.message.force_encoding("UTF-8")
-        h[:login] = c.author.email
+        h[:parents] = c.parents.collect {|p| [p.id, 0, 0] }
+        h[:author]  = c.author.name.force_encoding('UTF-8')
+        h[:time]    = c.time
+        h[:space]   = c.space
+        h[:refs]    = c.refs.collect {|r| r.name }.join(' ') unless c.refs.nil?
+        h[:id]      = c.sha
+        h[:date]    = c.date
+        h[:message] = c.message.force_encoding('UTF-8')
+        h[:login]   = c.author.email
         h
       end.to_json
       erb :graph
@@ -169,7 +164,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit]) # can also be a ref
       etag(@commit.id) if Ginatra::App.production?
-      erb(:commit)
+      erb :commit
     end
 
     # Download an archive of a given tree!

@@ -1,14 +1,12 @@
-require "yaml"
-require "fileutils"
-require "logger"
+require 'yaml'
+require 'fileutils'
+require 'logger'
 
 module Ginatra
-
   # A Wrapper for the ginatra configuration variables,
   # including methods to load, dump and lookup keys
   # using just the class.
   class Config
-
     current_path = File.expand_path("#{File.dirname(__FILE__)}")
 
     # A default path for our configuration variables!
@@ -52,7 +50,7 @@ module Ginatra
       end
 
       @logger = Logger.new(log_file)
-      @logger.level     = log_level
+      @logger.level = log_level
       @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
       @logger
     end
@@ -73,12 +71,14 @@ module Ginatra
     def self.load!
       loaded_config = {}
       @config = DEFAULT_CONFIG.dup
-      if File.size(CONFIG_PATH) == 0
+
+      if File.size(CONFIG_PATH).zero?
         dump!
       else
         loaded_config = YAML.load_file(CONFIG_PATH)
         @config.merge!(loaded_config)
       end
+
       @config
     end
 
@@ -125,6 +125,5 @@ module Ginatra
         super
       end
     end
-
   end
 end

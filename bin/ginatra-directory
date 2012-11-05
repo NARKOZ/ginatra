@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "ginatra"
+require 'ginatra'
 
 module Ginatra::Directory
 
@@ -24,9 +24,7 @@ HELP
 
   def self.remove(globs)
     Ginatra::Config.load!
-    globs.each do |glob|
-      Ginatra::Config[:git_dirs].delete(glob)
-    end
+    globs.each {|glob| Ginatra::Config[:git_dirs].delete(glob) }
     Ginatra::Config.logger.info "Removed #{globs.join(" ")} from your config"
     Ginatra::Config.dump!
   end
@@ -34,7 +32,7 @@ HELP
   def self.list
     Ginatra::Config.load!
     puts "Directories Ginatra will look for repos in:"
-    puts Ginatra::Config[:git_dirs].map{|r| "  - #{r}"}.join("\n")
+    puts Ginatra::Config[:git_dirs].map {|r| "  - #{r}" }.join("\n")
     puts ""
   end
 

@@ -1,4 +1,4 @@
-require "grit"
+require 'grit'
 
 module Grit
   class Commit
@@ -12,11 +12,9 @@ module Grit
 end
 
 module Ginatra
-
   # A thin wrapper to the Grit::repo class so that we can add a name and a url-sanitised-name
   # to a repo, and also intercept and add refs to the commit objects.
   class Repo
-
     attr_reader :name, :param, :description
 
     # Create a new repository, and sort out clever stuff including assigning
@@ -50,8 +48,8 @@ module Ginatra
     # @return [Grit::Commit] the commit object.
     def commit(id)
       @commit = @repo.commit(id)
-      raise(Ginatra::InvalidCommit.new(id)) if @commit.nil?
-      add_refs(@commit,{})
+      raise Ginatra::InvalidCommit.new(id) if @commit.nil?
+      add_refs(@commit, {})
       @commit
     end
 
@@ -64,8 +62,8 @@ module Ginatra
     # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
     #
     # @return [Array<Grit::Commit>] the array of commits.
-    def commits(start = 'master', max_count = 10, skip = 0)
-      raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
+    def commits(start='master', max_count=10, skip=0)
+      raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
       refs_cache = {}
       @repo.commits(start, max_count, skip).each do |commit|
         add_refs(commit,refs_cache)
@@ -80,8 +78,8 @@ module Ginatra
     # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
     #
     # @return [Array<GraphCommit>] the array of commits.
-    def all_commits(max_count = 10, skip = 0)
-      raise(Ginatra::Error.new("max_count cannot be less than 0")) if max_count < 0
+    def all_commits(max_count=10, skip=0)
+      raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
       commits = Grit::Commit.find_all(@repo, nil, {:max_count => max_count, :skip => skip})
       ref_cache = {}
       commits.collect do |commit|
@@ -89,6 +87,7 @@ module Ginatra
         GraphCommit.new(commit)
       end
     end
+
     # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
     #
     # @todo Perhaps move into commit class.
@@ -98,7 +97,10 @@ module Ginatra
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
     def add_refs(commit, ref_cache)
       if ref_cache.empty?
-         @repo.refs.each {|ref| ref_cache[ref.commit.id] ||= [];ref_cache[ref.commit.id] << ref}
+         @repo.refs.each do |ref|
+          ref_cache[ref.commit.id] ||= []
+          ref_cache[ref.commit.id] << ref
+        end
       end
       commit.refs = ref_cache[commit.id] if ref_cache.include? commit.id
       commit.refs ||= []

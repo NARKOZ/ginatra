@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "ginatra"
-require "vegas"
+require 'ginatra'
+require 'vegas'
 
 Vegas::Runner.new(Ginatra::App, 'ginatra-server', {:port => Ginatra::Config.port, :host => Ginatra::Config.host}) do |runner, opts, app|
 
@@ -22,6 +22,4 @@ Vegas::Runner.new(Ginatra::App, 'ginatra-server', {:port => Ginatra::Config.port
     runner.options[:start] = false
     at_exit { puts opts }
   end
-
 end
-

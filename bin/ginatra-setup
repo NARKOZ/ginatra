@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "ginatra/config"
-require "rbconfig"
+require 'ginatra/config'
+require 'rbconfig'
 
 unless ENV['TRAVIS']
   if RbConfig::CONFIG["ruby_version"] < "1.9"

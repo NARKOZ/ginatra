@@ -1,13 +1,13 @@
 require 'singleton'
 
 module Ginatra
-  # A singleton class that lets us make and use a constantly updating 
+  # A singleton class that lets us make and use a constantly updating
   # list of repositories.
   class RepoList
     include Singleton
     attr_accessor :list
-    
-    # This creates the list, then does the first refresh to 
+
+    # This creates the list, then does the first refresh to
     # populate it.
     #
     # It returns what refresh returns.
@@ -15,9 +15,9 @@ module Ginatra
       self.list = []
       self.refresh
     end
-    
-    # The preferred way to access the list publicly. 
-    # 
+
+    # The preferred way to access the list publicly.
+    #
     # @return [Array<Ginatra::Repo>] a list of ginatra repos.
     def self.list
       self.instance.refresh
@@ -39,9 +39,9 @@ module Ginatra
     # globs. Checks to see that it's not there first
     #
     # @param [String] path the path of the git repo
-    # @param [String] param the param of the repo if it differs, 
+    # @param [String] param the param of the repo if it differs,
     #   for looking to see if it's already on the list
-    def add(path, param = File.split(path).last)
+    def add(path, param=File.split(path).last)
       unless self.has_repo?(param)
         begin
           list << Repo.new(path)
@@ -55,7 +55,7 @@ module Ginatra
       list
     end
 
-    # checks to see if the list contains a repo with a param 
+    # checks to see if the list contains a repo with a param
     # matching the one passed in.
     #
     # @param [String] local_param param to check.
@@ -65,7 +65,7 @@ module Ginatra
       !list.find { |r| r.param == local_param }.nil?
     end
 
-    # quick way to look up if there is a repo with a given param in the list. 
+    # quick way to look up if there is a repo with a given param in the list.
     # If not, it refreshes the list and tries again.
     #
     # @param [String] local_param the param to lookup
