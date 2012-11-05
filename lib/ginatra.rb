@@ -118,6 +118,7 @@ module Ginatra
       params[:page] = 1
       @next_commits = @repo.commits(params[:ref], 10, 10).any?
       etag(@commits.first.id) if Ginatra::App.production?
+      erb :log
     end
 
     # The patch file for a given commit to a +repo+.
