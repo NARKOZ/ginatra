@@ -7,9 +7,8 @@ Gem::Specification.new do |gem|
   gem.version       = Ginatra::VERSION
   gem.summary       = "A Gitweb Clone in Sinatra and Grit"
   gem.description   = "Host your own git repository browser through the power of Sinatra and Grit"
-  gem.email         = "sam@lenary.co.uk"
-  gem.homepage      = "http://lenary.co.uk/ginatra"
-  gem.authors       = ["Sam Elliott", "Ryan Bigg"]
+  gem.email         = ["mail@narkoz.me"]
+  gem.authors       = ["Nihad Abbasov", "Sam Elliott", "Ryan Bigg"]
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
