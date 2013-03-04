@@ -1,5 +1,5 @@
-//= require jquery.min
-//= require bootstrap.min
-//= require highlight.min
-//= require jquery.pjax
+//= require ./lib/jquery.min
+//= require ./lib/bootstrap.min
+//= require ./lib/highlight.min
+//= require ./lib/jquery.pjax
 //= require custom

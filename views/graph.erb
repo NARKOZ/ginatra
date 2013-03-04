@@ -1,6 +1,6 @@
 <%= partial :header, :locals => {:repo => @repo} %>
 
-<script src="<%= prefix_url("js/raphael.js") %>"></script>
+<script src="<%= prefix_url("js/lib/raphael.js") %>"></script>
 <script>
   var chunk1 = {commits: <%= @commits_json %>},
       days = <%= @days_json %>;

@@ -1,6 +1,6 @@
 /*
- *= require bootstrap.min
- *= require bootstrap-responsive.min
- *= require github.min
+ *= require ./lib/bootstrap.min
+ *= require ./lib/bootstrap-responsive.min
+ *= require ./lib/github.min
  *= require custom
 */
