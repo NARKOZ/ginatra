@@ -12,16 +12,14 @@ html, body { height: 100%; }
 
 @media (max-width: 767px) {
   #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    margin: 0 -20px;
+    padding: 0 20px;
   }
 }
 
 footer#footer {
-  border-top: 1px #E5E5E5 solid;
-  background-color: #F5F5F5;
+  border-top: 1px #e5e5e5 solid;
+  background-color: #f5f5f5;
 }
 
 #footer p { margin: 20px 0; }
@@ -31,15 +29,13 @@ footer#footer {
 
 #diff { padding-top: 20px; }
 #diff .added a { color: #468847; }
-#diff .changed a { color: #3A87AD; }
-#diff .deleted a { color: #B94A48; }
+#diff .changed a { color: #3a87ad; }
+#diff .deleted a { color: #b94a48; }
 
 .info-box {
   padding: 20px;
-  background-color: #eeeeee;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
+  background-color: #eee;
+  border-radius: 6px;
 }
 
 #holder {
