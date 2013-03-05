@@ -10,8 +10,8 @@ Features include:
 
 + Multiple repository support
 + Multiple branch/tag support
-+ Commit history, diff
-+ Feeds in ATOM format
++ Commit history, diff, patch
++ Feeds in Atom format
 + Syntax highlighting
 + Branch graphs
 
