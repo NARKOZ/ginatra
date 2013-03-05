@@ -16,6 +16,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
+  gem.required_ruby_version = ">= 1.9"
+
   gem.add_dependency 'sinatra',   '~> 1.3.3'
   gem.add_dependency 'grit',      '~> 2.5.0'
   gem.add_dependency 'vegas',     '~> 0.1.8'
