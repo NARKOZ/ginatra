@@ -31,6 +31,13 @@ module Ginatra
       set :views, "#{settings.root}/../views"
     end
 
+    # Better errors in development
+    configure :development do
+      require 'better_errors'
+      use BetterErrors::Middleware
+      BetterErrors.application_root = settings.root
+    end
+
     # Let's handle a CommitsError.
     #
     # @todo prettify
