@@ -31,11 +31,16 @@ module Ginatra
       set :views, "#{settings.root}/../views"
     end
 
-    # Better errors in development
     configure :development do
+      # Use better errors in development
       require 'better_errors'
       use BetterErrors::Middleware
       BetterErrors.application_root = settings.root
+
+      # Reload modified files in development
+      require 'sinatra/reloader'
+      register Sinatra::Reloader
+      Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
     # Let's handle a CommitsError.
