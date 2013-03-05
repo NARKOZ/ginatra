@@ -19,9 +19,9 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'grit',    '~> 2.5.0'
   gem.add_dependency 'vegas',   '~> 0.1.8'
   gem.add_dependency 'builder', '~> 3.1.4'
+  gem.add_dependency 'sprockets', '~> 2.0'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rack-test'
-  gem.add_development_dependency 'sprockets', '~> 2.0'
 end
