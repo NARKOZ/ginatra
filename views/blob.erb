@@ -2,4 +2,4 @@
 <%= partial :tree_nav %>
 
 <p><i class="icon-file"></i> <%= @blob.name %></p>
-<pre><code><%= h @blob.data %></code></pre>
+<%= highlight_source @blob %>

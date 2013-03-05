@@ -135,6 +135,24 @@ module Ginatra
       "<ul class='unstyled'>#{list.join}</ul>"
     end
 
+    def highlight_diff(diff)
+      source    = diff.diff.force_encoding('UTF-8')
+      formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
+      lexer     = Rouge::Lexers::Diff.new
+
+      formatter.format lexer.lex(source)
+    end
+
+    def highlight_source(blob)
+      source    = blob.data.force_encoding('UTF-8')
+      formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
+      lexer     = Rouge::Lexer.guess_by_filename(blob.name) ||
+                  Rouge::Lexer.guess_by_source(blob.data) ||
+                  Rouge::Lexer.guess_by_mimetype(blob.mime_type)
+
+      formatter.format lexer.lex(source)
+    end
+
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #

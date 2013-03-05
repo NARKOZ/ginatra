@@ -59,6 +59,6 @@
 
   <% @commit.diffs.each_with_index do |diff, index| %>
     <p><i class="icon-file"></i> <a name='file-<%= index + 1 %>'><%= diff.b_path %></a></p>
-    <pre><code><%= h diff.diff %></code></pre>
+    <%= highlight_diff diff %>
   <% end %>
 </div>
