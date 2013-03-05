@@ -146,7 +146,7 @@ module Ginatra
     def highlight_source(blob)
       source    = blob.data.force_encoding('UTF-8')
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
-      lexer     = Rouge::Lexer.guess_by_filename(blob.name) ||
+      lexer     = Rouge::Lexer.guess_by_filename(blob.name.to_s) ||
                   Rouge::Lexer.guess_by_source(blob.data) ||
                   Rouge::Lexer.guess_by_mimetype(blob.mime_type)
 
