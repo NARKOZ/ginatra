@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.version       = Ginatra::VERSION
   gem.summary       = "A Gitweb Clone in Sinatra and Grit"
   gem.description   = "Host your own git repository browser through the power of Sinatra and Grit"
+  gem.homepage      = "https://github.com/narkoz/ginatra"
   gem.email         = ["mail@narkoz.me"]
   gem.authors       = ["Nihad Abbasov", "Sam Elliott", "Ryan Bigg"]
 
@@ -15,11 +16,11 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'sinatra', '~> 1.3.3'
-  gem.add_dependency 'grit',    '~> 2.5.0'
-  gem.add_dependency 'vegas',   '~> 0.1.8'
-  gem.add_dependency 'builder', '~> 3.2.0'
-  gem.add_dependency 'rouge', '~> 0.2.15'
+  gem.add_dependency 'sinatra',   '~> 1.3.3'
+  gem.add_dependency 'grit',      '~> 2.5.0'
+  gem.add_dependency 'vegas',     '~> 0.1.8'
+  gem.add_dependency 'builder',   '~> 3.2.0'
+  gem.add_dependency 'rouge',     '~> 0.2.15'
   gem.add_dependency 'sprockets', '~> 2.0'
 
   gem.add_development_dependency 'rake'
