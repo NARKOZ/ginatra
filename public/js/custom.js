@@ -1,6 +1,4 @@
 $(function() {
-  hljs.initHighlightingOnLoad();
-
   $('.js-nav').click(function(){
     location.href = $(this).data('href');
   });
