@@ -43,7 +43,7 @@ module Ginatra
           options[:host] = host
         end
 
-        opts.on('', 'start', 'Start Ginatra web server') do |host|
+        opts.on('', 'start', 'Start Ginatra web server') do
           root_path = File.expand_path("#{__FILE__}/../..")
           Rack::Server.start(
             :Port => options[:port],
