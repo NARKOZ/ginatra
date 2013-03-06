@@ -3,14 +3,12 @@
 module Ginatra
   module Executable
     HELP = <<-HELP
-Usage: ginatra [ setup |
-                 version |
+Usage: ginatra [ version |
                  server <options> <command> |
                  daemon <command> |
                  directory <command> <globs> ]
 
 Ginatra Commands:
-  setup   - Checks Dependencies and Installs Configuration
   version - Pretty Self explanatory. Print version number and exit
 
 Ginatra Server Commands:
@@ -46,11 +44,6 @@ Ginatra Directory Commands:
     def self.server
       path = File.expand_path(File.dirname(__FILE__))
       load("#{path}/ginatra-server")
-    end
-
-    def self.setup
-      path = File.expand_path(File.dirname(__FILE__))
-      load("#{path}/ginatra-setup")
     end
 
     def self.execute(command, args)
