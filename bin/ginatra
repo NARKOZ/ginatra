@@ -1,69 +1,67 @@
 #!/usr/bin/env ruby
 
+require 'ginatra'
+require 'optparse'
+
 module Ginatra
   module Executable
-    HELP = <<-HELP
-Usage: ginatra [ version |
-                 server <options> <command> |
-                 daemon <command> |
-                 directory <command> <globs> ]
+    options = {
+      :port => Ginatra::Config.port,
+      :host => Ginatra::Config.host
+    }
 
-Ginatra Commands:
-  version - Pretty Self explanatory. Print version number and exit
+    global_opts = OptionParser.new do |opts|
+      opts.banner = "Usage: ginatra <options> <command>"
 
-Ginatra Server Commands:
-  start   - Start the Ginatra HTTP Server.
-  stop    - Stop the Ginatra Server.
-  status  - How's your Ginatra Server holding up?
+      opts.separator ""
+      opts.separator "Options:"
 
-Ginatra Daemon Commands:
-  start   - Starts the Git Daemon servimg Ginatra's Repositories
-  stop    - Stops the Git Daemon
-  restart - Restarts the Git Daemon
-  status  - Is the Git Daemon on or off?
+      opts.on('-v', '--version', 'Print version and exit') do
+        require_relative '../lib/ginatra/version'
+        puts "Ginatra #{Ginatra::VERSION}"
+        exit
+      end
 
-
-Ginatra Directory Commands:
-  add     - Adds the <globs> to the array of dirs that Ginatra
-              looks in for repositories.
-  remove  - Removes the <globs> from the aforementioned array.
-  list    - Lists the globs Ginatra looks in for repositories
-
-    HELP
-
-    def self.daemon
-      path = File.expand_path(File.dirname(__FILE__))
-      load "#{path}/ginatra-daemon"
-    end
-
-    def self.directory
-      path = File.expand_path(File.dirname(__FILE__))
-      load "#{path}/ginatra-directory"
-    end
-
-    def self.server
-      path = File.expand_path(File.dirname(__FILE__))
-      load("#{path}/ginatra-server")
-    end
-
-    def self.execute(command, args)
-      case command
-      when "version"
-        require File.expand_path('../../lib/ginatra/version', __FILE__)
-        puts Ginatra::VERSION
-      when "setup"
-        setup
-      when "daemon"
-        daemon
-      when "directory"
-        directory
-      when "server"
-        server
-      else
-        puts Ginatra::Executable::HELP
+      opts.on_tail('-h', '--help', 'Show this help message') do
+        puts opts
+        exit
       end
     end
+
+    server_opts = {
+      'server' => OptionParser.new do |opts|
+        opts.banner = "Usage: ginatra server <options> <command>"
+
+        opts.separator ""
+        opts.separator "Options:"
+
+        opts.on('-p', '--port PORT', 'Port to bind to (defaults from config file)') do |port|
+          options[:port] = port.to_i
+        end
+
+        opts.on('-h', '--host HOST', 'Host address to bind to (defaults from config file)') do |host|
+          options[:host] = host
+        end
+
+        opts.on('', 'start', 'Start Ginatra web server') do |host|
+          root_path = File.expand_path("#{__FILE__}/../..")
+          Rack::Server.start(
+            :Port => options[:port],
+            :Host => options[:host],
+            :config => "#{root_path}/config.ru"
+          )
+        end
+      end
+    }
+
+    if ARGV.size.zero?
+      puts global_opts
+      puts
+      puts server_opts['server']
+      exit 1
+    end
+
+    global_opts.order!
+    server_opts[ARGV.shift].order!
   end
 end
-
-Ginatra::Executable.execute ARGV.shift, ARGV

@@ -20,7 +20,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'sinatra',   '~> 1.3.3'
   gem.add_dependency 'grit',      '~> 2.5.0'
-  gem.add_dependency 'vegas',     '~> 0.1.8'
   gem.add_dependency 'builder',   '~> 3.2.0'
   gem.add_dependency 'rouge',     '~> 0.2.15'
   gem.add_dependency 'sprockets', '~> 2.0'
