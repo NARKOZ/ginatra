@@ -1,95 +1,32 @@
 require 'yaml'
-require 'fileutils'
-require 'logger'
 
 module Ginatra
   # A Wrapper for the ginatra configuration variables,
   # including methods to load, dump and lookup keys
   # using just the class.
   class Config
-    current_path = File.expand_path("#{File.dirname(__FILE__)}")
-
-    # A default path for our configuration variables!
-    CONFIG_PATH = File.expand_path("~/.ginatra/config.yml")
-
-    # A default config that we fall back to if no file is found.
-    DEFAULT_CONFIG = {
-      :git_dirs => [File.expand_path("#{current_path}/../../repos/*")],
-      :ignored_files => ['README.md'],
-      :description => "View My Git Repositories",
-      :port => 9797,
-      :host => "0.0.0.0",
-      :prefix => "/"
-    }
-
-    def self.logger
-      return @logger if @logger
-
-      log_file = Ginatra::Config[:log_file] || STDOUT
-
-      # create log_file location
-      # The log_file config option should be an absolute file system path
-      # It doesn't have to exist, but ginatra should have the proper file system privileges to create the directories
-      # and files along the specified path
-      unless log_file == STDOUT
-        parent_dir, separator, file_component = log_file.rpartition("/")
-        FileUtils.mkdir_p parent_dir
-        FileUtils.touch log_file
-      end
-
-      # determine log level from config file
-      # The log_level config option should be one of the Logger::Severity constant names (case doesn't matter)
-      # example: :log_level: debug
-      log_level = Ginatra::Config[:log_level]
-
-      if log_level.nil?
-        log_level = Logger::WARN
-      else
-        log_level = Logger.const_get(log_level.to_s.upcase.to_sym)
-        log_level = Logger::WARN if log_level.nil?
-      end
-
-      @logger = Logger.new(log_file)
-      @logger.level = log_level
-      @logger.formatter = Proc.new {|s, t, n, msg| "[#{t}] #{msg}\n"}
-      @logger
-    end
-
-    def self.safe_setup
-      unless File.exist?(CONFIG_PATH)
-        FileUtils.mkdir_p(File.dirname(CONFIG_PATH))
-        File.open(CONFIG_PATH, 'w') do |f|
-          YAML.dump(DEFAULT_CONFIG, f)
-        end
-      end
-    end
-
     # Loads the configuration and merges it with
-    # the default configuration.
+    # custom configuration if necessary.
     #
     # @return [Hash] config a hash of the configuration options
     def self.load!
-      loaded_config = {}
-      @config = DEFAULT_CONFIG.dup
+      current_path        = File.expand_path("#{File.dirname(__FILE__)}")
+      custom_config_file  = File.expand_path("~/.ginatra/config.yml")
+      default_config_file = File.expand_path("#{current_path}/../../config.yml")
 
-      if File.size(CONFIG_PATH).zero?
-        dump!
-      else
-        loaded_config = YAML.load_file(CONFIG_PATH)
-        @config.merge!(loaded_config)
+      @config = YAML.load_file(default_config_file)
+
+      if File.exist?(custom_config_file)
+        custom_config = YAML.load_file(custom_config_file)
+        @config.merge!(custom_config)
       end
 
-      @config
+      @config = symbolize_keys(@config)
     end
 
-    # Dumps the _current_ configuration to +CONFIG_PATH+
-    # again WITHOUT regard for what's already there.
-    #
-    # Very Destructive Method. Use with care!
-    def self.dump!
-      File.open(CONFIG_PATH, 'w') do |f|
-        YAML.dump(@config, f)
-      end
+    # Returns a new hash with all keys converted to symbols
+    def self.symbolize_keys(hash)
+      hash.each_with_object({}) {|(k, v), h| h[k.to_sym] = v }
     end
 
     # Allows us to do many things.

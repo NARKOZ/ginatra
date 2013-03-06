@@ -17,18 +17,13 @@ module Ginatra
   class App < Sinatra::Base
     helpers Helpers, Sinatra::Partials
 
-    # logger that can be used with the Sinatra code
-    def logger; Ginatra::Config.logger end
-
     configure do
       Config.load!
-      set :host, Ginatra::Config[:host]
-      set :port, Ginatra::Config[:port]
-      set :dump_errors, true
-      set :logging, Proc.new { !test? }
-      set :static, true
+      set :host, Ginatra::Config.host
+      set :port, Ginatra::Config.port
       set :public_folder, "#{settings.root}/../public"
       set :views, "#{settings.root}/../views"
+      enable :dump_errors, :logging, :static
     end
 
     configure :development do
