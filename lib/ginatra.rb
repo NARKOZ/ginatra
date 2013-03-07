@@ -242,7 +242,7 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
     get '/:repo/:ref/page/:page' do
-      pass unless params[:page] =~ /^(\d)+$/
+      pass unless params[:page] =~ /\A\d+\z/
       params[:page] = params[:page].to_i
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
