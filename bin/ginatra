@@ -3,65 +3,61 @@
 require 'ginatra'
 require 'optparse'
 
-module Ginatra
-  module Executable
-    options = {
-      :port => Ginatra::Config.port,
-      :host => Ginatra::Config.host
-    }
+options = {
+  :port => Ginatra::Config.port,
+  :host => Ginatra::Config.host
+}
 
-    global_opts = OptionParser.new do |opts|
-      opts.banner = "Usage: ginatra <options> <command>"
+global_opts = OptionParser.new do |opts|
+  opts.banner = "Usage: ginatra <options> <command>"
 
-      opts.separator ""
-      opts.separator "Options:"
+  opts.separator ""
+  opts.separator "Options:"
 
-      opts.on('-v', '--version', 'Print version and exit') do
-        require_relative '../lib/ginatra/version'
-        puts "Ginatra #{Ginatra::VERSION}"
-        exit
-      end
+  opts.on('-v', '--version', 'Print version and exit') do
+    require_relative '../lib/ginatra/version'
+    puts "Ginatra #{Ginatra::VERSION}"
+    exit
+  end
 
-      opts.on_tail('-h', '--help', 'Show this help message') do
-        puts opts
-        exit
-      end
-    end
-
-    server_opts = {
-      'server' => OptionParser.new do |opts|
-        opts.banner = "Usage: ginatra server <options> <command>"
-
-        opts.separator ""
-        opts.separator "Options:"
-
-        opts.on('-p', '--port PORT', 'Port to bind to (defaults from config file)') do |port|
-          options[:port] = port.to_i
-        end
-
-        opts.on('-h', '--host HOST', 'Host address to bind to (defaults from config file)') do |host|
-          options[:host] = host
-        end
-
-        opts.on('', 'start', 'Start Ginatra web server') do
-          root_path = File.expand_path("#{__FILE__}/../..")
-          Rack::Server.start(
-            :Port => options[:port],
-            :Host => options[:host],
-            :config => "#{root_path}/config.ru"
-          )
-        end
-      end
-    }
-
-    if ARGV.size.zero?
-      puts global_opts
-      puts
-      puts server_opts['server']
-      exit 1
-    end
-
-    global_opts.order!
-    server_opts[ARGV.shift].order!
+  opts.on_tail('-h', '--help', 'Show this help message') do
+    puts opts
+    exit
   end
 end
+
+server_opts = {
+  'server' => OptionParser.new do |opts|
+    opts.banner = "Usage: ginatra server <options> <command>"
+
+    opts.separator ""
+    opts.separator "Options:"
+
+    opts.on('-p', '--port PORT', 'Port to bind to (defaults from config file)') do |port|
+      options[:port] = port.to_i
+    end
+
+    opts.on('-h', '--host HOST', 'Host address to bind to (defaults from config file)') do |host|
+      options[:host] = host
+    end
+
+    opts.on('', 'start', 'Start Ginatra web server') do
+      root_path = File.expand_path("#{__FILE__}/../..")
+      Rack::Server.start(
+        :Port => options[:port],
+        :Host => options[:host],
+        :config => "#{root_path}/config.ru"
+      )
+    end
+  end
+}
+
+if ARGV.size.zero?
+  puts global_opts
+  puts
+  puts server_opts['server']
+  exit 1
+end
+
+global_opts.order!
+server_opts[ARGV.shift].order!

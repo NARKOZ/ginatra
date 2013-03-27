@@ -4,7 +4,6 @@ describe Ginatra::Helpers do
   before do
     @repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"))
     @commit = @repo.commit("095955b6402c30ef24520bafdb8a8687df0a98d3")
-    @ref = @repo.get_head("master")
     Time.stub(:now).and_return(Time.new(2012, 12, 25, 0, 0, 0, '+00:00'))
   end
 
@@ -61,12 +60,6 @@ describe Ginatra::Helpers do
       it "should return a link to repo atom feed" do
         atom_feed_link('test').should == "<a href='/test.atom'>Feed</a>"
       end
-    end
-  end
-
-  describe "#commit_ref" do
-    it "should return a link for a commit patch" do
-      commit_ref(@ref, 'test').should == "<a href='/test/master'>master</a>"
     end
   end
 end

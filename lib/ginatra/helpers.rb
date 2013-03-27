@@ -51,31 +51,6 @@ module Ginatra
       "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
     end
 
-    # spits out a link to a certain reference.
-    #
-    # @param [Grit::Ref] ref grit ref object
-    # @param [String] repo_param the url-sanitised-name for the repo
-    #   (for the link path)
-    #
-    # @return [String] HTML link to the given ref with class attached.
-    def commit_ref(ref, repo_param)
-      ref_url = prefix_url("#{repo_param}/#{ref.name}")
-      "<a href='#{ref_url}'>#{ref.name}</a>"
-    end
-
-    # calls +Ginatra::Helpers#commit_ref+ for each ref in the commit
-    #
-    # @see Ginatra::Helpers#commit_ref
-    #
-    # @param [Grit::Commit] commit grit commit object
-    # @param [String] repo_param the url-sanitised-name for the repo
-    #   (for the link path)
-    #
-    # @return [String] HTML containing all the ref links
-    def commit_refs(commit, repo_param)
-      commit.refs.map {|r| commit_ref(r, repo_param) }.join("\n")
-    end
-
     # returns a string including the link to download a certain
     # tree of the repo
     #

@@ -254,5 +254,4 @@ module Ginatra
     end
 
   end # App
-
 end # Ginatra
