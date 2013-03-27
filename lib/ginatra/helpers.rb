@@ -1,18 +1,17 @@
 require 'digest/md5'
 
 module Ginatra
-  # Helpers used in the views usually,
-  # but not exclusively.
+  # Helpers used in the views, and not only.
   module Helpers
     include Rack::Utils
     alias_method :h, :escape_html
 
-    # checks X-PJAX header
+    # Checks X-PJAX header
     def is_pjax?
       request.env['HTTP_X_PJAX']
     end
 
-    # constructs the URL used in the layout's base tag
+    # Constructs the URL used in the layout's base tag
     def prefix_url(rest_of_url='')
       prefix = Ginatra::Config[:prefix].to_s
 
@@ -23,7 +22,7 @@ module Ginatra
       "#{prefix}/#{rest_of_url}"
     end
 
-    # takes an email and returns a url to a secure gravatar
+    # Takes an email and returns a url to a secure gravatar
     #
     # @param [String] email the email address
     # @return [String] the url to the gravatar
@@ -31,7 +30,7 @@ module Ginatra
       "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
     end
 
-    # reformats the date into a user friendly date with html entities
+    # Reformats the date into a user friendly date with html entities
     #
     # @param [#strftime] date object to format nicely
     # @return [String] html string formatted using
@@ -51,7 +50,7 @@ module Ginatra
       "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
     end
 
-    # returns a string including the link to download a certain
+    # Returns a string including the link to download a certain
     # tree of the repo
     #
     # @param [Grit::Tree] tree the tree you want an archive link for
@@ -64,7 +63,7 @@ module Ginatra
       "<a href='#{archive_url}'>Download Archive</a>"
     end
 
-    # returns a string including the link to download a patch for a certain
+    # Returns a string including the link to download a patch for a certain
     # commit to the repo
     #
     # @param [Grit::Commit] commit the commit you want a patch for
@@ -88,9 +87,9 @@ module Ginatra
       "<a href='#{feed_url}'>Feed</a>"
     end
 
-    # returns a HTML (+<ul>+) list of the files altered in a given commit.
+    # Returns a HTML (+<ul>+) list of the files modified in a given commit.
     #
-    # It includes classes for added/altered/deleted and also anchor links
+    # It includes classes for added/modified/deleted and also anchor links
     # to the diffs for further down the page.
     #
     # @param [Grit::Commit] commit the commit you want the list of files for
@@ -110,6 +109,11 @@ module Ginatra
       "<ul class='unstyled'>#{list.join}</ul>"
     end
 
+    # Highlights commit diff
+    #
+    # @param [Grit::Diff] diff for highlighting
+    #
+    # @return [String] highlighted HTML.code
     def highlight_diff(diff)
       source    = diff.diff.force_encoding('UTF-8')
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
@@ -118,6 +122,11 @@ module Ginatra
       formatter.format lexer.lex(source)
     end
 
+    # Highlights blob source
+    #
+    # @param [Grit::Blob] blob to highlight source
+    #
+    # @return [String] highlighted HTML.code
     def highlight_source(blob)
       source    = blob.data.force_encoding('UTF-8')
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
@@ -131,7 +140,7 @@ module Ginatra
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #
-    # Stolen from rails: ActionView::Helpers::TextHelper#simple_format
+    # Brought from Rails: ActionView::Helpers::TextHelper#simple_format
     # and simplified to just use <p> tags without any options, then modified
     # more later.
     #
@@ -146,8 +155,6 @@ module Ginatra
     end
 
     # Truncates a given text to a certain number of letters, including a special ending if needed.
-    #
-    # Stolen and bastardised from rails
     #
     # @param [String] text the text to truncate
     # @option options [Integer] :length   (30) the length you want the output string
@@ -168,18 +175,13 @@ module Ginatra
 
     # Returns the rfc representation of a date, for use in the atom feeds.
     #
-    # stolen from Marley
-    #
     # @param [DateTime] datetime the date to format
     # @return [String] the formatted datetime
     def rfc_date(datetime)
       datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
     end
 
-    # Returns the Hostname of the given install.
-    # used in the atom feeds.
-    #
-    # stolen from Marley
+    # Returns the Hostname of the given install, for use in the atom feeds.
     #
     # @return [String] the hostname of the server. Respects HTTP-X-Forwarded-For
     def hostname

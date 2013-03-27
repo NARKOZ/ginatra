@@ -20,8 +20,6 @@ module Ginatra
     # Create a new repository, and sort out clever stuff including assigning
     # the param, the name and the description.
     #
-    # @todo cleanup!
-    #
     # @param [String] path a path to the repository you want created
     # @return [Ginatra::Repo] a repository instance
     def initialize(path)
@@ -90,8 +88,6 @@ module Ginatra
 
     # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
     #
-    # @todo Perhaps move into commit class.
-    #
     # @param [Grit::Commit] commit the commit you want refs added to
     # @param [Hash] empty hash with scope out of loop to speed things up
     # @return [Array] the array of refs added to the commit. they are also on the commit object.
@@ -107,8 +103,6 @@ module Ginatra
     end
 
     # Catch all
-    #
-    # Warning! contains: Magic
     #
     # @todo update respond_to? method
     def method_missing(sym, *args, &block)

@@ -11,9 +11,7 @@ require 'ginatra/graph_commit'
 
 module Ginatra
   # The main application class.
-  #
-  # This class contains all the core application logic
-  # and is what is mounted by the +rackup.ru+ files.
+  # Contains all the core application logic and mounted in +config.ru+ file.
   class App < Sinatra::Base
     helpers Helpers, Sinatra::Partials
 
@@ -38,9 +36,7 @@ module Ginatra
       Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
-    # Let's handle a CommitsError.
-    #
-    # @todo prettify
+    # Handle CommitsError
     error CommitsError do
       'No commits were returned for ' + request.uri
     end
@@ -66,7 +62,7 @@ module Ginatra
 
     # The html page for a +repo+.
     #
-    # Shows the most recent commits in a log format
+    # Shows the most recent commits in a log format.
     #
     # @param [String] repo the repository url-sanitised-name
     get '/:repo' do
@@ -116,7 +112,7 @@ module Ginatra
 
     # The html page for a given +ref+ of a +repo+.
     #
-    # Shows the most recent commits in a log format
+    # Shows the most recent commits in a log format.
     #
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
@@ -150,7 +146,7 @@ module Ginatra
       erb :commit
     end
 
-    # Download an archive of a given tree!
+    # Download an archive of a given tree.
     #
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
@@ -162,7 +158,6 @@ module Ginatra
 
     # HTML page for a given tree in a given +repo+
     #
-    # @todo cleanup!
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
     get '/:repo/tree/:tree' do
@@ -184,14 +179,13 @@ module Ginatra
 
     # HTML page for a given tree in a given +repo+.
     #
-    # This one supports a splat parameter so you can specify a path
+    # This one supports a splat parameter so you can specify a path.
     #
-    # @todo cleanup!
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
     get '/:repo/tree/:tree/*' do # for when we specify a path
       @repo = RepoList.find(params[:repo])
-      @tree = @repo.tree(params[:tree])/params[:splat].first # can also be a ref (i think)
+      @tree = @repo.tree(params[:tree])/params[:splat].first
       if @tree.is_a?(Grit::Blob)
         # we need @tree to be a tree. if it's a blob, send it to the blob page
         # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
@@ -220,7 +214,6 @@ module Ginatra
     #
     # Uses a splat param to specify a blob path.
     #
-    # @todo cleanup!
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
     get '/:repo/blob/:tree/*' do
@@ -236,9 +229,8 @@ module Ginatra
       end
     end
 
-    # pagination route for the commits to a given ref in a +repo+.
+    # Pagination route for the commits to a given ref in a +repo+.
     #
-    # @todo cleanup!
     # @param [String] repo the repository url-sanitised-name
     # @param [String] ref the repository ref
     get '/:repo/:ref/page/:page' do

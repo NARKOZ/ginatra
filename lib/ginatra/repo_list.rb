@@ -88,8 +88,6 @@ module Ginatra
     end
 
     # allows missing methods to cascade to the instance,
-    #
-    # Caution! contains: Magic
     def self.method_missing(sym, *args, &block)
       instance.send(sym, *args, &block)
     end

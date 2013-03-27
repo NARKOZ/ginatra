@@ -1,4 +1,4 @@
-# stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
+# brought from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 module Sinatra::Partials
   def partial(template, *args)
     template_array = template.to_s.split('/')
