@@ -162,8 +162,8 @@ module Ginatra
     #
     # @return [String] the truncated text.
     def truncate(text, options={})
-        options[:length] ||= 30
-        options[:omission] ||= "..."
+      options[:length] ||= 30
+      options[:omission] ||= "..."
 
       if text
         l = options[:length] - options[:omission].length
