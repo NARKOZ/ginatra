@@ -1,6 +1,6 @@
 # Ginatra
 
-[![Build Status](https://travis-ci.org/NARKOZ/ginatra.png)](https://travis-ci.org/NARKOZ/ginatra)
+[![Build Status](https://travis-ci.org/NARKOZ/ginatra.png?branch=master)](https://travis-ci.org/NARKOZ/ginatra)
 [![Gem Version](https://fury-badge.herokuapp.com/rb/ginatra.png)](http://badge.fury.io/rb/ginatra)
 
 **Ginatra** is a Git web interface. It allows browsing a git repository (or a set of
