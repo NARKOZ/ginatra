@@ -1,28 +1,5 @@
-html, body { height: 100%; }
-
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
-}
-
-#push, #footer { height: 60px; }
-
-@media (max-width: 767px) {
-  #footer {
-    margin: 0 -20px;
-    padding: 0 20px;
-  }
-}
-
-footer#footer {
-  border-top: 1px #e5e5e5 solid;
-  background-color: #f5f5f5;
-}
-
-#footer p { margin: 20px 0; }
+.push { padding-bottom: 40px; }
+footer p { margin: 10px 0; }
 .header { margin-top: 15px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }

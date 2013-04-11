@@ -6,16 +6,12 @@
     <link href="<%= prefix_url("assets/application.css") %>" rel="stylesheet">
   </head>
   <body>
-    <div id="wrap">
-      <div class="container-fluid">
-        <div class="well header">
-          <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
-        </div>
-
-        <%= yield %>
+    <div class="container-fluid push">
+      <div class="well header">
+        <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
       </div>
 
-      <div id="push"></div>
+      <%= yield %>
     </div>
 
     <%= partial :footer %>
