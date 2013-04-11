@@ -57,7 +57,8 @@ module Ginatra
       @commits = @repo.commits
       return "" if @commits.empty?
       etag(@commits.first.id) if Ginatra::App.production?
-      builder :atom, :layout => nil
+      content_type 'application/xml'
+      erb :atom, :layout => false
     end
 
     # The html page for a +repo+.
@@ -107,7 +108,8 @@ module Ginatra
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?
       etag(@commits.first.id) if Ginatra::App.production?
-      builder :atom, :layout => nil
+      content_type 'application/xml'
+      erb :atom, :layout => false
     end
 
     # The html page for a given +ref+ of a +repo+.

@@ -1,0 +1,34 @@
+<%
+  base_title = "#{@repo.name}: "
+  base_url = "http://#{hostname}" + prefix_url("#{@repo.param}")
+  if params[:ref]
+    url = base_url + "/#{params[:ref]}"
+    title = base_title + params[:ref]
+  else
+    url = base_url
+    title = base_title + "master"
+  end
+%>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id><%= url %></id>
+  <title><%= title %></title>
+  <subtitle><%= h(@repo.description) %></subtitle>
+  <link href="<%= url %>"/>
+  <link rel="self" href="<%= url %>.atom"/>
+  <updated><%= @commits.first ? rfc_date(@commits.first.committed_date) : rfc_date(Time.now.utc) %></updated>
+  <% @commits.each do |commit| %>
+    <entry>
+      <id><%= "#{base_url}/commit/#{commit.id_abbrev}" %></id>
+      <title><%= "Commit #{commit.id_abbrev} to #{@repo.name}" %></title>
+      <summary><%= h(commit.short_message) %></summary>
+      <content><%= h(commit.message) %></content>
+      <link href="<%= "#{base_url}/commit/#{commit.id_abbrev}" %>"/>
+      <updated><%= rfc_date(commit.committed_date) %></updated>
+      <author>
+        <name><%= commit.author.name %></name>
+        <email><%= commit.author.email %></email>
+      </author>
+    </entry>
+  <% end %>
+</feed>
