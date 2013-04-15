@@ -1,6 +1,7 @@
 .push { padding-bottom: 40px; }
 footer p { margin: 10px 0; }
 .header { margin-top: 15px; }
+.filter { margin-top: -20px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
 
