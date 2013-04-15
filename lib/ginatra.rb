@@ -42,8 +42,8 @@ module Ginatra
     end
 
     # The root route
-    # This works by interacting with the Ginatra::Repolist singleton.
     get '/' do
+      @repositories = Ginatra::RepoList.list
       erb :index
     end
 

@@ -2,14 +2,14 @@
   <h1>Repositories <small><%= h Ginatra::Config.description %></small></h1>
 </div>
 
-<% if Ginatra::RepoList.list.size > 10 %>
+<% if @repositories.size > 10 %>
   <div class="row-fluid filter">
     <input type="text" class="span12 js-filter-query" placeholder="Filter...">
   </div>
 <% end %>
 
 <ul class="nav nav-tabs nav-stacked js-repolist">
-  <% Ginatra::RepoList.list.each do |repo| %>
+  <% @repositories.each do |repo| %>
     <li>
       <a href="<%= prefix_url(repo.param) %>">
         <h2>
