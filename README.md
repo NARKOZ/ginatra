@@ -22,42 +22,29 @@ Features include:
 
 ## Installation
 
-To install ginatra:
+***Recommended*** Use edge version (stable as in beta):
 
-    $ gem install ginatra
-    ...
-    $ ginatra setup
-    checked deps
-    installed config
+```sh
+git clone git://github.com/NARKOZ/ginatra.git
+cd ginatra/
+bundle
+# add some git repositories to browse (put them into `repos` directory)
+#   and start Ginatra web server:
+./bin/ginatra server
+```
 
-If you get those two lines of output, you're sorted. anything else and something
-has gone wrong.
+By default Ginatra will run on `localhost:9797`
 
-## Usage
+--
 
-If you're just using it in development, use the following to start, check and stop Ginatra
-respectively:
+Ginatra is also available as a gem in [Rubygems](https://rubygems.org/gems/ginatra).
+You can install old release via `gem install ginatra`.
 
-    $ ginatra server start
-    $ ginatra server status
-    $ ginatra server stop
+## Configuration
 
-Ginatra  also runs  on thin, with the approach outlined above.
+You can change settings by editing `config.yml` file in root folder 
+Alternatively you can create `~/.ginatra/config.yml` file with your own
+settings, use
+[`config.yml`](https://github.com/NARKOZ/ginatra/blob/master/config.yml) as a reference.
 
-Ginatra can also start a git-daemon serving all the repositories that ginatra serves:
-
-    $ ginatra daemon start
-    $ ginatra daemon status
-    $ ginatra daemon stop
-
-This runs on the default git daemon port.
-
-You can add a glob specified list of git repositories for ginatra to serve using the
-following commands:
-
-    $ ginatra directory add '~/Git/ginatra/*'
-    $ ginatra directory list
-    $ ginatra directory remove '~/Git/ginatra/*'
-
-These should be fairly self explanatory. Help is shown with either the --help option
-or by not specifying a sub-command like start, status, stop, add, list or remove.
+You need to restart web server after applying changes to config file.
