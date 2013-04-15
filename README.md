@@ -42,7 +42,7 @@ You can install old release via `gem install ginatra`.
 
 ## Configuration
 
-You can change settings by editing `config.yml` file in root folder 
+You can change settings by editing `config.yml` file in root folder.  
 Alternatively you can create `~/.ginatra/config.yml` file with your own
 settings, use
 [`config.yml`](https://github.com/NARKOZ/ginatra/blob/master/config.yml) as a reference.
