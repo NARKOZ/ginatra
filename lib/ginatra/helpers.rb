@@ -13,7 +13,7 @@ module Ginatra
 
     # Constructs the URL used in the layout's base tag
     def prefix_url(rest_of_url='')
-      prefix = Ginatra::Config[:prefix].to_s
+      prefix = Ginatra.config.prefix.to_s
 
       if prefix.length > 0 && prefix[-1].chr == '/'
         prefix.chop!

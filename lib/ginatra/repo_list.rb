@@ -28,9 +28,9 @@ module Ginatra
     # and adds them if they're not already there.
     def refresh
       list.clear
-      Ginatra::Config.git_dirs.map do |git_dir|
+      Ginatra.config.git_dirs.map do |git_dir|
         files = Dir.glob(git_dir)
-        files.each { |e| add(e) unless Ginatra::Config.ignored_files.include?(File.split(e).last) }
+        files.each { |e| add(e) unless Ginatra.config.ignored_files.include?(File.split(e).last) }
       end
       list
     end
@@ -49,7 +49,7 @@ module Ginatra
           # If the path is not a git repository, then this error is raised
           # and causes an error page to result.
           # Is it preferable to just log that the error happened and not show the error page?
-          Ginatra::Config.logger.info "Invalid git repository at #{path}.  Did you create the directory and forget to run 'git init' inside that directory?"
+          raise Ginatra::Error, "Invalid git repository at #{path}.  Did you create the directory and forget to run 'git init' inside that directory?"
         end
       end
       list

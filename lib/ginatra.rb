@@ -16,9 +16,8 @@ module Ginatra
     helpers Helpers, Sinatra::Partials
 
     configure do
-      Config.load!
-      set :host, Ginatra::Config.host
-      set :port, Ginatra::Config.port
+      set :host, Ginatra.config.host
+      set :port, Ginatra.config.port
       set :public_folder, "#{settings.root}/../public"
       set :views, "#{settings.root}/../views"
       enable :dump_errors, :logging, :static
