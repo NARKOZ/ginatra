@@ -1,8 +1,21 @@
-From the top README:
+To make Ginatra see repositories, put them into this directory. You can do this
+by several ways:
 
-> To clone repositories so that Ginatra  can see them, clone the repositories into `./repos/` - they will be served  automatically. Use the `--bare` switch to both save space and  make sure Ginatra can  read them. If you rename  them, make sure the directory ends in `.git'. For Example:
-> 
->     cd repos
->     git clone --bare git://github.com/lenary/ginatra.git
->     git clone --bare git://github.com/mojombo/grit.git fun.git
-    
+1. Clone repository here
+
+    git clone git://github.com/NARKOZ/ginatra.git
+
+2. Symlink repository into there
+
+    ln -s /path/to/repo repos/
+
+3. Copy repository here
+
+    cp -R /path/to/repo repos/
+
+4. Move repository here
+
+    mv -R /path/to/repo repos/
+
+Run `ginatra --help` for additional command line help and see `config.yml` file
+for available settings.
