@@ -1,3 +1,5 @@
+<% title "#{@repo.name} at #{@tree.id[0..6]}" %>
+
 <div id="pjax-container">
   <%= partial :header, :locals => {:repo => @repo} %>
   <%= partial :tree_nav %>

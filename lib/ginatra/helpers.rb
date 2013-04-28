@@ -11,6 +11,21 @@ module Ginatra
       request.env['HTTP_X_PJAX']
     end
 
+    # Sets title for pages
+    def title(*args)
+      @title ||= []
+      @title_options ||= { :headline => nil, :sitename => nil }
+      options = args.last.is_a?(Hash) ? args.pop : {}
+
+      @title += args
+      @title_options.merge!(options)
+
+      t = @title.clone
+      t << @title_options[:headline]
+      t << @title_options[:sitename]
+      t.compact.join ' - '
+    end
+
     # Constructs the URL used in the layout's base tag
     def prefix_url(rest_of_url='')
       prefix = Ginatra.config.prefix.to_s
