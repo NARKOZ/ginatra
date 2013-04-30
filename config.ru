@@ -8,6 +8,25 @@ map '/assets' do
   run environment
 end
 
-map '/' do
-  run Ginatra::App
+if Ginatra.config.git_clone_enabled?
+  require 'mkmf'
+  require 'git/webby'
+
+  git_executable = find_executable 'git'
+  raise 'Git executable not found in PATH' if git_executable.nil?
+
+  Git::Webby::HttpBackend.configure do |server|
+    server.project_root = './repos'
+    server.git_path     = git_executable
+    server.get_any_file = true
+    server.upload_pack  = false
+    server.receive_pack = false
+    server.authenticate = false
+  end
+
+  run Rack::Cascade.new [Git::Webby::HttpBackend, Ginatra::App]
+else
+  map '/' do
+    run Ginatra::App
+  end
 end

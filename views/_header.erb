@@ -3,4 +3,7 @@
     <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
     <small><%= repo.description.split("\n").first %></small>
   </h1>
+  <% if Ginatra.config.git_clone_enabled? %>
+    Clone URL: <strong><%= url repo.param %></strong>
+  <% end %>
 </div>

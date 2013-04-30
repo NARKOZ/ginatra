@@ -8,3 +8,4 @@ description: "My Git Repositories"
 port: 9797
 host: localhost
 prefix: "/"
+git_clone_enabled?: true
