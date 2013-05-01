@@ -130,11 +130,13 @@ module Ginatra
     #
     # @return [String] highlighted HTML.code
     def highlight_diff(diff)
+      encoding  = diff.diff.encoding.name
       source    = diff.diff.force_encoding('UTF-8')
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
       lexer     = Rouge::Lexers::Diff.new
 
-      formatter.format lexer.lex(source)
+      hd = formatter.format lexer.lex(source)
+      hd.force_encoding encoding
     end
 
     # Highlights blob source
