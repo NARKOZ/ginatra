@@ -85,13 +85,13 @@ module Ginatra
       @commits_json = commits.collect do |c|
         h = {}
         h[:parents] = c.parents.collect {|p| [p.id, 0, 0] }
-        h[:author]  = c.author.name.force_encoding('UTF-8')
+        h[:author]  = c.author.name.force_encoding(Encoding::UTF_8)
         h[:time]    = c.time
         h[:space]   = c.space
         h[:refs]    = c.refs.collect {|r| r.name }.join(' ') unless c.refs.nil?
         h[:id]      = c.sha
         h[:date]    = c.date
-        h[:message] = c.message.force_encoding('UTF-8')
+        h[:message] = c.message.force_encoding(Encoding::UTF_8)
         h[:login]   = c.author.email
         h
       end.to_json
