@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-describe Ginatra do
-  before do
-    @repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"))
-  end
-
+describe Ginatra::App do
   describe "main page" do
     it "should respond with 200" do
       get '/'

@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Ginatra::GraphCommit do
   before do
-    @repo_list = Ginatra::RepoList
-    @ginatra_repo = @repo_list.find("test")
+    @ginatra_repo = Ginatra::RepoList.find("test")
     @list_of_commits = @ginatra_repo.all_commits
     @map_of_commits = {}
     @list_of_commits.each {|c| @map_of_commits[c.id] = c }

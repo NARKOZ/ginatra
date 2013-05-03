@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Ginatra::Repo do
   before do
-    @repo_list = Ginatra::RepoList
-    @ginatra_repo = @repo_list.find("test")
+    @ginatra_repo = Ginatra::RepoList.find("test")
     @grit_repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"), {})
     @commit = @ginatra_repo.commit("095955b6402c30ef24520bafdb8a8687df0a98d3")
   end
@@ -26,7 +25,7 @@ describe Ginatra::Repo do
   end
 
   it "should be the same thing using #find or #new" do
-    @repo_list.find("test").should == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
+    @ginatra_repo.should == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
   end
 
   it "should contain this commit" do
