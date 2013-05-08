@@ -165,9 +165,10 @@ module Ginatra
       end
 
       @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
-      @path = {}
-      @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}"
-      @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}"
+      @path = {
+        :blob => "#{params[:repo]}/blob/#{params[:tree]}",
+        :tree => "#{params[:repo]}/tree/#{params[:tree]}"
+      }
       erb :tree, :layout => !is_pjax?
     end
 
@@ -185,9 +186,10 @@ module Ginatra
         # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
         redirect "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
       else
-        @path = {}
-        @path[:tree] = "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
-        @path[:blob] = "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
+        @path = {
+          :blob => "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
+          :tree => "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+        }
         erb :tree, :layout => !is_pjax?
       end
     end
