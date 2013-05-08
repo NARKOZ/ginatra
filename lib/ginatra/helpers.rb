@@ -131,7 +131,7 @@ module Ginatra
     # @return [String] highlighted HTML.code
     def highlight_diff(diff)
       encoding  = diff.diff.encoding
-      source    = diff.diff.force_encoding(Encoding::UTF_8)
+      source    = diff.diff.force_encoding(Encoding::UTF_8) << "\n"
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
       lexer     = Rouge::Lexers::Diff.new
 
