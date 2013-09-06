@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Ginatra::Repo do
   before do
     @ginatra_repo = Ginatra::RepoList.find("test")
-    @grit_repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"), {})
-    @commit = @ginatra_repo.commit("095955b6402c30ef24520bafdb8a8687df0a98d3")
+    @repo = Rugged::Repository.new(File.join(current_path, "..", "repos", "test"))
+    @commit = @ginatra_repo.commit("095955b")
   end
 
   it "should have a name" do
@@ -19,25 +19,6 @@ describe Ginatra::Repo do
     @ginatra_repo.description.should =~ /description file for this repository and set the description for it./
   end
 
-  it "should have an array of commits that match the grit array of commits limited to 10 items" do
-    @ginatra_repo.commits.should == @grit_repo.commits
-    @ginatra_repo.commits.length.should == 10
-  end
-
-  it "should be the same thing using #find or #new" do
-    @ginatra_repo.should == Ginatra::Repo.new(File.join(current_path, "..", "repos", "test"))
-  end
-
-  it "should contain this commit" do
-    @commit.refs.should_not be_empty
-  end
-
-  it "should not contain this other commit" do
-    expect {
-      @ginatra_repo.commit("totallyinvalid")
-    }.to raise_error(Ginatra::InvalidCommit, "Could not find a commit with the id of totallyinvalid")
-  end
-
   it "should have a list of commits" do
     @ginatra_repo.commits.should_not be_empty
   end
@@ -46,11 +27,5 @@ describe Ginatra::Repo do
     expect {
       @ginatra_repo.commits("master", -1)
     }.to raise_error(Ginatra::Error, "max_count cannot be less than 0")
-  end
-
-  it "should be able to add refs to a commit" do
-    @commit.refs = []
-    @ginatra_repo.add_refs(@commit,{})
-    @commit.refs.should_not be_empty
   end
 end

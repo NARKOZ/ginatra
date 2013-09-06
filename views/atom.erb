@@ -16,18 +16,17 @@
   <subtitle><%= h(@repo.description) %></subtitle>
   <link href="<%= url %>"/>
   <link rel="self" href="<%= url %>.atom"/>
-  <updated><%= @commits.first ? rfc_date(@commits.first.committed_date) : rfc_date(Time.now.utc) %></updated>
+  <updated><%= @commits.first ? rfc_date(@commits.first.committer[:time]) : rfc_date(Time.now.utc) %></updated>
   <% @commits.each do |commit| %>
     <entry>
-      <id><%= "#{base_url}/commit/#{commit.id_abbrev}" %></id>
-      <title><%= "Commit #{commit.id_abbrev} to #{@repo.name}" %></title>
-      <summary><%= h(commit.short_message) %></summary>
+      <id><%= "#{base_url}/commit/#{commit.oid[0..6]}" %></id>
+      <title><%= "Commit #{commit.oid[0..6]} to #{@repo.name}" %></title>
       <content><%= h(commit.message) %></content>
-      <link href="<%= "#{base_url}/commit/#{commit.id_abbrev}" %>"/>
-      <updated><%= rfc_date(commit.committed_date) %></updated>
+      <link href="<%= "#{base_url}/commit/#{commit.oid[0..6]}" %>"/>
+      <updated><%= rfc_date(commit.committer[:time]) %></updated>
       <author>
-        <name><%= commit.author.name %></name>
-        <email><%= commit.author.email %></email>
+        <name><%= commit.author[:name] %></name>
+        <email><%= commit.author[:email] %></email>
       </author>
     </entry>
   <% end %>

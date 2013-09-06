@@ -1,4 +1,4 @@
-<% title "#{@repo.name} at #{@tree.id[0..6]}" %>
+<% title "#{@repo.name} at #{@tree.oid[0..6]}" %>
 
 <div id="pjax-container">
   <%= partial :header, :locals => {:repo => @repo} %>
@@ -7,19 +7,19 @@
   <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>"></div>
 
-    <% @tree.trees.each do |tree| %>
-      <% tree_path = "#{tree.name}"%>
+    <% @tree.each_tree do |tree| %>
+      <% tree_path = "#{tree[:name]}"%>
       <li class="tree">
         <a href="<%= prefix_url(@path[:tree]) %>/<%= tree_path %>">
-          <i class="icon-folder-close"></i> <%= tree.basename %>
+          <i class="icon-folder-close"></i> <%= tree[:name] %>
         </a>
       </li>
     <% end %>
 
-    <% @tree.blobs.each do |blob| %>
+    <% @tree.each_blob do |blob| %>
       <li class="blob">
-        <a href="<%= prefix_url(@path[:blob]) %>/<%= blob.basename %>">
-          <i class="icon-file"></i> <%= blob.basename %>
+        <a href="<%= prefix_url(@path[:blob]) %>/<%= blob[:name] %>">
+          <i class="icon-file"></i> <%= blob[:name] %>
         </a>
       </li>
     <% end %>

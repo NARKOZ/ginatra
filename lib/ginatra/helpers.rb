@@ -65,19 +65,6 @@ module Ginatra
       "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
     end
 
-    # Returns a string including the link to download a certain
-    # tree of the repo
-    #
-    # @param [Grit::Tree] tree the tree you want an archive link for
-    # @param [String] repo_param the url-sanitised-name of the repo
-    #   (for the link path)
-    #
-    # @return [String] the HTML link to the archive.
-    def archive_link(tree, repo_param)
-      archive_url = prefix_url("#{repo_param}/archive/#{tree.id}.tar.gz")
-      "<a href='#{archive_url}'>Download Archive</a>"
-    end
-
     # Returns a string including the link to download a patch for a certain
     # commit to the repo
     #
@@ -87,7 +74,7 @@ module Ginatra
     #
     # @return [String] the HTML link to the patch
     def patch_link(commit, repo_param)
-      patch_url = prefix_url("#{repo_param}/commit/#{commit.id}.patch")
+      patch_url = prefix_url("#{repo_param}/commit/#{commit.oid}.patch")
       "<a href='#{patch_url}'>Download Patch</a>"
     end
 
@@ -110,15 +97,15 @@ module Ginatra
     # @param [Grit::Commit] commit the commit you want the list of files for
     #
     # @return [String] a +<ul>+ with lots of +<li>+ children.
-    def file_listing(commit)
+    def file_listing(diff)
       list = []
-      commit.diffs.each_with_index do |diff, index|
-        if diff.deleted_file
-          list << "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
-        else
-          cls = diff.new_file ? "added" : "changed"
-          ico = diff.new_file ? "icon-ok" : "icon-edit"
-          list << "<li class='#{cls}'><i class='#{ico}'></i> <a href='#file-#{index + 1}'>#{diff.a_path}</a></li>"
+      diff.deltas.each_with_index do |delta, index|
+        if delta.deleted?
+          list << "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+        elsif delta.added?
+          list << "<li class='added'><i class='icon-ok'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+        elsif delta.modified?
+          list << "<li class='changed'><i class='icon-edit'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         end
       end
       "<ul class='unstyled'>#{list.join}</ul>"
@@ -129,11 +116,26 @@ module Ginatra
     # @param [Grit::Diff] diff for highlighting
     #
     # @return [String] highlighted HTML.code
-    def highlight_diff(diff)
-      encoding  = diff.diff.encoding
-      source    = diff.diff.force_encoding(Encoding::UTF_8) << "\n"
+    def highlight_diff(hunk)
+      lines = []
+      lines << hunk.header
+
+      hunk.each_line do |line|
+        if line.context?
+          lines << line.content
+        elsif line.deletion?
+          lines << "- #{line.content}"
+        elsif line.addition?
+          lines << "+ #{line.content}"
+        end
+      end
+
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
       lexer     = Rouge::Lexers::Diff.new
+
+      source   = lines.join
+      encoding = source.encoding
+      source   = source.force_encoding(Encoding::UTF_8)
 
       hd = formatter.format lexer.lex(source)
       hd.force_encoding encoding
@@ -144,12 +146,14 @@ module Ginatra
     # @param [Grit::Blob] blob to highlight source
     #
     # @return [String] highlighted HTML.code
-    def highlight_source(blob)
-      source    = blob.data.force_encoding(Encoding::UTF_8)
+    def highlight_source(source, filename='')
+      source    = source.force_encoding(Encoding::UTF_8)
       formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
-      lexer     = Rouge::Lexer.guess_by_filename(blob.name.to_s) ||
-                  Rouge::Lexer.guess_by_source(blob.data) ||
-                  Rouge::Lexer.guess_by_mimetype(blob.mime_type)
+      lexer     = Rouge::Lexer.guess_by_filename(filename)
+
+      if lexer == Rouge::Lexers::Text
+        lexer = Rouge::Lexer.guess_by_source(source) || Rouge::Lexers::Text
+      end
 
       formatter.format lexer.lex(source)
     end

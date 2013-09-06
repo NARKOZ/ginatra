@@ -27,9 +27,9 @@ describe Ginatra::RepoList do
       @new_repo_name = "temp-new-repo"
       @repo_dir = File.join(current_path, "..", "repos")
 
-      FileUtils.cd(@repo_dir) do |dir|
-        FileUtils.mkdir(@new_repo_name)
-        FileUtils.cd(@new_repo_name) do |dir|
+      FileUtils.cd(@repo_dir) do |repo_dir|
+        FileUtils.mkdir_p(@new_repo_name)
+        FileUtils.cd(@new_repo_name) do |new_repo_dir|
           `git init`
         end
       end

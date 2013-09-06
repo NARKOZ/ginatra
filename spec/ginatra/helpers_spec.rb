@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Ginatra::Helpers do
   before do
-    @repo = Grit::Repo.new(File.join(current_path, "..", "repos", "test"))
-    @commit = @repo.commit("095955b6402c30ef24520bafdb8a8687df0a98d3")
+    @repo = Ginatra::RepoList.find('test')
+    @commit = @repo.commit('095955b')
     Time.stub(:now).and_return(Time.new(2012, 12, 25, 0, 0, 0, '+00:00'))
   end
 
@@ -33,12 +33,6 @@ describe Ginatra::Helpers do
     it "should return a time in nice format" do
       time_tag(Time.now).should ==
         "<time datetime='2012-12-25T00:00:00+0000' title='2012-12-25 00:00:00'>December 25, 2012 00:00</time>"
-    end
-  end
-
-  describe "#archive_link" do
-    it "should return a link for a tree archive" do
-      archive_link(@repo.tree, 'test').should == "<a href='/test/archive/master.tar.gz'>Download Archive</a>"
     end
   end
 

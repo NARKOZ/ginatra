@@ -1,19 +1,6 @@
-require 'grit'
-
-module Grit
-  class Commit
-    # this lets us add a link between commits and refs directly
-    attr_accessor :refs
-
-    def ==(other_commit)
-      id == other_commit.id
-    end
-  end
-end
+require 'rugged'
 
 module Ginatra
-  # A thin wrapper to the Grit::repo class so that we can add a name and a url-sanitised-name
-  # to a repo, and also intercept and add refs to the commit objects.
   class Repo
     attr_reader :name, :param, :description
 
@@ -23,35 +10,28 @@ module Ginatra
     # @param [String] path a path to the repository you want created
     # @return [Ginatra::Repo] a repository instance
     def initialize(path)
-      @repo = Grit::Repo.new(path)
+      @repo = Rugged::Repository.new(path)
       @param = File.split(path).last
       @name = @param
-      @description = @repo.description
-      @description = "Please edit the #{@repo.path}/description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
+      @description = File.read("#{@repo.path}description").strip
+      @description = "Please edit the #{@repo.path}description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
     end
 
-    def ==(other_repo)
-      # uses method_missing
-      path == other_repo.path
+    # Return a commit corresponding to sha in the repo.
+    #
+    # @param [String] sha the commit id or tag name
+    # @return [Grit::Commit] the commit object
+    def commit(sha)
+      @repo.lookup(sha)
     end
 
-    # Return a commit corresponding to the commit to the repo,
-    # but with the refs already attached.
-    #
-    # @see Ginatra::Repo#add_refs
-    #
-    # @raise [Ginatra::InvalidCommit] if the commit doesn't exist.
-    #
-    # @param [String] id the commit id
-    # @return [Grit::Commit] the commit object.
-    def commit(id)
-      @commit = @repo.commit(id)
-      raise Ginatra::InvalidCommit.new(id) if @commit.nil?
-      add_refs(@commit, {})
-      @commit
+    # Return a tag by name in the repo.
+    def tag(name)
+      ref = @repo.ref("refs/tags/#{name}")
+      @repo.lookup(ref.target)
     end
 
-    # Return a list of commits to a certain branch, including pagination options and all the refs.
+    # Return a list of commits in a certain branch, including pagination options and all the refs.
     #
     # @param [String] start the branch to look for commits in
     # @param [Integer] max_count the maximum count of commits
@@ -60,46 +40,39 @@ module Ginatra
     # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
     #
     # @return [Array<Grit::Commit>] the array of commits.
-    def commits(start='master', max_count=10, skip=0)
+    def commits(branch='master', max_count=10, skip=0)
       raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
-      refs_cache = {}
-      @repo.commits(start, max_count, skip).each do |commit|
-        add_refs(commit,refs_cache)
-      end
+      walker = Rugged::Walker.new(@repo)
+      walker.sorting(Rugged::SORT_TOPO)
+      walker.push(@repo.ref("refs/heads/#{branch}").target)
+
+      commits = walker.collect {|commit| commit }
+      commits[skip, max_count]
     end
 
-    # Return a list of commits like --all, including pagination options and all the refs.
-    #
-    # @param [Integer] max_count the maximum count of commits
-    # @param [Integer] skip the number of commits in the branch to skip before taking the count.
-    #
-    # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
-    #
-    # @return [Array<GraphCommit>] the array of commits.
-    def all_commits(max_count=10, skip=0)
-      raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
-      commits = Grit::Commit.find_all(@repo, nil, {:max_count => max_count, :skip => skip})
-      ref_cache = {}
-      commits.collect do |commit|
-        add_refs(commit, ref_cache)
-        GraphCommit.new(commit)
-      end
+    # Returns list of branches sorted by name alphabetically
+    def branches
+      Rugged::Branch.each(@repo, :local).sort
     end
 
-    # Adds the refs corresponding to Grit::Commit objects to the respective Commit objects.
-    #
-    # @param [Grit::Commit] commit the commit you want refs added to
-    # @param [Hash] empty hash with scope out of loop to speed things up
-    # @return [Array] the array of refs added to the commit. they are also on the commit object.
-    def add_refs(commit, ref_cache)
-      if ref_cache.empty?
-         @repo.refs.each do |ref|
-          ref_cache[ref.commit.id] ||= []
-          ref_cache[ref.commit.id] << ref
-        end
+    # Checks existence of branch by name
+    def branch_exists?(branch_name)
+      !Rugged::Branch.lookup(@repo, branch_name).nil?
+    end
+
+    # Find blob by oid
+    def find_blob(oid)
+      Rugged::Blob.new @repo, oid
+    end
+
+    # Find tree by tree oid or branch name
+    def find_tree(oid)
+      if branch_exists?(oid)
+        last_commit_sha = @repo.ref("refs/heads/#{oid}").target
+        lookup(last_commit_sha).tree
+      else
+        lookup(oid)
       end
-      commit.refs = ref_cache[commit.id] if ref_cache.include? commit.id
-      commit.refs ||= []
     end
 
     # Catch all
@@ -116,11 +89,6 @@ module Ginatra
     # to correspond to the #method_missing definition
     def respond_to?(sym)
       @repo.respond_to?(sym) || super
-    end
-
-    # not sure why we need this but whatever.
-    def to_s
-      @name.to_s
     end
   end
 end

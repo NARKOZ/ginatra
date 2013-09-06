@@ -7,7 +7,6 @@ require 'ginatra/errors'
 require 'ginatra/helpers'
 require 'ginatra/repo'
 require 'ginatra/repo_list'
-require 'ginatra/graph_commit'
 
 module Ginatra
   # The main application class.
@@ -68,32 +67,9 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
       params[:page] = 1
-      params[:ref]  = @repo.get_head('master').nil? ? @repo.heads.first.name : 'master'
-      @next_commits = @repo.commits(params[:ref], 10, 10).any?
+      params[:ref]  = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
+      @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
       erb :log
-    end
-
-    get '/:repo/graph' do
-      @repo = RepoList.find(params[:repo])
-      max_count = params[:max_count].nil? ? 650 : params[:max_count].to_i
-      commits = @repo.all_commits(max_count)
-
-      days = GraphCommit.index_commits(commits)
-      @days_json = days.compact.collect {|d| [d.day, d.strftime('%b')] }.to_json
-      @commits_json = commits.collect do |c|
-        h = {}
-        h[:parents] = c.parents.collect {|p| [p.id, 0, 0] }
-        h[:author]  = c.author.name.force_encoding(Encoding::UTF_8)
-        h[:time]    = c.time
-        h[:space]   = c.space
-        h[:refs]    = c.refs.collect {|r| r.name }.join(' ') unless c.refs.nil?
-        h[:id]      = c.sha
-        h[:date]    = c.date
-        h[:message] = c.message.force_encoding(Encoding::UTF_8)
-        h[:login]   = c.author.email
-        h
-      end.to_json
-      erb :graph
     end
 
     # The atom feed of recent commits to a certain branch of a +repo+.
@@ -128,8 +104,10 @@ module Ginatra
     # @param [String] commit the repository commit
     get '/:repo/commit/:commit.patch' do
       content_type :txt
-      @repo = RepoList.find(params[:repo])
-      @repo.git.format_patch({}, "--stdout", "-1", params[:commit])
+      repo   = RepoList.find(params[:repo])
+      commit = repo.commit(params[:commit])
+      diff   = commit.diff(commit.parents.first)
+      diff.patch
     end
 
     # The html representation of a commit.
@@ -138,18 +116,18 @@ module Ginatra
     # @param [String] commit the repository commit
     get '/:repo/commit/:commit' do
       @repo = RepoList.find(params[:repo])
-      @commit = @repo.commit(params[:commit]) # can also be a ref
+      @commit = @repo.commit(params[:commit])
       erb :commit
     end
 
-    # Download an archive of a given tree.
+    # The html representation of a tag.
     #
     # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/archive/:tree.tar.gz' do
-      content_type :gz
+    # @param [String] tag the repository tag
+    get '/:repo/tag/:tag' do
       @repo = RepoList.find(params[:repo])
-      @repo.archive_tar_gz(params[:tree])
+      @commit = @repo.tag(params[:tag]).target
+      erb :commit
     end
 
     # HTML page for a given tree in a given +repo+
@@ -158,13 +136,8 @@ module Ginatra
     # @param [String] tree the repository tree
     get '/:repo/tree/:tree' do
       @repo = RepoList.find(params[:repo])
+      @tree = @repo.find_tree(params[:tree])
 
-      if (@repo.git.rev_parse({'--verify' => ''}, "#{params[:tree]}^{tree}")).empty?
-        # we don't have a tree.
-        not_found
-      end
-
-      @tree = @repo.tree(params[:tree]) # can also be a ref (i think)
       @path = {
         :blob => "#{params[:repo]}/blob/#{params[:tree]}",
         :tree => "#{params[:repo]}/tree/#{params[:tree]}"
@@ -178,20 +151,19 @@ module Ginatra
     #
     # @param [String] repo the repository url-sanitised-name
     # @param [String] tree the repository tree
-    get '/:repo/tree/:tree/*' do # for when we specify a path
+    get '/:repo/tree/:tree/*' do
       @repo = RepoList.find(params[:repo])
-      @tree = @repo.tree(params[:tree])/params[:splat].first
-      if @tree.is_a?(Grit::Blob)
-        # we need @tree to be a tree. if it's a blob, send it to the blob page
-        # this allows people to put in the remaining part of the path to the file, rather than endless clicks like you need in github
-        redirect "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}"
-      else
-        @path = {
-          :blob => "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
-          :tree => "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
-        }
-        erb :tree, :layout => !is_pjax?
+      @tree = @repo.find_tree(params[:tree])
+
+      @tree.walk(:postorder) do |root, entry|
+        @tree = @repo.lookup entry[:oid] if "#{root}#{entry[:name]}" == params[:splat].first
       end
+
+      @path = {
+        :blob => "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
+        :tree => "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+      }
+      erb :tree, :layout => !is_pjax?
     end
 
     # HTML page for a given blob in a given +repo+
@@ -200,7 +172,12 @@ module Ginatra
     # @param [String] tree the repository tree
     get '/:repo/blob/:blob' do
       @repo = RepoList.find(params[:repo])
-      @blob = @repo.blob(params[:blob])
+      @tree = @repo.lookup(params[:tree])
+
+      @tree.walk(:postorder) do |root, entry|
+        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
+      end
+
       erb :blob, :layout => !is_pjax?
     end
 
@@ -212,14 +189,13 @@ module Ginatra
     # @param [String] tree the repository tree
     get '/:repo/blob/:tree/*' do
       @repo = RepoList.find(params[:repo])
-      @blob = @repo.tree(params[:tree])/params[:splat].first
-      if @blob.is_a?(Grit::Tree)
-        # as above, we need @blob to be a blob. if it's a tree, send it to the tree page
-        # this allows people to put in the remaining part of the path to the folder, rather than endless clicks like you need in github
-        redirect "/#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
-      else
-        erb :blob, :layout => !is_pjax?
+      @tree = @repo.find_tree(params[:tree])
+
+      @tree.walk(:postorder) do |root, entry|
+        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
+
+      erb :blob, :layout => !is_pjax?
     end
 
     # Pagination route for the commits to a given ref in a +repo+.
@@ -231,7 +207,7 @@ module Ginatra
       params[:page] = params[:page].to_i
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
-      @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).empty?
+      @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).nil?
       if params[:page] - 1 > 0
         @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
       end

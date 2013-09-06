@@ -1,7 +1,8 @@
-<% title @blob.name, :headline => @repo.name %>
+<% title @blob[:name], :headline => @repo.name %>
 
 <%= partial :header, :locals => {:repo => @repo} %>
 <%= partial :tree_nav %>
 
-<p><i class="icon-file"></i> <%= @blob.name %></p>
-<%= highlight_source @blob %>
+<p><i class="icon-file"></i> <%= @blob[:name] %></p>
+<% blob = @repo.find_blob @blob[:oid] %>
+<%= highlight_source blob.content, @blob[:name] %>

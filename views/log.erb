@@ -15,11 +15,11 @@
           </thead>
           <tbody>
             <% @commits.each do |commit| %>
-              <% url = prefix_url("#{@repo.param}/commit/#{commit.id}") %>
+              <% url = prefix_url("#{@repo.param}/commit/#{commit.oid}") %>
               <tr class="js-nav" data-href="<%= url %>">
-                <td><img src="<%= gravatar_url(commit.author.email) %>" class="img-rounded"> <%= commit.author.name %></td>
-                <td><a href="<%= url %>"><%= truncate(h(commit.short_message), {:length => 140, :separator => ' '}) %></a></td>
-                <td><%= time_tag(commit.committed_date) %></td>
+                <td><img src="<%= gravatar_url(commit.author[:email]) %>" class="img-rounded"> <%= commit.author[:name] %></td>
+                <td><a href="<%= url %>"><%= truncate(h(commit.message), {:length => 140, :separator => ' '}) %></a></td>
+                <td><%= time_tag(commit.committer[:time]) %></td>
               </tr>
             <% end %>
           </tbody>
@@ -42,23 +42,23 @@
 
       <div class="span4">
         <ul class="nav nav-list">
-          <li class="nav-header">Heads</li>
-          <% @repo.heads.each do |head| %>
+          <li class="nav-header">Branches</li>
+          <% @repo.branches.each do |branch| %>
             <li>
-              <a href="<%=h prefix_url(@repo.param) %>/<%=h head.name %>">
-                <%=h head.name %>
+              <a href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
+                <%= h branch.name %>
               </a>
             </li>
           <% end %>
 
           <li class="divider"></li>
 
-          <li class="nav-header">Tags</li>
+          <li class="nav-header">Tags (<%= @repo.tags.count %>)</li>
           <% if @repo.tags.any? %>
-            <% @repo.tags.each do |tag| %>
+            <% @repo.tags.sort.reverse_each do |tag| %>
               <li>
-                <a href="<%=h prefix_url(@repo.param) %>/commit/<%=h tag.name %>">
-                  <%=h tag.name %>
+                <a href="<%= h prefix_url(@repo.param) %>/tag/<%= h tag %>">
+                  <%= h tag %>
                 </a>
               </li>
             <% end %>

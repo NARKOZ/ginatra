@@ -1,4 +1,4 @@
-<% title @repo.name, :headline => "Commit #{@commit.id[0..6]}" %>
+<% title @repo.name, :headline => "Commit #{@commit.oid[0..6]}" %>
 <%= partial :header, :locals => {:repo => @repo} %>
 
 <div class="info-box">
@@ -7,15 +7,15 @@
       <%= simple_format h(@commit.message) %>
 
       <div class="author-box">
-        <img src="<%= gravatar_url(@commit.author.email) %>" class="img-rounded">
-        <strong><%= @commit.author.name %></strong>
-        authored at <%= time_tag @commit.authored_date %>
+        <img src="<%= gravatar_url(@commit.author[:email]) %>" class="img-rounded">
+        <strong><%= @commit.author[:name] %></strong>
+        authored at <%= time_tag @commit.author[:time] %>
 
-        <% unless @commit.committer.name == @commit.author.name %>
+        <% unless @commit.committer[:name] == @commit.author[:name] %>
         <div class="author-box">
-          <img src="<%= gravatar_url(@commit.committer.email) %>" class="img-rounded">
-          <strong><%= @commit.committer.name %></strong>
-          committed at <%= time_tag @commit.committed_date %>
+          <img src="<%= gravatar_url(@commit.committer[:email]) %>" class="img-rounded">
+          <strong><%= @commit.committer[:name] %></strong>
+          committed at <%= time_tag @commit.committer[:time] %>
         </div>
         <% end %>
       </div>
@@ -31,21 +31,21 @@
         </div>
         <div class="span3">
           <p>
-            <a href="<%= prefix_url(@repo.param) %>/commit/<%= @commit.id %>">
-              <%= @commit.id %>
+            <a href="<%= prefix_url(@repo.param) %>/commit/<%= @commit.oid %>">
+              <%= @commit.oid %>
             </a>
           </p>
 
           <p>
-            <a href="<%= prefix_url(@repo.param) %>/tree/<%= @commit.tree.id %>">
-              <%= @commit.tree.id %>
+            <a href="<%= prefix_url(@repo.param) %>/tree/<%= @commit.tree.oid %>">
+              <%= @commit.tree.oid %>
             </a>
           </p>
 
           <% @commit.parents.each do |parent| %>
           <p>
-            <a href="<%= prefix_url(@repo.param) %>/commit/<%= parent.id %>">
-              <%= parent.id %>
+            <a href="<%= prefix_url(@repo.param) %>/commit/<%= parent.oid %>">
+              <%= parent.oid %>
             </a>
           </p>
           <% end %>
@@ -56,10 +56,14 @@
 </div>
 
 <div id="diff">
-  <%= file_listing(@commit) %>
+  <% diff = @commit.diff(@commit.parents.first) %>
+  <%= file_listing diff %>
 
-  <% @commit.diffs.each_with_index do |diff, index| %>
-    <p><i class="icon-file"></i> <a name='file-<%= index + 1 %>'><%= diff.b_path %></a></p>
-    <%= highlight_diff diff %>
+  <% diff.patches.each_with_index do |patch, index| %>
+    <p><i class="icon-file"></i> <a name='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a></p>
+
+    <% patch.hunks.each do |hunk| %>
+      <%= highlight_diff hunk %>
+    <% end %>
   <% end %>
 </div>
