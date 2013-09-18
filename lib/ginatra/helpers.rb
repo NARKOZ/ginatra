@@ -151,8 +151,8 @@ module Ginatra
       formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
       lexer     = Rouge::Lexer.guess_by_filename(filename)
 
-      if lexer == Rouge::Lexers::Text
-        lexer = Rouge::Lexer.guess_by_source(source) || Rouge::Lexers::Text
+      if lexer == Rouge::Lexers::PlainText
+        lexer = Rouge::Lexer.guess_by_source(source) || Rouge::Lexers::PlainText
       end
 
       formatter.format lexer.lex(source)

@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'sinatra',   '~> 1.4.2'
   gem.add_dependency 'rugged',    '~> 0.19.0'
-  gem.add_dependency 'rouge',     '~> 0.3.5'
+  gem.add_dependency 'rouge',     '~> 0.5.3'
   gem.add_dependency 'sprockets', '~> 2.0'
 
   gem.add_development_dependency 'rake'
