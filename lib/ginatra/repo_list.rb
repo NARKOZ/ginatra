@@ -45,7 +45,7 @@ module Ginatra
       unless self.has_repo?(param)
         begin
           list << Repo.new(path)
-        rescue Grit::InvalidGitRepositoryError
+        rescue Rugged::RepositoryError
           # If the path is not a git repository, then this error is raised
           # and causes an error page to result.
           # Is it preferable to just log that the error happened and not show the error page?

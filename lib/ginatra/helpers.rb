@@ -68,7 +68,7 @@ module Ginatra
     # Returns a string including the link to download a patch for a certain
     # commit to the repo
     #
-    # @param [Grit::Commit] commit the commit you want a patch for
+    # @param [Rugged::Commit] commit the commit you want a patch for
     # @param [String] repo_param the url-sanitised name for the repo
     #   (for the link path)
     #
@@ -94,7 +94,7 @@ module Ginatra
     # It includes classes for added/modified/deleted and also anchor links
     # to the diffs for further down the page.
     #
-    # @param [Grit::Commit] commit the commit you want the list of files for
+    # @param [Rugged::Commit] commit the commit you want the list of files for
     #
     # @return [String] a +<ul>+ with lots of +<li>+ children.
     def file_listing(diff)
@@ -113,7 +113,7 @@ module Ginatra
 
     # Highlights commit diff
     #
-    # @param [Grit::Diff] diff for highlighting
+    # @param [Rugged::Hunk] diff hunk for highlighting
     #
     # @return [String] highlighted HTML.code
     def highlight_diff(hunk)
@@ -143,7 +143,7 @@ module Ginatra
 
     # Highlights blob source
     #
-    # @param [Grit::Blob] blob to highlight source
+    # @param [Rugged::Blob] blob to highlight source
     #
     # @return [String] highlighted HTML.code
     def highlight_source(source, filename='')

@@ -20,7 +20,7 @@ module Ginatra
     # Return a commit corresponding to sha in the repo.
     #
     # @param [String] sha the commit id or tag name
-    # @return [Grit::Commit] the commit object
+    # @return [Rugged::Commit] the commit object
     def commit(sha)
       @repo.lookup(sha)
     end
@@ -39,7 +39,7 @@ module Ginatra
     #
     # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
     #
-    # @return [Array<Grit::Commit>] the array of commits.
+    # @return [Array<Rugged::Commit>] the array of commits.
     def commits(branch='master', max_count=10, skip=0)
       raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
       walker = Rugged::Walker.new(@repo)
