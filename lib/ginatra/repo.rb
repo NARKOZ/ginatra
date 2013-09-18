@@ -52,7 +52,7 @@ module Ginatra
 
     # Returns list of branches sorted by name alphabetically
     def branches
-      Rugged::Branch.each(@repo, :local).sort
+      Rugged::Branch.each(@repo, :local).sort_by(&:name)
     end
 
     # Checks existence of branch by name
