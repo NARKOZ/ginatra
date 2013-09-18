@@ -106,7 +106,7 @@ module Ginatra
       content_type :txt
       repo   = RepoList.find(params[:repo])
       commit = repo.commit(params[:commit])
-      diff   = commit.diff(commit.parents.first)
+      diff   = commit.parents.first.diff(commit)
       diff.patch
     end
 

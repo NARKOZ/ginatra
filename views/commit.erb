@@ -56,7 +56,7 @@
 </div>
 
 <div id="diff">
-  <% diff = @commit.diff(@commit.parents.first) %>
+  <% diff = @commit.parents.first.diff(@commit) %>
   <%= file_listing diff %>
 
   <% diff.patches.each_with_index do |patch, index| %>
