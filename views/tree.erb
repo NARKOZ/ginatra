@@ -1,7 +1,7 @@
 <% title "#{@repo.name} at #{@tree.oid[0..6]}" %>
 
 <div id="pjax-container">
-  <%= partial :header, :locals => {:repo => @repo} %>
+  <%= partial :header, locals: { repo: @repo } %>
   <%= partial :tree_nav %>
 
   <ul class="nav nav-tabs nav-stacked" id="js-tree">

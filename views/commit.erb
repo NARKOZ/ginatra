@@ -1,5 +1,5 @@
-<% title @repo.name, :headline => "Commit #{@commit.oid[0..6]}" %>
-<%= partial :header, :locals => {:repo => @repo} %>
+<% title @repo.name, headline: "Commit #{@commit.oid[0..6]}" %>
+<%= partial :header, locals: { repo: @repo } %>
 
 <div class="info-box">
   <div class="row-fluid">

@@ -1,5 +1,5 @@
-<% title @repo.name, :headline => 'Commits' %>
-<%= partial :header, :locals => {:repo => @repo} %>
+<% title @repo.name, headline: 'Commits' %>
+<%= partial :header, locals: { repo: @repo } %>
 
 <div class="row-fluid">
   <div class="span12">
@@ -18,7 +18,7 @@
               <% url = prefix_url("#{@repo.param}/commit/#{commit.oid}") %>
               <tr class="js-nav" data-href="<%= url %>">
                 <td><img src="<%= gravatar_url(commit.author[:email]) %>" class="img-rounded"> <%= commit.author[:name] %></td>
-                <td><a href="<%= url %>"><%= truncate(h(commit.message), {:length => 140, :separator => ' '}) %></a></td>
+                <td><a href="<%= url %>"><%= truncate(h(commit.message), { length: 140, separator: ' ' }) %></a></td>
                 <td><%= time_tag(commit.committer[:time]) %></td>
               </tr>
             <% end %>

@@ -51,7 +51,7 @@ describe Ginatra::RepoList do
       repo_list.should include(new_repo)
 
       # remove the new repository from the file system
-      FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), :secure => true
+      FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), secure: true
 
       repo_list = Ginatra::RepoList.list # refresh the repo list
 
@@ -60,7 +60,7 @@ describe Ginatra::RepoList do
     end
 
     after(:each) do
-      FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), :secure => true
+      FileUtils.rm_rf File.join(@repo_dir, @new_repo_name), secure: true
     end
   end
 end

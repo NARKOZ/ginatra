@@ -4,8 +4,8 @@ require 'ginatra'
 require 'optparse'
 
 options = {
-  :port => Ginatra.config.port,
-  :host => Ginatra.config.host
+  port: Ginatra.config.port,
+  host: Ginatra.config.host
 }
 
 global_opts = OptionParser.new do |opts|
@@ -44,9 +44,9 @@ server_opts = {
     opts.on('', 'start', 'Start Ginatra web server') do
       root_path = File.expand_path("#{__FILE__}/../..")
       Rack::Server.start(
-        :Port => options[:port],
-        :Host => options[:host],
-        :config => "#{root_path}/config.ru"
+        Port: options[:port],
+        Host: options[:host],
+        config: "#{root_path}/config.ru"
       )
     end
   end

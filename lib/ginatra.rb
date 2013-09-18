@@ -55,7 +55,7 @@ module Ginatra
       @commits = @repo.commits
       return "" if @commits.empty?
       content_type 'application/xml'
-      erb :atom, :layout => false
+      erb :atom, layout: false
     end
 
     # The html page for a +repo+.
@@ -81,7 +81,7 @@ module Ginatra
       @commits = @repo.commits(params[:ref])
       return "" if @commits.empty?
       content_type 'application/xml'
-      erb :atom, :layout => false
+      erb :atom, layout: false
     end
 
     # The html page for a given +ref+ of a +repo+.
@@ -139,10 +139,10 @@ module Ginatra
       @tree = @repo.find_tree(params[:tree])
 
       @path = {
-        :blob => "#{params[:repo]}/blob/#{params[:tree]}",
-        :tree => "#{params[:repo]}/tree/#{params[:tree]}"
+        blob: "#{params[:repo]}/blob/#{params[:tree]}",
+        tree: "#{params[:repo]}/tree/#{params[:tree]}"
       }
-      erb :tree, :layout => !is_pjax?
+      erb :tree, layout: !is_pjax?
     end
 
     # HTML page for a given tree in a given +repo+.
@@ -160,10 +160,10 @@ module Ginatra
       end
 
       @path = {
-        :blob => "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
-        :tree => "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
+        blob: "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
+        tree: "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       }
-      erb :tree, :layout => !is_pjax?
+      erb :tree, layout: !is_pjax?
     end
 
     # HTML page for a given blob in a given +repo+
@@ -178,7 +178,7 @@ module Ginatra
         @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
 
-      erb :blob, :layout => !is_pjax?
+      erb :blob, layout: !is_pjax?
     end
 
     # HTML page for a given blob in a given repo.
@@ -195,7 +195,7 @@ module Ginatra
         @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
 
-      erb :blob, :layout => !is_pjax?
+      erb :blob, layout: !is_pjax?
     end
 
     # Pagination route for the commits to a given ref in a +repo+.

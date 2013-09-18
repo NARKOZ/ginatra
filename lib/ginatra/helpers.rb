@@ -14,7 +14,7 @@ module Ginatra
     # Sets title for pages
     def title(*args)
       @title ||= []
-      @title_options ||= { :headline => nil, :sitename => nil }
+      @title_options ||= { headline: nil, sitename: nil }
       options = args.last.is_a?(Hash) ? args.pop : {}
 
       @title += args
@@ -130,7 +130,7 @@ module Ginatra
         end
       end
 
-      formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
+      formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
       lexer     = Rouge::Lexers::Diff.new
 
       source   = lines.join
@@ -148,7 +148,7 @@ module Ginatra
     # @return [String] highlighted HTML.code
     def highlight_source(source, filename='')
       source    = source.force_encoding(Encoding::UTF_8)
-      formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
+      formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
       lexer     = Rouge::Lexer.guess_by_filename(filename)
 
       if lexer == Rouge::Lexers::Text

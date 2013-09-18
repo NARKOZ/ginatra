@@ -14,5 +14,5 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.rspec_opts = ['--color']
 end
 
-task :default => :spec
-task :travis  => ['clone_repo', 'spec']
+task default: :spec
+task travis: ['clone_repo', 'spec']
