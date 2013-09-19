@@ -65,6 +65,23 @@ module Ginatra
       Rugged::Blob.new @repo, oid
     end
 
+    # Detect license
+    def get_license(branch_name)
+      last_commit = self.lookup(self.ref("refs/heads/#{branch_name}").target)
+      license = blob_at(last_commit.oid, 'LICENSE')
+
+      return 'N/A' if license.nil?
+
+      license_text = license.text
+
+      return 'Apache'  if license_text.match(/Apache License/)
+      return 'GPL'     if license_text.match(/GNU GENERAL PUBLIC LICENSE/)
+      return 'LGPL'    if license_text.match(/GNU LESSER GENERAL PUBLIC LICENSE/)
+      return 'MIT'     if license_text.match(/Permission is hereby granted, free of charge,/)
+      return 'BSD'     if license_text.match(/Redistribution and use in source and binary forms/)
+      'N/A'
+    end
+
     # Find tree by tree oid or branch name
     def find_tree(oid)
       if branch_exists?(oid)
