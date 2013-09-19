@@ -129,7 +129,7 @@ module Ginatra
 
       hunk.each_line do |line|
         if line.context?
-          lines << line.content
+          lines << "  #{line.content}"
         elsif line.deletion?
           lines << "- #{line.content}"
         elsif line.addition?
