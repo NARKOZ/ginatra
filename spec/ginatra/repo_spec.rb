@@ -15,8 +15,8 @@ describe Ginatra::Repo do
     @ginatra_repo.param.should == 'test'
   end
 
-  it "should have a description" do
-    @ginatra_repo.description.should =~ /description file for this repository and set the description for it./
+  it "should have an empty description" do
+    @ginatra_repo.description.should be_empty
   end
 
   it "should have a list of commits" do
