@@ -2,94 +2,101 @@ require 'spec_helper'
 
 describe Ginatra::App do
   describe "main page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo commits atom feed" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test.atom'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
 
-    it "should return application/xml" do
+    it "returns application/xml" do
       get '/test.atom'
-      last_response.headers['Content-Type'].should match("application/xml.*")
+      expect(last_response.headers['Content-Type']).to match("application/xml.*")
     end
   end
 
   describe "repo page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "branch commits atom feed" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test/master.atom'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
 
-    it "should return application/xml" do
+    it "returns application/xml" do
       get '/test/master.atom'
-      last_response.headers['Content-Type'].should match("application/xml.*")
+      expect(last_response.headers['Content-Type']).to match("application/xml.*")
     end
   end
 
   describe "repo branch page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test/master'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo commit patch" do
-    it "should respond with 200" do
+    it "returns http success" do
       get "/test/commit/095955b.patch"
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
 
-    it "should return text/plain" do
+    it "returns text/plain" do
       get "/test/commit/095955b.patch"
-      last_response.headers['Content-Type'].should match("text/plain.*")
+      expect(last_response.headers['Content-Type']).to match("text/plain.*")
     end
   end
 
   describe "repo commit page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get "/test/commit/095955b"
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
+    end
+  end
+
+  describe "repo tag page" do
+    it "returns http success" do
+      get "/test/tag/v0.0.3"
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo tree page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get "/test/tree/master"
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo tree page with path" do
-    it "should respond with 200" do
+    it "returns http success" do
       get "/test/tree/master/examples"
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo blob page with path" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test/blob/master/Gemfile'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 
   describe "repo log page" do
-    it "should respond with 200" do
+    it "returns http success" do
       get '/test/master/page/1'
-      last_response.status.should == 200
+      expect(last_response.status).to eq(200)
     end
   end
 end

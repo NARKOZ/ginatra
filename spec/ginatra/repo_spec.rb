@@ -1,31 +1,27 @@
 require 'spec_helper'
 
 describe Ginatra::Repo do
-  before do
-    @ginatra_repo = Ginatra::RepoList.find("test")
-    @repo = Rugged::Repository.new(File.join(current_path, "..", "repos", "test"))
-    @commit = @ginatra_repo.commit("095955b")
+  let(:repo) { Ginatra::RepoList.find('test') }
+
+  it "has a name" do
+    expect(repo.name).to eq('test')
   end
 
-  it "should have a name" do
-    @ginatra_repo.name.should == "test"
+  it "has a param for urls" do
+    expect(repo.param).to eq('test')
   end
 
-  it "should have a param for urls" do
-    @ginatra_repo.param.should == 'test'
+  it "has an empty description" do
+    expect(repo.description).to be_empty
   end
 
-  it "should have an empty description" do
-    @ginatra_repo.description.should be_empty
+  it "has a list of commits" do
+    expect(repo.commits).to_not be_empty
   end
 
-  it "should have a list of commits" do
-    @ginatra_repo.commits.should_not be_empty
-  end
-
-  it "should raise an error when asked to invert itself" do
+  it "raises an error when asked to invert itself" do
     expect {
-      @ginatra_repo.commits("master", -1)
-    }.to raise_error(Ginatra::Error, "max_count cannot be less than 0")
+      repo.commits('master', -1)
+    }.to raise_error(Ginatra::Error, 'max_count cannot be less than 0')
   end
 end
