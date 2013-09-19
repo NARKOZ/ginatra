@@ -1,11 +1,13 @@
-<ul class="nav nav-pills">
-  <li>
-    <a href="<%= prefix_url(@repo.param) %>/<%= params[:tree] %>">Commits</a>
-  </li>
-  <li class="active">
-    <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
-  </li>
-</ul>
+<% if @repo.branch_exists?(params[:tree]) %>
+  <ul class="nav nav-pills">
+    <li>
+      <a href="<%= prefix_url(@repo.param) %>/<%= params[:tree] %>">Commits</a>
+    </li>
+    <li class="active">
+      <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
+    </li>
+  </ul>
+<% end %>
 
 <% unless params[:splat].nil? or params[:splat].empty? %>
   <% tree_nav = params[:splat].first.split('/') %>
