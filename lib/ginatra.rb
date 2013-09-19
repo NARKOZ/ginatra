@@ -126,7 +126,7 @@ module Ginatra
     # @param [String] tag the repository tag
     get '/:repo/tag/:tag' do
       @repo = RepoList.find(params[:repo])
-      @commit = @repo.tag(params[:tag]).target
+      @commit = @repo.commit_by_tag(params[:tag])
       erb :commit
     end
 

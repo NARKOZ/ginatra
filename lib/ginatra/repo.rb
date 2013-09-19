@@ -25,8 +25,8 @@ module Ginatra
       @repo.lookup(sha)
     end
 
-    # Return a tag by name in the repo.
-    def tag(name)
+    # Return a commit corresponding to tag in the repo.
+    def commit_by_tag(name)
       ref = @repo.ref("refs/tags/#{name}")
       @repo.lookup(ref.target)
     end
