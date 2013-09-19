@@ -4,5 +4,11 @@
 <%= partial :tree_nav %>
 
 <p><i class="icon-file"></i> <%= @blob[:name] %></p>
+
 <% blob = @repo.find_blob @blob[:oid] %>
-<%= highlight_source blob.content, @blob[:name] %>
+
+<% if blob.binary? %>
+  <p>Binary file</p>
+<% else %>
+  <%= highlight_source blob.content, @blob[:name] %>
+<% end %>
