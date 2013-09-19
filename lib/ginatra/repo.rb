@@ -14,7 +14,7 @@ module Ginatra
       @param = File.split(path).last
       @name = @param
       @description = File.read("#{@repo.path}description").strip
-      @description = "Please edit the #{@repo.path}description file for this repository and set the description for it." if /^Unnamed repository;/.match(@description)
+      @description = '' if @description.match(/\AUnnamed repository;/)
     end
 
     # Return a commit corresponding to sha in the repo.

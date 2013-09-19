@@ -13,6 +13,7 @@
     <li>
       <a href="<%= prefix_url(repo.param) %>">
         <h2>
+          <%= empty_description_hint_for(repo) %>
           <%= repo.name %> <small><%= h repo.description %></small>
         </h2>
       </a>

@@ -1,5 +1,6 @@
 <div class="page-header">
   <h1>
+    <%= empty_description_hint_for(repo) %>
     <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
     <small><%= repo.description.split("\n").first %></small>
   </h1>
