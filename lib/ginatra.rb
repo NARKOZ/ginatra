@@ -34,11 +34,6 @@ module Ginatra
       Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
-    # Handle CommitsError
-    error CommitsError do
-      'No commits were returned for ' + request.uri
-    end
-
     # The root route
     get '/' do
       @repositories = Ginatra::RepoList.list
