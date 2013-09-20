@@ -137,7 +137,7 @@ module Ginatra
         end
       end
 
-      formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
+      formatter = Rouge::Formatters::HTML.new
       lexer     = Rouge::Lexers::Diff.new
 
       source   = lines.join
@@ -155,7 +155,7 @@ module Ginatra
     # @return [String] highlighted HTML.code
     def highlight_source(source, filename='')
       source    = source.force_encoding(Encoding::UTF_8)
-      formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
+      formatter = Rouge::Formatters::HTML.new(line_numbers: true)
       lexer     = Rouge::Lexer.guess_by_filename(filename)
 
       if lexer == Rouge::Lexers::PlainText

@@ -4,6 +4,7 @@ footer p { margin: 10px 0; }
 .filter { margin-top: -20px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
+.highlight table .gutter { border-right: 1px solid #c0c0c0 }
 
 #diff { padding-top: 20px; }
 #diff .added a { color: #468847; }
