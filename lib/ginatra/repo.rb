@@ -39,11 +39,8 @@ module Ginatra
     # @param [Integer] max_count the maximum count of commits
     # @param [Integer] skip the number of commits in the branch to skip before taking the count.
     #
-    # @raise [Ginatra::Error] if max_count is less than 0. silly billy!
-    #
     # @return [Array<Rugged::Commit>] the array of commits.
     def commits(branch='master', max_count=10, skip=0)
-      raise Ginatra::Error.new("max_count cannot be less than 0") if max_count < 0
       walker = Rugged::Walker.new(@repo)
       walker.sorting(Rugged::SORT_TOPO)
       walker.push(@repo.ref("refs/heads/#{branch}").target)

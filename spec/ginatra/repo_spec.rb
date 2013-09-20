@@ -3,25 +3,52 @@ require 'spec_helper'
 describe Ginatra::Repo do
   let(:repo) { Ginatra::RepoList.find('test') }
 
-  it "has a name" do
-    expect(repo.name).to eq('test')
+  describe "repo" do
+    subject           { repo }
+    its(:name)        { should == 'test' }
+    its(:param)       { should == 'test' }
+    its(:description) { should == '' }
   end
 
-  it "has a param for urls" do
-    expect(repo.param).to eq('test')
+  describe "#commit" do
+    it "returns commit by sha" do
+      commit = repo.commit '095955b'
+      expect(commit).to be_a_kind_of(Rugged::Commit)
+      expect(commit.oid).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+    end
   end
 
-  it "has an empty description" do
-    expect(repo.description).to be_empty
+  describe "#commit_by_tag" do
+    it "returns commit by tag" do
+      commit = repo.commit_by_tag 'v0.0.3'
+      expect(commit).to be_a_kind_of(Rugged::Commit)
+      expect(commit.oid).to eq('0c386b293878fb5f69031a998d564ecb8c2fee4d')
+    end
   end
 
-  it "has a list of commits" do
-    expect(repo.commits).to_not be_empty
+  describe "#commits" do
+    it "returns an array of commits" do
+      commits = repo.commits('master', 2)
+      expect(commits).to be_a_kind_of(Array)
+      expect(commits.size).to eq(2)
+      expect(commits.first.oid).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+    end
   end
 
-  it "raises an error when asked to invert itself" do
-    expect {
-      repo.commits('master', -1)
-    }.to raise_error(Ginatra::Error, 'max_count cannot be less than 0')
+  describe "#branches" do
+    it "returns an array of branches" do
+      branches = repo.branches
+      expect(branches).to be_a_kind_of(Array)
+      expect(branches.size).to eq(1)
+      expect(branches.first.name).to eq('master')
+      expect(branches.first.target).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+    end
+  end
+
+  describe "#branch_exists?" do
+    it "checks existence of branch" do
+      expect(repo.branch_exists?('master')).to be_true
+      expect(repo.branch_exists?('master-404')).to be_false
+    end
   end
 end
