@@ -11,7 +11,7 @@ module Ginatra
   #
   # @return [Hash] config a hash of the configuration options
   def self.load_config
-    current_path        = File.expand_path("#{File.dirname(__FILE__)}")
+    current_path        = File.expand_path(File.dirname(__FILE__))
     custom_config_file  = File.expand_path("~/.ginatra/config.yml")
     default_config_file = File.expand_path("#{current_path}/../../config.yml")
 
