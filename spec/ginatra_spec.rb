@@ -93,6 +93,18 @@ describe Ginatra::App do
     end
   end
 
+  describe "repo blob raw page" do
+    it "returns http success" do
+      get '/test/raw/master/Gemfile'
+      expect(last_response.status).to eq(200)
+    end
+
+    it "returns text/plain" do
+      get '/test/raw/master/Gemfile'
+      expect(last_response.headers['Content-Type']).to match("text/plain.*")
+    end
+  end
+
   describe "repo log page" do
     it "returns http success" do
       get '/test/master/page/1'

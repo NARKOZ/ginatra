@@ -193,6 +193,30 @@ module Ginatra
       erb :blob, layout: !is_pjax?
     end
 
+    # HTML page for a raw blob contents in a given repo.
+    #
+    # Uses a splat param to specify a blob path.
+    #
+    # @param [String] repo the repository url-sanitised-name
+    # @param [String] tree the repository tree
+    get '/:repo/raw/:tree/*' do
+      @repo = RepoList.find(params[:repo])
+      @tree = @repo.find_tree(params[:tree])
+
+      @tree.walk(:postorder) do |root, entry|
+        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
+      end
+
+      blob = @repo.find_blob @blob[:oid]
+      if blob.binary?
+        content_type 'application/octet-stream'
+        blob.text
+      else
+        content_type :txt
+        blob.text
+      end
+    end
+
     # Pagination route for the commits to a given ref in a +repo+.
     #
     # @param [String] repo the repository url-sanitised-name
