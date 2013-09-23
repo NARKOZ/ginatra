@@ -8,7 +8,16 @@
 <% blob = @repo.find_blob @blob[:oid] %>
 
 <% if blob.binary? %>
-  <p>Binary file</p>
+  <% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
+
+  <% if %(gif png jpg jpeg).include? @blob[:name].downcase.gsub(/.*\./, '') %>
+    <a href="<%= raw_blob_url %>">
+      <img class="blob-image" src="<%= raw_blob_url %>" alt="<%= @blob[:name] %>">
+    </a>
+  <% else %>
+    <p>Binary file</p>
+    <p><i class="icon-download"></i> <a href="<%= raw_blob_url %>">Download</a></p>
+  <% end %>
 <% else %>
   <%= highlight_source blob.content, @blob[:name] %>
 <% end %>

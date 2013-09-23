@@ -4,7 +4,7 @@ footer p { margin: 10px 0; }
 .filter { margin-top: -20px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
-.highlight table .gutter { border-right: 1px solid #c0c0c0 }
+.highlight table .gutter { border-right: 1px solid #c0c0c0; }
 
 #diff { padding-top: 20px; }
 #diff .added a { color: #468847; }
@@ -15,6 +15,12 @@ footer p { margin: 10px 0; }
   padding: 20px;
   background-color: #eee;
   border-radius: 6px;
+}
+
+.blob-image {
+  max-width: 700px;
+  border: 2px solid #fff;
+  outline: 1px solid #000;
 }
 
 #holder {
