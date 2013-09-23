@@ -19,8 +19,9 @@ footer p { margin: 10px 0; }
 
 .blob-image {
   max-width: 700px;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   outline: 1px solid #000;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKElEQVQYlWO8f/8+AxJQUFBA5jIx4AU0lWb8//8/Mv/Bgwd0s5uANADTSgitzUUmWwAAAABJRU5ErkJggg==');
 }
 
 #holder {
