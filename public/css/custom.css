@@ -23,8 +23,3 @@ footer p { margin: 10px 0; }
   outline: 1px solid #000;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKElEQVQYlWO8f/8+AxJQUFBA5jIx4AU0lWb8//8/Mv/Bgwd0s5uANADTSgitzUUmWwAAAABJRU5ErkJggg==');
 }
-
-#holder {
-  cursor: move;
-  overflow-y: hidden;
-}
