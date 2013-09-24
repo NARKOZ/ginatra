@@ -10,7 +10,7 @@
 <% if blob.binary? %>
   <% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
 
-  <% if %(gif png jpg jpeg).include? @blob[:name].downcase.gsub(/.*\./, '') %>
+  <% if %(gif png jpg jpeg).include? File.extname(@blob[:name])[1..-1].downcase %>
     <a href="<%= raw_blob_url %>">
       <img class="blob-image" src="<%= raw_blob_url %>" alt="<%= @blob[:name] %>">
     </a>
