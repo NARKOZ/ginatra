@@ -4,6 +4,7 @@ footer p { margin: 10px 0; }
 .filter { margin-top: -20px; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
+pre { white-space: pre; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }
 
 #diff { padding-top: 20px; }
@@ -15,6 +16,12 @@ footer p { margin: 10px 0; }
   padding: 20px;
   background-color: #eee;
   border-radius: 6px;
+}
+
+.source-wrapper {
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .blob-image {

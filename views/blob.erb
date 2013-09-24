@@ -19,5 +19,7 @@
     <p><i class="icon-download"></i> <a href="<%= raw_blob_url %>">Download</a></p>
   <% end %>
 <% else %>
-  <%= highlight_source blob.content, @blob[:name] %>
+  <div class="source-wrapper">
+    <%= highlight_source blob.content, @blob[:name] %>
+  </div>
 <% end %>
