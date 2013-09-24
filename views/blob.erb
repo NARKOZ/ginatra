@@ -3,13 +3,16 @@
 <%= partial :header, locals: { repo: @repo } %>
 <%= partial :tree_nav %>
 
-<p><i class="icon-file"></i> <%= @blob[:name] %></p>
+<% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
+
+<div class="row-fluid">
+  <p class="pull-left"><i class="icon-file"></i> <%= @blob[:name] %></p>
+  <p class="pull-right"><a href="<%= raw_blob_url %>">Raw</a></p>
+</div>
 
 <% blob = @repo.find_blob @blob[:oid] %>
 
 <% if blob.binary? %>
-  <% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
-
   <% if %(gif png jpg jpeg).include? File.extname(@blob[:name])[1..-1].downcase %>
     <a href="<%= raw_blob_url %>">
       <img class="blob-image" src="<%= raw_blob_url %>" alt="<%= @blob[:name] %>">
