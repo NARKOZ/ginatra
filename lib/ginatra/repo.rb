@@ -1,9 +1,7 @@
 require 'rugged'
-require_relative 'repo_stats'
 
 module Ginatra
   class Repo
-    include RepoStats
     attr_reader :name, :param, :description
 
     # Create a new repository, and sort out clever stuff including assigning
@@ -72,6 +70,11 @@ module Ginatra
       else
         lookup(oid)
       end
+    end
+
+    # Returns Rugged::Repository instance
+    def to_rugged
+      @repo
     end
 
     # Catch all

@@ -6,50 +6,52 @@
     <div class="row-fluid">
       <div class="span8">
         <ul class="nav nav-pills">
-          <li class="active">
+          <li>
             <a href="<%= prefix_url(@repo.param) %>/<%= params[:ref] %>">Commits</a>
           </li>
           <li>
             <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:ref] %>">Source</a>
           </li>
-          <li>
+          <li class="active">
             <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:ref] %>">Stats</a>
           </li>
         </ul>
 
+        <ul class="unstyled">
+          <li>
+            <strong>License:</strong>
+            <span class="label label-info"><%= @stats.license %></span>
+          </li>
+          <li>
+            <strong>Commits:</strong>
+            <%= @stats.commits_count %>
+          </li>
+          <li>
+            <strong>Created at:</strong>
+            <%= time_tag @stats.created_at %>
+          </li>
+        </ul>
+
+        <h3>Contributors (<%= @stats.contributors.size %>)</h3>
+
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
+              <th>Email</th>
               <th>Author</th>
-              <th>Commit message</th>
-              <th>Date</th>
+              <th>Commits</th>
             </tr>
           </thead>
           <tbody>
-            <% @commits.each do |commit| %>
-              <% url = prefix_url("#{@repo.param}/commit/#{commit.oid}") %>
-              <tr class="js-nav" data-href="<%= url %>">
-                <td><img src="<%= gravatar_url(commit.author[:email]) %>" class="img-rounded"> <%= commit.author[:name] %></td>
-                <td><a href="<%= url %>"><%= truncate(h(commit.message), { length: 140, separator: ' ' }) %></a></td>
-                <td><%= time_tag(commit.committer[:time]) %></td>
+            <% @stats.contributors.each do |contributor| %>
+              <tr>
+                <td><a href="mailto:<%= contributor.first %>"><%= contributor.first %></a></td>
+                <td><%= contributor.last[:author] %></td>
+                <td><%= contributor.last[:commits_count] %></td>
               </tr>
             <% end %>
           </tbody>
         </table>
-
-        <ul class="pager">
-          <% if @previous_commits %>
-            <li class="previous">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] - 1 %>'>&larr; Previous</a>
-            </li>
-          <% end %>
-
-          <% if @next_commits %>
-            <li class="next">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] + 1 %>'>Next &rarr;</a>
-            </li>
-          <% end %>
-        </ul>
       </div>
 
       <div class="span4">
@@ -57,7 +59,7 @@
           <li class="nav-header">Branches</li>
           <% @repo.branches.each do |branch| %>
             <li class="<%= 'active' if branch.name == params[:ref] %>">
-              <a href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
+              <a href="<%= h prefix_url(@repo.param) %>/stats/<%= h branch.name %>">
                 <%= h branch.name %>
               </a>
             </li>

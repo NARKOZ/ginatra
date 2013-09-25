@@ -27,6 +27,13 @@ describe Ginatra::App do
     end
   end
 
+  describe "repo stats page" do
+    it "returns http success" do
+      get '/test/stats/master'
+      expect(last_response.status).to eq(200)
+    end
+  end
+
   describe "branch commits atom feed" do
     it "returns http success" do
       get '/test/master.atom'

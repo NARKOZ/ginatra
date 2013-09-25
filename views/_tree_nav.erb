@@ -6,6 +6,9 @@
     <li class="active">
       <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
     </li>
+    <li>
+      <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:tree] %>">Stats</a>
+    </li>
   </ul>
 <% end %>
 

@@ -7,6 +7,7 @@ require 'ginatra/errors'
 require 'ginatra/helpers'
 require 'ginatra/repo'
 require 'ginatra/repo_list'
+require 'ginatra/repo_stats'
 
 module Ginatra
   # The main application class.
@@ -91,6 +92,18 @@ module Ginatra
       params[:page] = 1
       @next_commits = @repo.commits(params[:ref], 10, 10).any?
       erb :log
+    end
+
+    # The html page for a +repo+ stats.
+    #
+    # Shows information about repository branch.
+    #
+    # @param [String] repo the repository url-sanitised-name
+    # @param [String] ref the repository ref
+    get '/:repo/stats/:ref' do
+      @repo = RepoList.find(params[:repo])
+      @stats = RepoStats.new(@repo, params[:ref])
+      erb :stats
     end
 
     # The patch file for a given commit to a +repo+.
