@@ -1,4 +1,18 @@
 $(function() {
+  $('#js-clone-url').click(selectText);
+
+  function selectText(containerid) {
+    if (document.selection) {
+      var range = document.body.createTextRange();
+      range.moveToElementText(this);
+      range.select();
+    } else if (window.getSelection) {
+      var range = document.createRange();
+      range.selectNode(this);
+      window.getSelection().addRange(range);
+    }
+  }
+
   $('.js-nav').click(function() {
     location.href = $(this).data('href');
   });

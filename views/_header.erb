@@ -5,6 +5,8 @@
     <small><%= repo.description.split("\n").first %></small>
   </h1>
   <% if Ginatra.config.git_clone_enabled? %>
-    Clone URL: <strong><%= url repo.param %></strong>
+    <div id="js-clone-url" class="muted clone-hint">
+      <code>git clone <strong><%= url repo.param %></strong></code>
+    </div>
   <% end %>
 </div>

@@ -5,6 +5,7 @@ footer p { margin: 10px 0; }
 .author-box { padding-top: 10px; }
 #loader { display: none; }
 pre { white-space: pre; }
+.clone-hint { font-style: italic; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }
 
 #diff { padding-top: 20px; }
