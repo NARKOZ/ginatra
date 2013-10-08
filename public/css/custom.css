@@ -28,6 +28,8 @@ pre { white-space: pre; }
 .blob-image {
   max-width: 700px;
   border: 1px solid #fff;
-  outline: 1px solid #000;
+  outline: 1px solid #ccc;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKElEQVQYlWO8f/8+AxJQUFBA5jIx4AU0lWb8//8/Mv/Bgwd0s5uANADTSgitzUUmWwAAAABJRU5ErkJggg==');
 }
+
+.blob-image:hover { outline: 1px solid #0088cc; }
