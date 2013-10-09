@@ -7,13 +7,13 @@
       <%= simple_format h(@commit.message) %>
 
       <div class="author-box">
-        <img src="<%= gravatar_url(@commit.author[:email]) %>" class="img-rounded">
+        <img src="<%= gravatar_url(@commit.author[:email]) %>" class="img-rounded" alt="<%= @commit.author[:name] %>">
         <strong><%= @commit.author[:name] %></strong>
         authored at <%= time_tag @commit.author[:time] %>
 
         <% unless @commit.committer[:name] == @commit.author[:name] %>
         <div class="author-box">
-          <img src="<%= gravatar_url(@commit.committer[:email]) %>" class="img-rounded">
+          <img src="<%= gravatar_url(@commit.committer[:email]) %>" class="img-rounded" alt="<%= @commit.committer[:name] %>">
           <strong><%= @commit.committer[:name] %></strong>
           committed at <%= time_tag @commit.committer[:time] %>
         </div>
@@ -50,7 +50,7 @@
           </p>
           <% end %>
 
-          <p><i class="icon-download"></i> <%= patch_link @commit, @repo.param %></p>
+          <p><span class="icon-download"></span> <%= patch_link @commit, @repo.param %></p>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
   <%= file_listing diff %>
 
   <% diff.patches.each_with_index do |patch, index| %>
-    <p><i class="icon-file"></i> <a name='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a></p>
+    <p><span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a></p>
 
     <% patch.hunks.each do |hunk| %>
       <%= highlight_diff hunk %>

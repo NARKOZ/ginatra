@@ -41,7 +41,7 @@ module Ginatra
     def empty_description_hint_for(repo)
       return '' unless repo.description.empty?
       hint_text = "Please edit the #{repo.path}description file for this repository and set the description for it."
-      "<i class='icon-exclamation-sign' title='#{hint_text}'></i>"
+      "<span class='icon-exclamation-sign' title='#{hint_text}'></span>"
     end
 
     # Returns file icon depending on filemode
@@ -119,11 +119,11 @@ module Ginatra
       list = []
       diff.deltas.each_with_index do |delta, index|
         if delta.deleted?
-          list << "<li class='deleted'><i class='icon-remove'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='deleted'><span class='icon-remove'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.added?
-          list << "<li class='added'><i class='icon-ok'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='added'><span class='icon-ok'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.modified?
-          list << "<li class='changed'><i class='icon-edit'></i> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='changed'><span class='icon-edit'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         end
       end
       "<ul class='unstyled'>#{list.join}</ul>"

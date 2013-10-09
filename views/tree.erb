@@ -4,13 +4,13 @@
   <%= partial :header, locals: { repo: @repo } %>
   <%= partial :tree_nav %>
 
-  <ul class="nav nav-tabs nav-stacked" id="js-tree">
-    <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>"></div>
+  <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>" alt="loading"></div>
 
+  <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <% @tree.each do |tree| %>
       <% next unless tree[:type] == nil && tree[:filemode] == 57344 %>
       <li class="tree">
-        <i class="icon-hdd"></i> <%= tree[:name] %>
+        <span class="icon-hdd"></span> <%= tree[:name] %>
       </li>
     <% end %>
 
@@ -18,7 +18,7 @@
       <% tree_path = "#{tree[:name]}"%>
       <li class="tree">
         <a href="<%= prefix_url(@path[:tree]) %>/<%= tree_path %>">
-          <i class="icon-folder-close"></i> <%= tree[:name] %>
+          <span class="icon-folder-close"></span> <%= tree[:name] %>
         </a>
       </li>
     <% end %>

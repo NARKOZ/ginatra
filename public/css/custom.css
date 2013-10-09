@@ -3,7 +3,7 @@ footer p { margin: 10px 0; }
 .header { margin-top: 15px; }
 .filter { margin-top: -20px; }
 .author-box { padding-top: 10px; }
-#loader { display: none; }
+#loader { display: none; margin-top: -20px; }
 pre { white-space: pre; }
 .clone-hint { font-style: italic; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }

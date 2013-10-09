@@ -69,7 +69,7 @@ describe Ginatra::Helpers do
   describe "#empty_description_hint_for" do
     it "returns a hint for a repo with empty description" do
       hint_text = "Please edit the #{repo.path}description file for this repository and set the description for it."
-      expect(empty_description_hint_for(repo)).to eq("<i class='icon-exclamation-sign' title='#{hint_text}'></i>")
+      expect(empty_description_hint_for(repo)).to eq("<span class='icon-exclamation-sign' title='#{hint_text}'></span>")
     end
   end
 
