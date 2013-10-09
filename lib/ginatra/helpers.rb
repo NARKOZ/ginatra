@@ -44,6 +44,17 @@ module Ginatra
       "<i class='icon-exclamation-sign' title='#{hint_text}'></i>"
     end
 
+    # Returns file icon depending on filemode
+    def file_icon(filemode)
+      case filemode
+        # symbolic link (120000)
+        when 40960 then "<span class='icon-share-alt'></span>"
+        # executable file (100755)
+        when 33261 then "<span class='icon-asterisk'></span>"
+        else "<span class='icon-file'></span>"
+      end
+    end
+
     # Takes an email and returns a url to a secure gravatar
     #
     # @param [String] email the email address

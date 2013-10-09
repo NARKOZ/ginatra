@@ -19,7 +19,7 @@
     <% @tree.each_blob do |blob| %>
       <li class="blob">
         <a href="<%= prefix_url(@path[:blob]) %>/<%= blob[:name] %>">
-          <i class="icon-file"></i> <%= blob[:name] %>
+          <%= file_icon blob[:filemode] %> <%= blob[:name] %>
         </a>
       </li>
     <% end %>

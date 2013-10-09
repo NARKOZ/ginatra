@@ -6,7 +6,7 @@
 <% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
 
 <div class="row-fluid">
-  <p class="pull-left"><i class="icon-file"></i> <%= @blob[:name] %></p>
+  <p class="pull-left"><%= file_icon @blob[:filemode] %> <%= @blob[:name] %></p>
   <p class="pull-right"><a href="<%= raw_blob_url %>">Raw</a></p>
 </div>
 

@@ -24,6 +24,26 @@ describe Ginatra::Helpers do
     end
   end
 
+  describe "#file_icon" do
+    context "symbolic link" do
+      it "returns icon share-alt" do
+        expect(file_icon(40960)).to eq("<span class='icon-share-alt'></span>")
+      end
+    end
+
+    context "executable file" do
+      it "returns icon asterisk" do
+        expect(file_icon(33261)).to eq("<span class='icon-asterisk'></span>")
+      end
+    end
+
+    context "non-executable file" do
+      it "returns icon file" do
+        expect(file_icon(33188)).to eq("<span class='icon-file'></span>")
+      end
+    end
+  end
+
   describe "#nicetime" do
     it "returns a time in nice format" do
       expect(nicetime(Time.now)).to eq('Dec 25, 2012 &ndash; 00:00')
