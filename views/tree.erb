@@ -7,6 +7,13 @@
   <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>"></div>
 
+    <% @tree.each do |tree| %>
+      <% next unless tree[:type] == nil && tree[:filemode] == 57344 %>
+      <li class="tree">
+        <i class="icon-hdd"></i> <%= tree[:name] %>
+      </li>
+    <% end %>
+
     <% @tree.each_tree do |tree| %>
       <% tree_path = "#{tree[:name]}"%>
       <li class="tree">
