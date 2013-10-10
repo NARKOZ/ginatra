@@ -40,7 +40,7 @@ module Ginatra
     # Returns hint to set repository description
     def empty_description_hint_for(repo)
       return '' unless repo.description.empty?
-      hint_text = "Please edit the #{repo.path}description file for this repository and set the description for it."
+      hint_text = "Edit `#{repo.path}description` file to set the repository description."
       "<span class='icon-exclamation-sign' title='#{hint_text}'></span>"
     end
 
