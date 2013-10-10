@@ -54,7 +54,7 @@
 
       <div class="span4">
         <ul class="nav nav-list">
-          <li class="nav-header">Branches</li>
+          <li class="nav-header">Branches (<%= @repo.branches.size %>)</li>
           <% @repo.branches.each do |branch| %>
             <li class="<%= 'active' if branch.name == params[:ref] %>">
               <a href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
