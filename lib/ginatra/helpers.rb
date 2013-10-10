@@ -102,9 +102,8 @@ module Ginatra
     # @param [String] ref the ref to link to.
     #
     # @return [String] the HTML containing the link to the feed.
-    def atom_feed_link(repo_param, ref=nil)
-      feed_url = ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
-      "<a href='#{feed_url}'>Feed</a>"
+    def atom_feed_url(repo_param, ref=nil)
+      ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
     end
 
     # Returns a HTML (+<ul>+) list of the files modified in a given commit.

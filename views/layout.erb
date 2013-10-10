@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title><%= title(sitename: 'Ginatra') %></title>
     <link href="<%= prefix_url("assets/application.css") %>" rel="stylesheet">
+    <% if @repo %>
+      <link href="<%= atom_feed_url @repo.name, params[:ref] %>" title="Commits to <%= @repo.name %><%= ": #{params[:ref]}" if params[:ref] %>" type="application/atom+xml" rel="alternate">
+    <% end %>
   </head>
   <body>
     <div class="container-fluid push">

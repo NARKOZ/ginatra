@@ -73,16 +73,16 @@ describe Ginatra::Helpers do
     end
   end
 
-  describe "#atom_feed_link" do
+  describe "#atom_feed_url" do
     context "when ref name passed" do
       it "returns a link to repo reference atom feed" do
-        expect(atom_feed_link('test', 'master')).to eq("<a href='/test/master.atom'>Feed</a>")
+        expect(atom_feed_url('test', 'master')).to eq("/test/master.atom")
       end
     end
 
     context "when ref name not passed" do
       it "returns a link to repo atom feed" do
-        expect(atom_feed_link('test')).to eq("<a href='/test.atom'>Feed</a>")
+        expect(atom_feed_url('test')).to eq("/test.atom")
       end
     end
   end
