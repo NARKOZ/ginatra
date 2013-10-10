@@ -62,7 +62,16 @@
   <%= file_listing diff %>
 
   <% diff.patches.each_with_index do |patch, index| %>
-    <p><span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a></p>
+    <div class="row-fluid">
+      <p class="pull-left">
+        <span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a>
+      </p>
+      <p class="pull-right">
+        <% unless patch.delta.deleted? %>
+          <a href="<%= prefix_url(@repo.param) %>/blob/<%= @commit.tree.oid %>/<%= patch.delta.new_file[:path] %>">view file</a>
+        <% end %>
+      </p>
+    </div>
 
     <% patch.hunks.each do |hunk| %>
       <%= highlight_diff hunk %>
