@@ -6,20 +6,20 @@ describe Ginatra::Helpers do
   let(:repo)   { Ginatra::RepoList.find('test') }
   let(:commit) { repo.commit('095955b') }
 
-  describe "#gravatar_url" do
-    context "when size passed" do
-      it "returns a gravatar url with defined size" do
+  describe "#gravatar_image_tag" do
+    context "when options passed" do
+      it "returns a gravatar image tag with custom options" do
         expect(
-          gravatar_url('john@example.com', 100)
-        ).to eq('https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=100')
+          gravatar_image_tag('john@example.com', size: 100, alt: 'John', class: 'avatar')
+        ).to eq("<img src='https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=100' alt='John' height='100' width='100' class='avatar'>")
       end
     end
 
-    context "when size not passed" do
-      it "returns a gravatar url with default size" do
+    context "when options not passed" do
+      it "returns a gravatar image tag with default options" do
         expect(
-          gravatar_url('john@example.com')
-        ).to eq('https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=40')
+          gravatar_image_tag('john@example.com')
+        ).to eq("<img src='https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=40' alt='john' height='40' width='40'>")
       end
     end
   end

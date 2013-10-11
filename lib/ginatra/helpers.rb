@@ -55,12 +55,17 @@ module Ginatra
       end
     end
 
-    # Takes an email and returns a url to a secure gravatar
+    # Takes an email and returns an image tag with gravatar
     #
     # @param [String] email the email address
-    # @return [String] the url to the gravatar
-    def gravatar_url(email, size=40)
-      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
+    # @param [Hash] options alt, class and size options for image tag
+    # @return [String] html image tag
+    def gravatar_image_tag(email, options={})
+      alt = options.fetch(:alt, email.gsub(/@\S*/, ''))
+      size = options.fetch(:size, 40)
+      url = "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
+
+      "<img src='#{url}' alt='#{alt}' height='#{size}' width='#{size}'#{" class='#{options[:class]}'" if options[:class]}>"
     end
 
     # Reformats the date into a user friendly date with html entities

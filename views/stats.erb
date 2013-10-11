@@ -46,7 +46,7 @@
             <% @stats.contributors.each do |contributor| %>
               <tr>
                 <td>
-                  <img src="<%= gravatar_url contributor.first, 20 %>" alt="<%= contributor.last[:author] %>">
+                  <%= gravatar_image_tag contributor.first, size: 20, alt: contributor.last[:author] %>
                   <a href="mailto:<%= contributor.first %>"><%= contributor.first %></a>
                 </td>
                 <td><%= contributor.last[:author] %></td>

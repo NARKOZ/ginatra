@@ -7,13 +7,13 @@
       <%= simple_format h(@commit.message) %>
 
       <div class="author-box">
-        <img src="<%= gravatar_url(@commit.author[:email]) %>" class="img-rounded" alt="<%= @commit.author[:name] %>">
+        <%= gravatar_image_tag @commit.author[:email], class: 'img-rounded', alt: @commit.author[:name] %>
         <strong><%= @commit.author[:name] %></strong>
         authored at <%= time_tag @commit.author[:time] %>
 
         <% unless @commit.committer[:name] == @commit.author[:name] %>
         <div class="author-box">
-          <img src="<%= gravatar_url(@commit.committer[:email]) %>" class="img-rounded" alt="<%= @commit.committer[:name] %>">
+          <%= gravatar_image_tag @commit.committer[:email], class: 'img-rounded', alt: @commit.committer[:name] %>
           <strong><%= @commit.committer[:name] %></strong>
           committed at <%= time_tag @commit.committer[:time] %>
         </div>
