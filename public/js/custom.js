@@ -1,4 +1,10 @@
 $(function() {
+  $('#js-toggle-file-listing').click(function() {
+    var text = $(this).text();
+    $(this).text(text == 'Show changed files' ? 'Hide changed files': 'Show changed files');
+    $('#js-file-listing').toggle();
+  });
+
   function selectText() {
     var range;
 

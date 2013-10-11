@@ -59,7 +59,11 @@
 
 <div id="diff">
   <% diff = @commit.parents.first.diff(@commit) %>
-  <%= file_listing diff %>
+
+  <p><button class="btn" type="button" id="js-toggle-file-listing">Show changed files</button></p>
+  <div class="hide" id="js-file-listing">
+    <%= file_listing diff %>
+  </div>
 
   <% diff.patches.each_with_index do |patch, index| %>
     <div class="row-fluid">
