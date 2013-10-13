@@ -6,6 +6,7 @@ footer p { margin: 10px 0; }
 #loader { display: none; margin-top: -20px; }
 pre { white-space: pre; }
 .clone-hint { font-style: italic; }
+.dropdown-hint { padding: 3px 20px; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }
 
 #diff { padding-top: 20px; }

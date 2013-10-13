@@ -1,15 +1,34 @@
 <% if @repo.branch_exists?(params[:tree]) %>
-  <ul class="nav nav-pills">
-    <li>
-      <a href="<%= prefix_url(@repo.param) %>/<%= params[:tree] %>">Commits</a>
-    </li>
-    <li class="active">
-      <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
-    </li>
-    <li>
-      <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:tree] %>">Stats</a>
-    </li>
-  </ul>
+  <div class="row-fluid">
+    <ul class="nav nav-pills pull-left">
+      <li>
+        <a href="<%= prefix_url(@repo.param) %>/<%= params[:tree] %>">Commits</a>
+      </li>
+      <li class="active">
+        <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
+      </li>
+      <li>
+        <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:tree] %>">Stats</a>
+      </li>
+    </ul>
+
+    <div class="btn-group pull-right">
+      <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+        <%= params[:tree] %> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-hint">Branches</li>
+        <li class="divider"></li>
+        <% @repo.branches.each do |branch| %>
+          <% if @blob %>
+            <li><a href="<%= prefix_url(@repo.param) %>/blob/<%= branch.name %>/<%= params[:splat].first %>"><%= branch.name %></a></li>
+          <% else %>
+            <li><a href="<%= prefix_url(@repo.param) %>/tree/<%= branch.name %><%= "/#{params[:splat].first}" unless params[:splat].nil? || params[:splat].empty? %>"><%= branch.name %></a></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 <% end %>
 
 <% unless params[:splat].nil? or params[:splat].empty? %>
