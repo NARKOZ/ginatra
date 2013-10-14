@@ -4,7 +4,7 @@
   <%= partial :header, locals: { repo: @repo } %>
   <%= partial :tree_nav %>
 
-  <div id="loader"><img src="<%= prefix_url("img/spin.gif") %>" alt="loading"></div>
+  <div class="hide" id="loader"><img src="<%= prefix_url("img/spin.gif") %>" alt="loading"></div>
 
   <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <% @tree.each do |tree| %>

@@ -123,11 +123,11 @@ module Ginatra
       list = []
       diff.deltas.each_with_index do |delta, index|
         if delta.deleted?
-          list << "<li class='deleted'><span class='icon-remove'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='deleted'><span class='icon-remove' title='deleted'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.added?
-          list << "<li class='added'><span class='icon-ok'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='added'><span class='icon-ok' title='added'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.modified?
-          list << "<li class='changed'><span class='icon-edit'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='changed'><span class='icon-edit' title='modified'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         end
       end
       "<ul class='unstyled'>#{list.join}</ul>"

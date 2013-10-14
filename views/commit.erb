@@ -60,7 +60,11 @@
 <div id="diff">
   <% diff = @commit.parents.first.diff(@commit) %>
 
-  <p><button class="btn" type="button" id="js-toggle-file-listing">Show changed files</button></p>
+  <p>
+    <button class="btn btn-primary"><%= diff.deltas.size %> changed files</button>
+    <button class="btn" type="button" id="js-toggle-file-listing">Show file listing</button>
+  </p>
+
   <div class="hide" id="js-file-listing">
     <%= file_listing diff %>
   </div>

@@ -1,7 +1,7 @@
 $(function() {
   $('#js-toggle-file-listing').click(function() {
     var text = $(this).text();
-    $(this).text(text == 'Show changed files' ? 'Hide changed files': 'Show changed files');
+    $(this).text(text == 'Show file listing' ? 'Hide file listing': 'Show file listing');
     $('#js-file-listing').toggle();
   });
 
