@@ -1,4 +1,8 @@
 rvm:
   - 1.9.3
   - 2.0.0
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: change # default: always
 script: "bundle exec rake travis"
