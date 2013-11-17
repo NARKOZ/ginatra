@@ -52,6 +52,18 @@ module Ginatra
       Rugged::Branch.each(@repo, :local).sort_by(&:name)
     end
 
+    # Returns list of branches containing the commit
+    def branches_with(commit)
+      b = []
+      branches.each do |branch|
+        walker = Rugged::Walker.new(@repo)
+        walker.sorting(Rugged::SORT_TOPO)
+        walker.push(@repo.ref("refs/heads/#{branch.name}").target)
+        walker.collect { |c| b << branch if c.oid == commit }
+      end
+      b
+    end
+
     # Checks existence of branch by name
     def branch_exists?(branch_name)
       !Rugged::Branch.lookup(@repo, branch_name).nil?

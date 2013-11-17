@@ -45,6 +45,15 @@ describe Ginatra::Repo do
     end
   end
 
+  describe "#branches_with" do
+    it "returns an array of branches including commit" do
+      branches = repo.branches_with('095955b6402c30ef24520bafdb8a8687df0a98d3')
+      expect(branches).to be_a_kind_of(Array)
+      expect(branches.size).to eq(1)
+      expect(branches.first.name).to eq('master')
+    end
+  end
+
   describe "#branch_exists?" do
     it "checks existence of branch" do
       expect(repo.branch_exists?('master')).to be_true

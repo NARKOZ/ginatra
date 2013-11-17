@@ -19,6 +19,16 @@
         </div>
         <% end %>
       </div>
+
+      <br>
+      <p>
+        as seen in:
+        <% @repo.branches_with(@commit.oid).each do |branch| %>
+          <a href="<%= h prefix_url(@repo.param) %>/tree/<%= h branch.name %>">
+            <%= h branch.name %>
+          </a>
+        <% end %>
+      </p>
     </div>
     <div class="span7">
       <div class="row-fluid">
