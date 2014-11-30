@@ -61,11 +61,16 @@ module Ginatra
     # @param [String] repo the repository url-sanitised-name
     get '/:repo' do
       @repo = RepoList.find(params[:repo])
-      @commits = @repo.commits
-      params[:page] = 1
-      params[:ref]  = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
-      @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
-      erb :log
+
+      if @repo.branches.none?
+        erb :empty_repo
+      else
+        params[:page] = 1
+        params[:ref] = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
+        @commits = @repo.commits(params[:ref])
+        @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
+        erb :log
+      end
     end
 
     # The atom feed of recent commits to a certain branch of a +repo+.
@@ -90,7 +95,7 @@ module Ginatra
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
       params[:page] = 1
-      @next_commits = @repo.commits(params[:ref], 10, 10).any?
+      @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
       erb :log
     end
 
