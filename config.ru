@@ -12,6 +12,9 @@ if Ginatra.config.git_clone_enabled?
   require 'mkmf'
   require 'git/webby'
 
+  # Make the MakeMakefile logger write file output to null
+  module MakeMakefile::Logging; @logfile = File::NULL; end
+
   git_executable = find_executable 'git'
   raise 'Git executable not found in PATH' if git_executable.nil?
 
