@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Ginatra::Helpers do
-  before { Time.stub(:now).and_return(Time.new(2012, 12, 25, 0, 0, 0, '+00:00')) }
+  before { allow(Time).to receive(:now).and_return(Time.new(2012, 12, 25, 0, 0, 0, '+00:00')) }
 
   let(:repo)   { Ginatra::RepoList.find('test') }
   let(:commit) { repo.commit('095955b') }

@@ -4,10 +4,17 @@ describe Ginatra::Repo do
   let(:repo) { Ginatra::RepoList.find('test') }
 
   describe "repo" do
-    subject           { repo }
-    its(:name)        { should == 'test' }
-    its(:param)       { should == 'test' }
-    its(:description) { should == '' }
+    it "returns name" do
+      expect(repo.name).to eq("test")
+    end
+
+    it "returns param" do
+      expect(repo.param).to eq("test")
+    end
+
+    it "returns description" do
+      expect(repo.description).to eq("")
+    end
   end
 
   describe "#commit" do
@@ -56,8 +63,8 @@ describe Ginatra::Repo do
 
   describe "#branch_exists?" do
     it "checks existence of branch" do
-      expect(repo.branch_exists?('master')).to be_true
-      expect(repo.branch_exists?('master-404')).to be_false
+      expect(repo.branch_exists?('master')).to be true
+      expect(repo.branch_exists?('master-404')).to be false
     end
   end
 end
