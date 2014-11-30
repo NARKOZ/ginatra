@@ -27,8 +27,7 @@ module Ginatra
 
     # Return a commit corresponding to tag in the repo.
     def commit_by_tag(name)
-      ref = @repo.ref("refs/tags/#{name}")
-      @repo.lookup(ref.target)
+      @repo.ref("refs/tags/#{name}").target
     end
 
     # Return a list of commits in a certain branch, including pagination options and all the refs.
@@ -49,7 +48,7 @@ module Ginatra
 
     # Returns list of branches sorted by name alphabetically
     def branches
-      Rugged::Branch.each(@repo, :local).sort_by(&:name)
+      @repo.branches.each(:local).sort
     end
 
     # Returns list of branches containing the commit
@@ -66,7 +65,7 @@ module Ginatra
 
     # Checks existence of branch by name
     def branch_exists?(branch_name)
-      !Rugged::Branch.lookup(@repo, branch_name).nil?
+      @repo.branches.exists?(branch_name)
     end
 
     # Find blob by oid
@@ -77,7 +76,7 @@ module Ginatra
     # Find tree by tree oid or branch name
     def find_tree(oid)
       if branch_exists?(oid)
-        last_commit_sha = @repo.ref("refs/heads/#{oid}").target
+        last_commit_sha = @repo.ref("refs/heads/#{oid}").target.oid
         lookup(last_commit_sha).tree
       else
         lookup(oid)

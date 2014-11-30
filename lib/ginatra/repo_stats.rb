@@ -41,8 +41,7 @@ module Ginatra
     #
     # @return [String] License name
     def license
-      ref = @repo.ref("refs/heads/#{@branch}")
-      last_commit = @repo.lookup(ref.target)
+      last_commit = @repo.ref("refs/heads/#{@branch}").target
       license = @repo.blob_at(last_commit.oid, 'LICENSE') || @repo.blob_at(last_commit.oid, 'LICENSE.txt')
 
       if license.nil?

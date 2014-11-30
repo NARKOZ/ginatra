@@ -67,7 +67,7 @@
 
           <li class="nav-header">Tags (<%= @repo.tags.count %>)</li>
           <% if @repo.tags.any? %>
-            <% @repo.tags.sort.reverse_each do |tag| %>
+            <% @repo.tags.each_name do |tag| %>
               <li>
                 <a href="<%= h prefix_url(@repo.param) %>/tag/<%= h tag %>">
                   <%= h tag %>

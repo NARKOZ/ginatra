@@ -48,7 +48,7 @@ describe Ginatra::Repo do
       expect(branches).to be_a_kind_of(Array)
       expect(branches.size).to eq(1)
       expect(branches.first.name).to eq('master')
-      expect(branches.first.target).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+      expect(branches.first.target.oid).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
     end
   end
 
