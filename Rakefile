@@ -6,7 +6,7 @@ task :clone_repo do
   repos_dir = File.expand_path('./repos')
   FileUtils.cd(repos_dir) do
     puts `git clone git://github.com/atmos/hancock-client.git test`
-  end
+  end unless Dir.exists?("#{repos_dir}/test")
 end
 
 RSpec::Core::RakeTask.new(:spec) do |spec|
@@ -14,5 +14,4 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.rspec_opts = ['--color']
 end
 
-task default: :spec
-task travis: ['clone_repo', 'spec']
+task default: ['clone_repo', 'spec']
