@@ -48,7 +48,7 @@ module Ginatra
 
     # Returns list of branches sorted by name alphabetically
     def branches
-      @repo.branches.each(:local).sort
+      @repo.branches.each(:local).sort_by {|b| b.name }
     end
 
     # Returns list of branches containing the commit
