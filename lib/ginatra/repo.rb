@@ -27,7 +27,13 @@ module Ginatra
 
     # Return a commit corresponding to tag in the repo.
     def commit_by_tag(name)
-      @repo.ref("refs/tags/#{name}").target
+      target = @repo.ref("refs/tags/#{name}").target
+
+      if target.is_a? Rugged::Tag::Annotation
+        target = target.target
+      end
+
+      target
     end
 
     # Return a list of commits in a certain branch, including pagination options and all the refs.
