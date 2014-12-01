@@ -27,6 +27,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rack-test'
   gem.add_development_dependency 'sinatra-contrib'
-  gem.add_development_dependency 'better_errors'
+  gem.add_development_dependency 'better_errors', '~> 1.1.0'
   gem.add_development_dependency 'binding_of_caller'
 end
