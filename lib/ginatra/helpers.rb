@@ -170,7 +170,7 @@ module Ginatra
     # @return [String] highlighted HTML.code
     def highlight_source(source, filename='')
       source    = source.force_encoding(Encoding::UTF_8)
-      formatter = Rouge::Formatters::HTML.new(line_numbers: true)
+      formatter = Rouge::Formatters::HTML.new(line_numbers: true, wrap: false)
       lexer     = Rouge::Lexer.guess_by_filename(filename)
 
       if lexer == Rouge::Lexers::PlainText

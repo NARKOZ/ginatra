@@ -11,6 +11,9 @@ pre { white-space: pre; }
 .img-rounded { border-radius: 4px; }
 .clone-hint { font-style: italic; }
 .dropdown-hint { padding: 3px 20px; }
+.highlight { border-radius: 4px; margin-bottom: 20px; }
+.highlight pre { border: none; background-color: #f8f8f8; }
+.highlight table td { padding: 0; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }
 
 #diff { padding-top: 20px; }

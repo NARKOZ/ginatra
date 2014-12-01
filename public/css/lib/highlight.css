@@ -1,6 +1,5 @@
-.highlight table { border-spacing: 0; }
 .highlight table td { padding: 5px; }
-.highlight table .gutter { text-align: right; }
+.highlight table pre { margin: 0; }
 .highlight .cm {
   color: #999988;
   font-style: italic;
@@ -18,7 +17,7 @@
   font-weight: bold;
   font-style: italic;
 }
-.highlight .c {
+.highlight .c, .highlight .cd {
   color: #999988;
   font-style: italic;
 }
@@ -83,7 +82,7 @@
   color: #445588;
   font-weight: bold;
 }
-.highlight .k {
+.highlight .k, .highlight .kv {
   color: #000000;
   font-weight: bold;
 }
@@ -102,7 +101,7 @@
 .highlight .mo {
   color: #009999;
 }
-.highlight .m {
+.highlight .m, .highlight .mb, .highlight .mx {
   color: #009999;
 }
 .highlight .sb {
