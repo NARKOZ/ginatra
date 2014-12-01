@@ -8,9 +8,11 @@
 
   <ul class="nav nav-tabs nav-stacked" id="js-tree">
     <% @tree.each do |tree| %>
-      <% next unless tree[:type] == nil && tree[:filemode] == 57344 %>
+      <% next unless tree[:type] == :commit && tree[:filemode] == 57344 %>
       <li class="tree">
-        <span class="icon-hdd"></span> <%= tree[:name] %>
+        <a title="submodule <%= tree[:name] %> @ <%= tree[:oid] %>">
+          <span class="icon-hdd"></span> <%= tree[:name] %>
+        </a>
       </li>
     <% end %>
 
