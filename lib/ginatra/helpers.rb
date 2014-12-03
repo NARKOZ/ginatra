@@ -65,7 +65,14 @@ module Ginatra
       size = options.fetch(:size, 40)
       url = "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
 
-      "<img src='#{url}' alt='#{alt}' height='#{size}' width='#{size}'#{" class='#{options[:class]}'" if options[:class]}>"
+      if options[:lazy]
+        placeholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+        tag = "<img data-original='#{url}' src='#{placeholder}' alt='#{h alt}' height='#{size}' width='#{size}' class='js-lazy #{options[:class]}'>"
+      else
+        tag = "<img src='#{url}' alt='#{h alt}' height='#{size}' width='#{size}'#{" class='#{options[:class]}'" if options[:class]}>"
+      end
+
+      tag
     end
 
     # Reformats the date into a user friendly date with html entities

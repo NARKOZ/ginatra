@@ -29,7 +29,7 @@
             <% @commits.each do |commit| %>
               <% url = prefix_url("#{@repo.param}/commit/#{commit.oid}") %>
               <tr class="js-nav" data-href="<%= url %>">
-                <td><%= gravatar_image_tag commit.author[:email], class: 'img-rounded', alt: commit.author[:name] %> <%= commit.author[:name] %></td>
+                <td><%= gravatar_image_tag commit.author[:email], class: 'img-rounded', alt: commit.author[:name], lazy: true %> <%= commit.author[:name] %></td>
                 <td><a href="<%= url %>"><%= truncate(h(commit.message), { length: 140, separator: ' ' }) %></a></td>
                 <td><%= time_tag(commit.committer[:time]) %></td>
               </tr>

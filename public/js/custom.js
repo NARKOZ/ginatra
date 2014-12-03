@@ -1,4 +1,9 @@
 $(function() {
+  $('.js-lazy').lazyload({
+    effect: 'fadeIn',
+    threshold: 200
+  });
+
   $('#js-toggle-file-listing').click(function() {
     var text = $(this).text();
     $(this).text(text == 'Show file listing' ? 'Hide file listing': 'Show file listing');
