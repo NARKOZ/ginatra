@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1><%= title 'Repositories' %> <small><%= h Ginatra.config.description %></small></h1>
-  <% if Ginatra.config.git_clone_enabled? %>
+  <% if Ginatra.config.git_clone_enabled? && @repositories.any? %>
     <div class="muted clone-hint">
       To clone one of these repositories, install git, and run:
       git clone <%= url %><strong>repo-name</strong>
