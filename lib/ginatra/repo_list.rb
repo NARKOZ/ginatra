@@ -29,7 +29,7 @@ module Ginatra
     def refresh
       list.clear
       Ginatra.config.git_dirs.map do |git_dir|
-        files = Dir.glob(git_dir)
+        files = Dir.glob(git_dir).sort
         files.each { |e| add(e) unless Ginatra.config.ignored_files.include?(File.split(e).last) }
       end
       list
