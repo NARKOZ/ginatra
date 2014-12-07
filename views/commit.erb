@@ -8,13 +8,13 @@
 
       <div class="author-box">
         <%= gravatar_image_tag @commit.author[:email], class: 'img-rounded', alt: @commit.author[:name] %>
-        <strong><%= @commit.author[:name] %></strong>
+        <strong data-toggle="tooltip" data-placement="bottom" title="<%= @commit.author[:email] %>"><%= @commit.author[:name] %></strong>
         authored at <%= time_tag @commit.author[:time] %>
 
         <% unless @commit.committer[:name] == @commit.author[:name] %>
         <div class="author-box">
           <%= gravatar_image_tag @commit.committer[:email], class: 'img-rounded', alt: @commit.committer[:name] %>
-          <strong><%= @commit.committer[:name] %></strong>
+          <strong data-toggle="tooltip" data-placement="bottom" title="<%= @commit.committer[:email] %>"><%= @commit.committer[:name] %></strong>
           committed at <%= time_tag @commit.committer[:time] %>
         </div>
         <% end %>

@@ -1,4 +1,6 @@
 $(function() {
+  $('[data-toggle="tooltip"]').tooltip();
+
   $('.js-lazy').lazyload({
     effect: 'fadeIn',
     threshold: 200
