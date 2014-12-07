@@ -1,6 +1,5 @@
 require 'sinatra/base'
 require 'sinatra/partials'
-require 'json'
 require 'rouge'
 require 'ginatra/config'
 require 'ginatra/errors'
