@@ -1,6 +1,9 @@
 require 'singleton'
 
 module Ginatra
+  # Raised when repo not found in list.
+  class RepoNotFound < StandardError; end
+
   # A singleton class that lets us make and use a constantly updating
   # list of repositories.
   class RepoList
@@ -76,7 +79,9 @@ module Ginatra
         repo
       else
         refresh
-        list.find { |r| r.param == local_param }
+        repo = list.find { |r| r.param == local_param }
+        raise Ginatra::RepoNotFound if repo.nil?
+        repo
       end
     end
 

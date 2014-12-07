@@ -35,6 +35,18 @@ module Ginatra
       Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
+    not_found do
+      erb :'404', layout: false
+    end
+
+    error Ginatra::RepoNotFound do
+      halt 404, erb(:'404', layout: false)
+    end
+
+    error 500 do
+      erb :'500', layout: false
+    end
+
     # The root route
     get '/' do
       @repositories = Ginatra::RepoList.list
