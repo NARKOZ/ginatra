@@ -55,6 +55,12 @@ module Ginatra
       end
     end
 
+    # Masks original email
+    def secure_mail(email)
+      local, domain = email.split('@')
+      "#{local[0..3]}...@#{domain}"
+    end
+
     # Takes an email and returns an image tag with gravatar
     #
     # @param [String] email the email address

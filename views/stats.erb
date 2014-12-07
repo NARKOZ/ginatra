@@ -47,7 +47,7 @@
               <tr>
                 <td>
                   <%= gravatar_image_tag contributor.first, size: 20, alt: contributor.last[:author], lazy: true %>
-                  <a href="mailto:<%= contributor.first %>"><%= contributor.first %></a>
+                  <%= secure_mail contributor.first %>
                 </td>
                 <td><%= contributor.last[:author] %></td>
                 <td><%= contributor.last[:commits_count] %></td>

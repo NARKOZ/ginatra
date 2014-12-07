@@ -6,6 +6,12 @@ describe Ginatra::Helpers do
   let(:repo)   { Ginatra::RepoList.find('test') }
   let(:commit) { repo.commit('095955b') }
 
+  describe "#secure_mail" do
+    it "returns masked email" do
+      expect(secure_mail('eggscellent@example.com')).to eq('eggs...@example.com')
+    end
+  end
+
   describe "#gravatar_image_tag" do
     context "when options passed" do
       it "returns a gravatar image tag with custom options" do
