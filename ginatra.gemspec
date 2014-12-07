@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 1.9"
 
-  gem.add_dependency 'sinatra',   '~> 1.4.2'
+  gem.add_dependency 'sinatra',   '~> 1.4.5'
   gem.add_dependency 'rugged',    '~> 0.21.2'
   gem.add_dependency 'rouge',     '~> 1.7.4'
   gem.add_dependency 'sprockets', '~> 2.0'
