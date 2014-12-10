@@ -1,9 +1,6 @@
 require 'singleton'
 
 module Ginatra
-  # Raised when repo not found in list.
-  class RepoNotFound < StandardError; end
-
   # A singleton class that lets us make and use a constantly updating
   # list of repositories.
   class RepoList

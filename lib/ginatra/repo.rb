@@ -44,6 +44,8 @@ module Ginatra
     #
     # @return [Array<Rugged::Commit>] the array of commits.
     def commits(branch='master', max_count=10, skip=0)
+      raise Ginatra::InvalidRef unless branch_exists?(branch)
+
       walker = Rugged::Walker.new(@repo)
       walker.sorting(Rugged::SORT_TOPO)
       walker.push(@repo.ref("refs/heads/#{branch}").target)

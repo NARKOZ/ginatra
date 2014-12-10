@@ -38,7 +38,8 @@ module Ginatra
       erb :'404', layout: false
     end
 
-    error Ginatra::RepoNotFound do
+    error Ginatra::RepoNotFound, Ginatra::InvalidRef,
+          Rugged::OdbError, Rugged::ObjectError, Rugged::InvalidError do
       halt 404, erb(:'404', layout: false)
     end
 

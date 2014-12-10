@@ -34,11 +34,19 @@ describe Ginatra::Repo do
   end
 
   describe "#commits" do
-    it "returns an array of commits" do
-      commits = repo.commits('master', 2)
-      expect(commits).to be_a_kind_of(Array)
-      expect(commits.size).to eq(2)
-      expect(commits.first.oid).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+    context "when branch exist" do
+      it "returns an array of commits" do
+        commits = repo.commits('master', 2)
+        expect(commits).to be_a_kind_of(Array)
+        expect(commits.size).to eq(2)
+        expect(commits.first.oid).to eq('095955b6402c30ef24520bafdb8a8687df0a98d3')
+      end
+    end
+
+    context "when branch not exist" do
+      it "raises Ginatra::InvalidRef" do
+        expect { repo.commits('404-branch') }.to raise_error(Ginatra::InvalidRef)
+      end
     end
   end
 
