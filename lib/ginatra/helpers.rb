@@ -3,8 +3,10 @@ require 'digest/md5'
 module Ginatra
   # Helpers used in the views, and not only.
   module Helpers
-    include Rack::Utils
-    alias_method :h, :escape_html
+    # Escapes string to HTML entities
+    def h(text)
+      Rack::Utils.escape_html(text)
+    end
 
     # Checks X-PJAX header
     def is_pjax?
