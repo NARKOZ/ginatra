@@ -27,8 +27,8 @@ global_opts = OptionParser.new do |opts|
 end
 
 server_opts = {
-  'server' => OptionParser.new do |opts|
-    opts.banner = "Usage: ginatra server <options> <command>"
+  'run' => OptionParser.new do |opts|
+    opts.banner = "Usage: ginatra run <options>"
 
     opts.separator ""
     opts.separator "Options:"
@@ -41,13 +41,28 @@ server_opts = {
       options[:host] = host
     end
 
-    opts.on('', 'start', 'Start Ginatra web server') do
-      root_path = File.expand_path("#{__FILE__}/../..")
-      Rack::Server.start(
-        Port: options[:port],
-        Host: options[:host],
-        config: "#{root_path}/config.ru"
-      )
+    opts.on 'Start Ginatra web server' do
+      environment = ENV['RACK_ENV'] || 'production'
+      rack_config = File.expand_path("#{__FILE__}/../../config.ru")
+      pid_file    = File.expand_path("#{__FILE__}/../../ginatra.pid")
+
+      system "rackup -D -E #{environment} -P #{pid_file} -p #{options[:port]} -o #{options[:host]} #{rack_config}"
+      puts "Ginatra runs on #{options[:host]}:#{options[:port]}"
+    end
+  end,
+
+  'stop' => OptionParser.new do |opts|
+    opts.banner = "Usage: ginatra stop"
+
+    opts.on 'Stop Ginatra web server' do
+      pid_file = File.expand_path("#{__FILE__}/../../ginatra.pid")
+
+      if File.exist?(pid_file)
+        pid = File.read(pid_file)
+        Process.kill('INT', pid.to_i)
+        File.delete(pid_file)
+        puts "Stopped Ginatra web server"
+      end
     end
   end
 }
@@ -55,7 +70,9 @@ server_opts = {
 if ARGV.size.zero?
   puts global_opts
   puts
-  puts server_opts['server']
+  puts server_opts['run']
+  puts
+  puts server_opts['stop']
   exit 1
 end
 
