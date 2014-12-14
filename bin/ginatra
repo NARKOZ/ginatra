@@ -64,15 +64,27 @@ server_opts = {
         puts "Stopped Ginatra web server"
       end
     end
+  end,
+
+  'status' => OptionParser.new do |opts|
+    opts.banner = "Usage: ginatra status"
+
+    opts.on 'Get status of Ginatra web server' do
+      pid_file = File.expand_path("#{__FILE__}/../../ginatra.pid")
+      status = File.exist?(pid_file) ? "running.. (pid: #{File.read(pid_file).to_i})" : 'NOT running'
+      puts "Ginatra is #{status}"
+    end
   end
 }
 
 if ARGV.size.zero?
   puts global_opts
-  puts
-  puts server_opts['run']
-  puts
-  puts server_opts['stop']
+
+  %w(run stop status).each do |cmd|
+    puts
+    puts server_opts[cmd]
+  end
+
   exit 1
 end
 
