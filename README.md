@@ -42,9 +42,27 @@ You can install old release via `gem install ginatra`.
 
 ## Configuration
 
-You can change settings by editing `config.yml` file in root folder.  
+You can change settings by editing `config.yml` file in root folder.
 Alternatively you can create `~/.ginatra/config.yml` file with your own
 settings, use
 [`config.yml`](https://github.com/NARKOZ/ginatra/blob/master/config.yml) as a reference.
 
 You need to restart web server after applying changes to config file.
+
+## Contributing
+
+**Ways _you_ can contribute:**
+
+* by installing and testing the software
+* by using the issue tracker for...
+  * reporting bugs
+  * suggesting new features
+* by improving the code through:
+  * writing or editing documentation
+  * writing test specifications
+  * refactoring the code (**no patch is too small**: fix typos, add comments,
+  clean up inconsistent whitespace).
+  * reviewing open Pull Requests
+
+Check out [CONTRIBUTING.md](https://github.com/NARKOZ/ginatra/blob/master/CONTRIBUTING.md)
+for more information.
