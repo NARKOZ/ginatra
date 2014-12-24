@@ -198,7 +198,7 @@ module Ginatra
     # Formats the text to remove multiple spaces and newlines, and then inserts
     # HTML linebreaks.
     #
-    # Brought from Rails: ActionView::Helpers::TextHelper#simple_format
+    # Borrowed from Rails: ActionView::Helpers::TextHelper#simple_format
     # and simplified to just use <p> tags without any options, then modified
     # more later.
     #
