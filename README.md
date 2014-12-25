@@ -1,7 +1,9 @@
 # Ginatra
 
-[![Build Status](https://travis-ci.org/NARKOZ/ginatra.png?branch=master)](https://travis-ci.org/NARKOZ/ginatra)
-[![Gem Version](https://fury-badge.herokuapp.com/rb/ginatra.png)](http://badge.fury.io/rb/ginatra)
+[![Build Status](https://img.shields.io/travis/NARKOZ/ginatra/master.svg?style=flat)](https://travis-ci.org/NARKOZ/ginatra)
+[![Code Climate](https://img.shields.io/codeclimate/github/NARKOZ/ginatra.svg?style=flat)](https://codeclimate.com/github/NARKOZ/ginatra)
+[![Gem Version](https://img.shields.io/gem/v/ginatra.svg?style=flat)](https://rubygems.org/gems/ginatra)
+[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/NARKOZ/ginatra/blob/master/LICENSE.txt)
 
 **Ginatra** is a Git web interface. It allows browsing a git repository (or a set of
 git repositories) using a web browser.
