@@ -34,6 +34,10 @@ module Ginatra
       Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
+    def cache(obj)
+      etag obj if settings.production?
+    end
+
     not_found do
       erb :'404', layout: false
     end
@@ -61,9 +65,14 @@ module Ginatra
     get '/:repo.atom' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits
-      return "" if @commits.empty?
-      content_type 'application/xml'
-      erb :atom, layout: false
+
+      if @commits.empty?
+        return ''
+      else
+        cache "#{@commits.first.oid}/atom"
+        content_type 'application/xml'
+        erb :atom, layout: false
+      end
     end
 
     # The html page for a +repo+.
@@ -80,6 +89,7 @@ module Ginatra
         params[:page] = 1
         params[:ref] = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
         @commits = @repo.commits(params[:ref])
+        cache "#{@commits.first.oid}/log"
         @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
         erb :log
       end
@@ -92,9 +102,14 @@ module Ginatra
     get '/:repo/:ref.atom' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
-      return "" if @commits.empty?
-      content_type 'application/xml'
-      erb :atom, layout: false
+
+      if @commits.empty?
+        return ''
+      else
+        cache "#{@commits.first.oid}/atom/ref"
+        content_type 'application/xml'
+        erb :atom, layout: false
+      end
     end
 
     # The html page for a given +ref+ of a +repo+.
@@ -106,6 +121,7 @@ module Ginatra
     get '/:repo/:ref' do
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref])
+      cache "#{@commits.first.oid}/ref" if @commits.any?
       params[:page] = 1
       @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
       erb :log
@@ -131,6 +147,7 @@ module Ginatra
       content_type :txt
       repo   = RepoList.find(params[:repo])
       commit = repo.commit(params[:commit])
+      cache "#{commit.oid}/patch"
       diff   = commit.parents.first.diff(commit)
       diff.patch
     end
@@ -142,6 +159,7 @@ module Ginatra
     get '/:repo/commit/:commit' do
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit(params[:commit])
+      cache @commit.oid
       erb :commit
     end
 
@@ -152,6 +170,7 @@ module Ginatra
     get '/:repo/tag/:tag' do
       @repo = RepoList.find(params[:repo])
       @commit = @repo.commit_by_tag(params[:tag])
+      cache "#{@commit.oid}/tag"
       erb :commit
     end
 
@@ -162,6 +181,7 @@ module Ginatra
     get '/:repo/tree/:tree' do
       @repo = RepoList.find(params[:repo])
       @tree = @repo.find_tree(params[:tree])
+      cache @tree.oid
 
       @path = {
         blob: "#{params[:repo]}/blob/#{params[:tree]}",
@@ -179,6 +199,7 @@ module Ginatra
     get '/:repo/tree/:tree/*' do
       @repo = RepoList.find(params[:repo])
       @tree = @repo.find_tree(params[:tree])
+      cache "#{@tree.oid}/#{params[:splat].first}"
 
       @tree.walk(:postorder) do |root, entry|
         @tree = @repo.lookup entry[:oid] if "#{root}#{entry[:name]}" == params[:splat].first
@@ -203,6 +224,7 @@ module Ginatra
         @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
 
+      cache @blob[:oid]
       erb :blob, layout: !is_pjax?
     end
 
@@ -220,6 +242,7 @@ module Ginatra
         @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
 
+      cache "#{@blob[:oid]}/#{@tree.oid}"
       erb :blob, layout: !is_pjax?
     end
 
@@ -237,6 +260,7 @@ module Ginatra
         @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
       end
 
+      cache "#{@blob[:oid]}/#{@tree.oid}/raw"
       blob = @repo.find_blob @blob[:oid]
       if blob.binary?
         content_type 'application/octet-stream'
@@ -256,6 +280,7 @@ module Ginatra
       params[:page] = params[:page].to_i
       @repo = RepoList.find(params[:repo])
       @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
+      cache "#{@commits.first.oid}/page/#{params[:page]}/ref/#{params[:ref]}" if @commits.any?
       @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).nil?
       if params[:page] - 1 > 0
         @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
