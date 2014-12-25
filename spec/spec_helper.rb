@@ -1,9 +1,8 @@
+ENV['RACK_ENV'] = 'test'
+
 require 'rspec'
 require 'ginatra'
-require 'sinatra'
 require 'rack/test'
-
-set :environment, :test
 
 def app
   Ginatra::App
