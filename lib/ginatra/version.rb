@@ -1,3 +1,4 @@
 module Ginatra
-  VERSION = "3.0.1"
+  VERSION = "4.0.0"
+  RELEASE_NAME = "Aurora"
 end

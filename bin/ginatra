@@ -18,7 +18,7 @@ global_opts = OptionParser.new do |opts|
 
   opts.on('-v', '--version', 'Print version and exit') do
     require_relative '../lib/ginatra/version'
-    puts "Ginatra #{Ginatra::VERSION}"
+    puts "Ginatra #{Ginatra::VERSION} #{Ginatra::RELEASE_NAME}"
     exit
   end
 
