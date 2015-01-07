@@ -5,8 +5,8 @@ require 'ginatra/version'
 Gem::Specification.new do |gem|
   gem.name          = "ginatra"
   gem.version       = Ginatra::VERSION
-  gem.summary       = "A Gitweb Clone in Sinatra and Grit"
-  gem.description   = "Host your own git repository browser through the power of Sinatra and Grit"
+  gem.summary       = "Web interface for git repositories"
+  gem.description   = "Git repository viewer with a rocking good web interface"
   gem.homepage      = "https://github.com/narkoz/ginatra"
   gem.email         = ["mail@narkoz.me"]
   gem.authors       = ["Nihad Abbasov", "Sam Elliott", "Ryan Bigg"]
