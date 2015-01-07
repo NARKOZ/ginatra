@@ -8,39 +8,55 @@
 **Ginatra** is a Git web interface. It allows browsing a git repository (or a set of
 git repositories) using a web browser.
 
-Features include:
+## Features
 
++ Hassle free installation
 + Multiple repository support
 + Multiple branch/tag support
 + Commit history, diff, patch
 + Feeds in Atom format
 + Syntax highlighting
-+ Branch graphs
-
-## Requirements
-
-+ Ruby 1.9.2 or newer
-+ Git 1.6.3 or newer
++ Repository stats
++ Smart HTTP support
 
 ## Installation
 
-***Recommended*** Use edge version (stable as in beta):
+There are 2 ways to install Ginatra: as a packaged Ruby gem or as a Sinatra app.  
+It's recommended to install it as a ruby gem, unless you know what you're doing.
+
+### Ginatra gem
+
+Run the following command to install Ginatra from RubyGems:
+
+```sh
+gem install ginatra -v 4.0.0
+```
+
+Start the Ginatra server after installation:
+
+```sh
+ginatra run
+```
+
+By default Ginatra will run on `localhost:9797`
+
+### Ginatra app
+
+Run the following commands to install Ginatra from source:
 
 ```sh
 git clone git://github.com/NARKOZ/ginatra.git
 cd ginatra/
 bundle
-# add some git repositories to browse (put them into `repos` directory)
-#   and start Ginatra web server:
-./bin/ginatra server
+```
+
+Start the Ginatra server after installation:
+
+```sh
+./bin/ginatra run
 ```
 
 By default Ginatra will run on `localhost:9797`
-
---
-
-Ginatra is also available as a gem in [Rubygems](https://rubygems.org/gems/ginatra).
-You can install old release via `gem install ginatra`.
 
 ## Configuration
 
