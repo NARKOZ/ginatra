@@ -5,8 +5,10 @@
 [![Gem Version](https://img.shields.io/gem/v/ginatra.svg?style=flat)](https://rubygems.org/gems/ginatra)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/NARKOZ/ginatra/blob/master/LICENSE.txt)
 
-**Ginatra** is a Git web interface. It allows browsing a git repository (or a set of
-git repositories) using a web browser.
+**Ginatra** is a simple web-based git repository browser built on Ruby Sinatra.
+
+[ [website](http://narkoz.github.io/ginatra) |
+[screenshots](http://narkoz.github.io/ginatra/screenshots) ]
 
 ## Features
 
@@ -18,6 +20,7 @@ git repositories) using a web browser.
 + Syntax highlighting
 + Repository stats
 + Smart HTTP support
++ [and more](http://narkoz.github.io/ginatra#features)
 
 ## Installation
 
@@ -32,7 +35,9 @@ Run the following command to install Ginatra from RubyGems:
 gem install ginatra -v 4.0.0
 ```
 
-Start the Ginatra server after installation:
+Create config file (see [Configuration](#configuration) section in README).
+
+Start the Ginatra server:
 
 ```sh
 ginatra run
@@ -50,7 +55,9 @@ cd ginatra/
 bundle
 ```
 
-Start the Ginatra server after installation:
+Create config file or modify existing (see [Configuration](#configuration) section in README).
+
+Start the Ginatra server:
 
 ```sh
 ./bin/ginatra run
@@ -60,27 +67,32 @@ By default Ginatra will run on `localhost:9797`
 
 ## Configuration
 
-You can change settings by editing `config.yml` file in root folder.
-Alternatively you can create `~/.ginatra/config.yml` file with your own
-settings, use
-[`config.yml`](https://github.com/NARKOZ/ginatra/blob/master/config.yml) as a reference.
+Create `~/.ginatra/config.yml` file with your own settings. See
+[`config.yml`](https://github.com/NARKOZ/ginatra/blob/master/config.yml) for a reference.
+
+`git_dirs` - Ginatra will look into these folders for git repositories. It's
+required to append `*` at the end of path. Example: `/home/Development/repos/*`
+
+`ignored_files` - files to ignore in `git_dirs`
+
+`description` - description of web interface. Used in index page.
+
+`port` - port that Ginatra server will run at.
+
+`host` - host that Ginatra server will run at.
+
+`prefix` - prefix for the host serving Ginatra. Used when Ginatra is installed
+in subdirectory.
+
+`git_clone_enabled?` - enables smart HTTP support and allows to clone git
+repopsitories.
+
+If you installed Ginatra as an app, you can change settings by editing
+`config.yml` file in root folder.
 
 You need to restart web server after applying changes to config file.
 
-## Contributing
+## How to Contribute
 
-**Ways _you_ can contribute:**
-
-* by installing and testing the software
-* by using the issue tracker for...
-  * reporting bugs
-  * suggesting new features
-* by improving the code through:
-  * writing or editing documentation
-  * writing test specifications
-  * refactoring the code (**no patch is too small**: fix typos, add comments,
-  clean up inconsistent whitespace).
-  * reviewing open Pull Requests
-
-Check out [CONTRIBUTING.md](https://github.com/NARKOZ/ginatra/blob/master/CONTRIBUTING.md)
-for more information.
+Open issues are labeled per perceived difficulty. See [contributing
+guidelines](https://github.com/NARKOZ/ginatra/blob/master/CONTRIBUTING.md).
