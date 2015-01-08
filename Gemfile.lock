@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     ginatra (4.0.0)
+      better_errors (~> 1.1.0)
       rouge (~> 1.7.7)
       rugged (~> 0.21.3)
       sinatra (~> 1.4.5)
@@ -64,7 +65,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  better_errors (~> 1.1.0)
   binding_of_caller
   ginatra!
   rack-test

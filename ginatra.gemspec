@@ -22,11 +22,11 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rugged',    '~> 0.21.3'
   gem.add_dependency 'rouge',     '~> 1.7.7'
   gem.add_dependency 'sprockets', '~> 2.0'
+  gem.add_dependency 'better_errors', '~> 1.1.0'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rack-test'
   gem.add_development_dependency 'sinatra-contrib'
-  gem.add_development_dependency 'better_errors', '~> 1.1.0'
   gem.add_development_dependency 'binding_of_caller'
 end
