@@ -32,7 +32,7 @@ It's recommended to install it as a ruby gem, unless you know what you're doing.
 Run the following command to install Ginatra from RubyGems:
 
 ```sh
-gem install ginatra
+gem install ginatra -v 4.0.1
 ```
 
 Create config file (see [Configuration](#configuration) section in README).
@@ -52,6 +52,7 @@ Run the following commands to install Ginatra from source:
 ```sh
 git clone git://github.com/NARKOZ/ginatra.git
 cd ginatra/
+git checkout v4.0.1
 bundle
 ```
 
@@ -91,6 +92,18 @@ If you installed Ginatra as an app, you can change settings by editing
 `config.yml` file in root folder.
 
 You need to restart web server after applying changes to config file.
+
+## CLI
+
+You can interact with Ginatra via CLI. The following commands are available:
+
+```sh
+ginatra run    # Starts Ginatra server
+ginatra stop   # Stops Ginatra server
+ginatra status # Checks status of the Ginatra server (running or not)
+ginatra -v     # Shows version of Ginatra
+ginatra -h     # Lists available commands and their options
+```
 
 ## How to Contribute
 
