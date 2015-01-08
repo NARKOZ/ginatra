@@ -32,7 +32,7 @@ It's recommended to install it as a ruby gem, unless you know what you're doing.
 Run the following command to install Ginatra from RubyGems:
 
 ```sh
-gem install ginatra -v 4.0.0
+gem install ginatra
 ```
 
 Create config file (see [Configuration](#configuration) section in README).

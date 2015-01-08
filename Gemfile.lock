@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ginatra (4.0.0)
+    ginatra (4.0.1)
       rouge (~> 1.7.7)
       rugged (~> 0.21.3)
       sinatra (~> 1.4.5)
