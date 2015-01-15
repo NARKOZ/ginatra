@@ -8,11 +8,12 @@
 **Ginatra** is a simple web-based git repository browser built on Ruby Sinatra.
 
 [ [website](http://narkoz.github.io/ginatra) |
-[screenshots](http://narkoz.github.io/ginatra/screenshots) ]
+[screenshots](http://narkoz.github.io/ginatra/screenshots) |
+[demo](http://narkoz.github.io/ginatra/demo) ]
 
 ## Features
 
-+ Hassle free installation
++ Easy installation
 + Multiple repository support
 + Multiple branch/tag support
 + Commit history, diff, patch
@@ -32,7 +33,7 @@ It's recommended to install it as a ruby gem, unless you know what you're doing.
 Run the following command to install Ginatra from RubyGems:
 
 ```sh
-gem install ginatra -v 4.0.1
+gem install ginatra -v 4.0.2
 ```
 
 Create config file (see [Configuration](#configuration) section in README).
@@ -52,7 +53,7 @@ Run the following commands to install Ginatra from source:
 ```sh
 git clone git://github.com/NARKOZ/ginatra.git
 cd ginatra/
-git checkout v4.0.1
+git checkout v4.0.2
 bundle
 ```
 
@@ -84,7 +85,7 @@ required to append `*` at the end of path. Example: `/home/Development/repos/*`
 in subdirectory.
 
 `git_clone_enabled?` - enables smart HTTP support and allows to clone git
-repopsitories.
+repositories.
 
 If you installed Ginatra as an app, you can change settings by editing
 `config.yml` file in root folder.
