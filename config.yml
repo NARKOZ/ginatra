@@ -2,8 +2,6 @@
 # Settings specified in '~/.ginatra/config.yml' will take precedence over these
 git_dirs:
   - ./repos/*
-ignored_files:
-  - README.md
 description: "My Git Repositories"
 port: 9797
 host: localhost

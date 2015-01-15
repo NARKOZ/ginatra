@@ -74,8 +74,6 @@ Create `~/.ginatra/config.yml` file with your own settings. See
 `git_dirs` - Ginatra will look into these folders for git repositories. It's
 required to append `*` at the end of path. Example: `/home/Development/repos/*`
 
-`ignored_files` - files to ignore in `git_dirs`
-
 `description` - description of web interface. Used in index page.
 
 `port` - port that Ginatra server will run at.

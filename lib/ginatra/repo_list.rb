@@ -28,17 +28,19 @@ module Ginatra
     # and adds them if they're not already there.
     def refresh
       list.clear
-      Ginatra.config.git_dirs.map do |git_dir|
 
+      Ginatra.config.git_dirs.map do |git_dir|
         if Dir.exist?(git_dir.chop)
-          files = Dir.glob(git_dir).sort
+          dirs = Dir.glob(git_dir).sort
         else
           dir = File.expand_path("../../../#{git_dir}", __FILE__)
-          files = Dir.glob(dir).sort
+          dirs = Dir.glob(dir).sort
         end
 
-        files.each { |e| add(e) unless Ginatra.config.ignored_files.include?(File.split(e).last) }
+        dirs = dirs.select {|f| File.directory? f }
+        dirs.each {|d| add(d) }
       end
+
       list
     end
 
