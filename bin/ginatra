@@ -4,7 +4,7 @@ $:.unshift File.expand_path('../../lib', __FILE__)
 
 ENV['RACK_ENV'] ||= 'production'
 
-require 'ginatra'
+require 'ginatra/config'
 require 'optparse'
 
 options = {

@@ -1,5 +1,6 @@
 # Default config file for Ginatra
 # Settings specified in '~/.ginatra/config.yml' will take precedence over these
+# Include ./repos/* in your config.yml if you are running rspecs 
 git_dirs:
   - ./repos/*
 description: "My Git Repositories"
