@@ -13,8 +13,11 @@ module Ginatra
       @repo = Rugged::Repository.new(path)
       @param = File.split(path).last
       @name = @param
-      @description = File.read("#{@repo.path}description").strip
-      @description = '' if @description.match(/\AUnnamed repository;/)
+      @description = ''
+      if File.exists?("#{@repo.path}description")
+        @description = File.read("#{@repo.path}description").strip
+        @description = '' if @description.match(/\AUnnamed repository;/)
+      end
     end
 
     # Return a commit corresponding to sha in the repo.
