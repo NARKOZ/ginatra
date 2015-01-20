@@ -14,7 +14,7 @@ module Ginatra
       @param = File.split(path).last
       @name = @param
       @description = ''
-      if File.exists?("#{@repo.path}description") then
+      if File.exists?("#{@repo.path}description")
         @description = File.read("#{@repo.path}description").strip
         @description = '' if @description.match(/\AUnnamed repository;/)
       end
