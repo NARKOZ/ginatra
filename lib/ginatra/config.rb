@@ -15,13 +15,23 @@ module Ginatra
     custom_config_file  = File.expand_path("~/.ginatra/config.yml")
     default_config_file = File.expand_path("#{current_path}/../../config.yml")
 
-    config = YAML.load_file(default_config_file)
+    # Our own file should be there and we don't need to check its syntax
+    abort 'ginatra config file #{default_config_file} is missing.' unless File.exists?(default_config_file)
+    final_config = YAML.load_file(default_config_file)
 
-    if File.exist?(custom_config_file)
-      custom_config = YAML.load_file(custom_config_file)
-      config.merge!(custom_config)
+    # User config file may not exist or be broken
+    if File.exists?(custom_config_file)
+      begin
+        custom_config = YAML.load_file(custom_config_file)
+      rescue Psych::SyntaxError => ex
+        puts "Cannot parse your config file #{ex.message}."
+        custom_config = {}
+      end
+      final_config.merge!(custom_config)
+    else
+      puts "User config file #{custom_config_file} absent. Will only see repos in #{final_config["git_dirs"].join(", ")}."
     end
 
-    config
+    final_config
   end
 end
