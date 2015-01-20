@@ -16,3 +16,5 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include Ginatra::Helpers
 end
+
+Ginatra.config.git_dirs << "./repos/*" unless Ginatra.config.git_dirs.include?('./repos/*')
