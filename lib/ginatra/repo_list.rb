@@ -29,7 +29,7 @@ module Ginatra
     def refresh
       list.clear
 
-      Ginatra.config.git_dirs.map do |git_dir|
+      Ginatra.load_config["git_dirs"].map do |git_dir|
         if Dir.exist?(git_dir.chop)
           dirs = Dir.glob(git_dir).sort
         else
