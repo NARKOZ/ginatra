@@ -16,7 +16,7 @@ module Ginatra
     # Sets title for pages
     def title(*args)
       @title ||= []
-      @title_options ||= { headline: nil, sitename: nil }
+      @title_options ||= { headline: nil, sitename: h(Ginatra.config.sitename) }
       options = args.last.is_a?(Hash) ? args.pop : {}
 
       @title += args

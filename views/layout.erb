@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title><%= title(sitename: 'Ginatra') %></title>
+    <title><%= title %></title>
     <link href="<%= prefix_url("assets/application.css") %>" rel="stylesheet">
     <% if @repo %>
       <link href="<%= atom_feed_url @repo.name, params[:ref] %>" title="Commits to <%= @repo.name %><%= ": #{params[:ref]}" if params[:ref] %>" type="application/atom+xml" rel="alternate">
@@ -11,7 +11,7 @@
   <body>
     <div class="container-fluid push">
       <div class="well header">
-        <h1><a href="<%= prefix_url %>">Ginatra</a></h1>
+        <h1><a href="<%= prefix_url %>"><%= Ginatra.config.sitename %></a></h1>
       </div>
 
       <%= yield %>

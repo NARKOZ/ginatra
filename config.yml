@@ -2,6 +2,7 @@
 # Settings specified in '~/.ginatra/config.yml' will take precedence over these
 git_dirs:
   - ./repos/*
+sitename: Ginatra
 description: "My Git Repositories"
 port: 9797
 host: localhost
