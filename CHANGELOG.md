@@ -1,5 +1,9 @@
 ## master
 
+  * Upgrade to Twitter Bootstrap 3. Make interface mobile-friendly and
+    responsive.
+  * Introduce a new setting: `sitename` to customize title.
+  * Improve error handling for invalid custom configuration. (@rogermarlow)
   * Your contribution here.
 
 ## 4.0.2 (2015-01-15)
