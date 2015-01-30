@@ -1,13 +1,9 @@
-.push { padding-bottom: 40px; }
-footer p { margin: 10px 0; }
-.header { margin-top: 15px; box-shadow: none; }
-.filter { margin-top: -20px; }
+.header { margin: 15px 0 -20px 0; }
+.filter { margin-top: -10px; padding-bottom: 10px; }
 .author-box { padding-top: 10px; }
 #loader { margin-top: -20px; }
 pre { white-space: pre; }
 .btn .caret { margin-left: 3px; }
-.btn-small .caret { margin-top: 8px; }
-.dropdown-menu { border-radius: 3px; }
 .img-rounded { border-radius: 4px; }
 .clone-hint { font-style: italic; }
 .dropdown-hint { padding: 3px 20px; }
@@ -15,6 +11,12 @@ pre { white-space: pre; }
 .highlight pre { border: none; background-color: #f8f8f8; }
 .highlight table td { padding: 0; }
 .highlight table .gutter { border-right: 1px solid #c0c0c0; }
+
+.diff-files-list { display: none; }
+.repo-list a { color: #337ab7; }
+.repo-list a:hover, a:focus { color: #23527c; }
+.nav { padding-bottom: 10px; }
+.nav > li > a { padding: 7px 15px; }
 
 #diff { padding-top: 20px; }
 #diff .added a { color: #468847; }
@@ -26,13 +28,6 @@ pre { white-space: pre; }
   margin: 0 auto;
   text-align: center;
   padding-top: 10%;
-}
-
-.btn {
-  text-shadow: none;
-  background-image: none;
-  border-radius: 3px;
-  box-shadow: none;
 }
 
 .info-box {

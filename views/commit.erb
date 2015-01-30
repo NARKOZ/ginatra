@@ -2,8 +2,8 @@
 <%= partial :header, locals: { repo: @repo } %>
 
 <div class="info-box">
-  <div class="row-fluid">
-    <div class="span5">
+  <div class="row">
+    <div class="col-md-5">
       <%= simple_format h(@commit.message) %>
 
       <div class="author-box">
@@ -30,16 +30,16 @@
         <% end %>
       </p>
     </div>
-    <div class="span7">
-      <div class="row-fluid">
-        <div class="span1">
+    <div class="col-md-7">
+      <div class="row">
+        <div class="col-md-1">
           <p><strong>commit:</strong></p>
           <p><strong>tree:</strong></p>
           <% @commit.parents.size.times do %>
             <p><strong>parent:</strong></p>
           <% end %>
         </div>
-        <div class="span3">
+        <div class="col-md-3">
           <p>
             <a href="<%= prefix_url(@repo.param) %>/commit/<%= @commit.oid %>">
               <%= @commit.oid %>
@@ -72,23 +72,25 @@
 
   <p>
     <button class="btn btn-primary"><%= diff.deltas.size %> changed files</button>
-    <button class="btn" type="button" id="js-toggle-file-listing">Show file listing</button>
+    <button class="btn btn-default" type="button" id="js-toggle-file-listing">Show file listing</button>
   </p>
 
-  <div class="hide" id="js-file-listing">
+  <div class="diff-files-list" id="js-file-listing">
     <%= file_listing diff %>
   </div>
 
   <% diff.patches.each_with_index do |patch, index| %>
-    <div class="row-fluid">
-      <p class="pull-left">
-        <span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a>
-      </p>
-      <p class="pull-right">
-        <% unless patch.delta.deleted? %>
-          <a href="<%= prefix_url(@repo.param) %>/blob/<%= @commit.tree.oid %>/<%= patch.delta.new_file[:path] %>">view file</a>
-        <% end %>
-      </p>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="pull-left">
+          <span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a>
+        </p>
+        <p class="pull-right">
+          <% unless patch.delta.deleted? %>
+            <a href="<%= prefix_url(@repo.param) %>/blob/<%= @commit.tree.oid %>/<%= patch.delta.new_file[:path] %>">view file</a>
+          <% end %>
+        </p>
+      </div>
     </div>
 
     <% patch.hunks.each do |hunk| %>

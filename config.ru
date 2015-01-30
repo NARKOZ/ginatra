@@ -1,11 +1,18 @@
 require 'ginatra'
 require 'sprockets'
+require 'bootstrap-sass'
 
 map '/assets' do
   environment = Sprockets::Environment.new
   root_path   = File.dirname __FILE__
   environment.append_path "#{root_path}/public/js"
   environment.append_path "#{root_path}/public/css"
+
+  environment.context_class.class_eval do
+    def asset_path(path, options = {})
+    end
+  end
+
   run environment
 end
 

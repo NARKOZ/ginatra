@@ -1,6 +1,5 @@
 /*
- *= require ./lib/bootstrap.min
- *= require ./lib/bootstrap-responsive.min
+ *= require twbs
  *= require ./lib/highlight
  *= require custom
 */

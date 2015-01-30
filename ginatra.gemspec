@@ -23,6 +23,9 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rouge',     '~> 1.7.7'
   gem.add_dependency 'sprockets', '~> 2.0'
 
+  # Assets
+  gem.add_dependency 'bootstrap-sass', '3.3.3'
+
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rack-test'

@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1>Repositories <small><%= h Ginatra.config.description %></small></h1>
   <% if Ginatra.config.git_clone_enabled? && @repositories.any? %>
-    <div class="muted clone-hint">
+    <div class="text-muted clone-hint">
       To clone one of these repositories, install git, and run:
       git clone <%= url %><strong>repo-name</strong>
     </div>
@@ -11,20 +11,20 @@
 </div>
 
 <% if @repositories.size > 10 %>
-  <div class="row-fluid filter">
-    <input type="text" class="span12 js-filter-query" placeholder="Filter...">
+  <div class="row filter">
+    <div class="col-md-12">
+      <input type="text" class="form-control js-filter-query" placeholder="Filter...">
+    </div>
   </div>
 <% end %>
 
-<ul class="nav nav-tabs nav-stacked js-repolist">
+<div class="list-group repo-list js-repolist">
   <% @repositories.each do |repo| %>
-    <li>
-      <a href="<%= prefix_url(repo.param) %>">
-        <h2>
-          <%= empty_description_hint_for(repo) %>
-          <%= repo.name %> <small><%= h repo.description %></small>
-        </h2>
-      </a>
-    </li>
+    <a href="<%= prefix_url(repo.param) %>" class="list-group-item">
+      <h2>
+        <%= empty_description_hint_for(repo) %>
+        <%= repo.name %> <small><%= h repo.description %></small>
+      </h2>
+    </a>
   <% end %>
-</ul>
+</div>

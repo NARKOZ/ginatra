@@ -1,10 +1,10 @@
 <% title @repo.name, headline: 'Stats' %>
 <%= partial :header, locals: { repo: @repo } %>
 
-<div class="row-fluid">
-  <div class="span12">
-    <div class="row-fluid">
-      <div class="span8">
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-8">
         <ul class="nav nav-pills">
           <li>
             <a href="<%= prefix_url(@repo.param) %>/<%= params[:ref] %>">Commits</a>
@@ -17,7 +17,7 @@
           </li>
         </ul>
 
-        <ul class="unstyled">
+        <ul class="list-unstyled">
           <li>
             <strong>License:</strong>
             <span class="label label-info"><%= @stats.license %></span>
@@ -57,32 +57,34 @@
         </table>
       </div>
 
-      <div class="span4">
-        <ul class="nav nav-list">
-          <li class="nav-header">Branches (<%= @repo.branches.size %>)</li>
-          <% @repo.branches.each do |branch| %>
-            <li class="<%= 'active' if branch.name == params[:ref] %>">
-              <a href="<%= h prefix_url(@repo.param) %>/stats/<%= h branch.name %>">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Branches (<%= @repo.branches.size %>)</div>
+
+          <ul class="list-group">
+            <% @repo.branches.each do |branch| %>
+              <a class="list-group-item <%= 'active' if branch.name == params[:ref] %>" href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
                 <%= h branch.name %>
               </a>
-            </li>
-          <% end %>
+            <% end %>
+          </ul>
+        </div>
 
-          <li class="divider"></li>
+        <div class="panel panel-default">
+          <div class="panel-heading">Tags (<%= @repo.tags.count %>)</div>
 
-          <li class="nav-header">Tags (<%= @repo.tags.count %>)</li>
-          <% if @repo.tags.any? %>
-            <% @repo.tags.each_name do |tag| %>
-              <li>
-                <a href="<%= h prefix_url(@repo.param) %>/tag/<%= h tag %>">
+          <ul class="list-group">
+            <% if @repo.tags.any? %>
+              <% @repo.tags.each_name do |tag| %>
+                <a class="list-group-item" href="<%= h prefix_url(@repo.param) %>/tag/<%= h tag %>">
                   <%= h tag %>
                 </a>
-              </li>
+              <% end %>
+            <% else %>
+              <li class="list-group-item">No tags</li>
             <% end %>
-          <% else %>
-            <li>No tags</li>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

@@ -41,7 +41,7 @@ $(function() {
   // filter repositories
   $('.js-filter-query').on('keyup', function() {
     var regexp = new RegExp($(this).val(), 'i'),
-        $repolist = $('.js-repolist li');
+        $repolist = $('.js-repolist a');
 
     $repolist.hide();
     $repolist.filter(function() {

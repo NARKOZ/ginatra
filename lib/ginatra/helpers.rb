@@ -145,7 +145,7 @@ module Ginatra
           list << "<li class='changed'><span class='icon-edit' title='modified'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         end
       end
-      "<ul class='unstyled'>#{list.join}</ul>"
+      "<ul class='list-unstyled'>#{list.join}</ul>"
     end
 
     # Highlights commit diff
