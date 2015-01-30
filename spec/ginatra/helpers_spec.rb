@@ -33,19 +33,19 @@ describe Ginatra::Helpers do
   describe "#file_icon" do
     context "symbolic link" do
       it "returns icon share-alt" do
-        expect(file_icon(40960)).to eq("<span class='icon-share-alt'></span>")
+        expect(file_icon(40960)).to eq("<img src='/img/mail-forward.svg' alt='symbolic link' class='icon'>")
       end
     end
 
     context "executable file" do
       it "returns icon asterisk" do
-        expect(file_icon(33261)).to eq("<span class='icon-asterisk'></span>")
+        expect(file_icon(33261)).to eq("<img src='/img/asterisk.svg' alt='executable file' class='icon'>")
       end
     end
 
     context "non-executable file" do
       it "returns icon file" do
-        expect(file_icon(33188)).to eq("<span class='icon-file'></span>")
+        expect(file_icon(33188)).to eq("<img src='/img/file.svg' alt='file' class='icon'>")
       end
     end
   end
@@ -75,7 +75,7 @@ describe Ginatra::Helpers do
   describe "#empty_description_hint_for" do
     it "returns a hint for a repo with empty description" do
       hint_text = "Edit `#{repo.path}description` file to set the repository description."
-      expect(empty_description_hint_for(repo)).to eq("<span class='icon-exclamation-sign' title='#{hint_text}'></span>")
+      expect(empty_description_hint_for(repo)).to eq("<img src='/img/exclamation-circle.svg' title='#{hint_text}' alt='hint' class='icon'>")
     end
   end
 
