@@ -1,7 +1,7 @@
 .header { margin: 15px 0 -20px 0; }
 .filter { margin-top: -10px; padding-bottom: 10px; }
 .author-box { padding-top: 10px; }
-#loader { margin-top: -20px; }
+#loader { display:none; padding-bottom: 20px; }
 pre { white-space: pre; }
 .btn .caret { margin-left: 3px; }
 .img-rounded { border-radius: 4px; }
