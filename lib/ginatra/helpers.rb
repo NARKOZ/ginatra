@@ -43,17 +43,17 @@ module Ginatra
     def empty_description_hint_for(repo)
       return '' unless repo.description.empty?
       hint_text = "Edit `#{repo.path}description` file to set the repository description."
-      "<span class='icon-exclamation-sign' title='#{hint_text}'></span>"
+      "<img src='/img/exclamation-circle.svg' title='#{hint_text}' alt='hint' class='icon'>"
     end
 
     # Returns file icon depending on filemode
     def file_icon(filemode)
       case filemode
         # symbolic link (120000)
-        when 40960 then "<span class='icon-share-alt'></span>"
+        when 40960 then "<img src='/img/mail-forward.svg' alt='symbolic link' class='icon'>"
         # executable file (100755)
-        when 33261 then "<span class='icon-asterisk'></span>"
-        else "<span class='icon-file'></span>"
+        when 33261 then "<img src='/img/asterisk.svg' alt='executable file' class='icon'>"
+        else "<img src='/img/file.svg' alt='file' class='icon'>"
       end
     end
 
@@ -138,11 +138,11 @@ module Ginatra
       list = []
       diff.deltas.each_with_index do |delta, index|
         if delta.deleted?
-          list << "<li class='deleted'><span class='icon-remove' title='deleted'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='deleted'><img src='/img/minus-square.svg' alt='deleted' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.added?
-          list << "<li class='added'><span class='icon-ok' title='added'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='added'><img src='/img/plus-square.svg' alt='added' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         elsif delta.modified?
-          list << "<li class='changed'><span class='icon-edit' title='modified'></span> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
+          list << "<li class='changed'><img src='/img/edit.svg' alt='modified' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
         end
       end
       "<ul class='list-unstyled'>#{list.join}</ul>"

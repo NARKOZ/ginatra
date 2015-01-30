@@ -10,13 +10,13 @@
     <% @tree.each do |tree| %>
       <% next unless tree[:type] == :commit && tree[:filemode] == 57344 %>
       <a title="submodule <%= tree[:name] %> @ <%= tree[:oid] %>" class="list-group-item">
-        <span class="icon-hdd"></span> <%= tree[:name] %>
+        <img src="/img/hdd-o.svg" alt="submodule" class="icon"> <%= tree[:name] %>
       </a>
     <% end %>
 
     <% @tree.each_tree do |tree| %>
       <a href="<%= prefix_url(@path[:tree]) %>/<%= tree[:name] %>" class="list-group-item">
-        <span class="icon-folder-close"></span> <%= tree[:name] %>
+        <img src="/img/folder.svg" alt="folder" class="icon"> <%= tree[:name] %>
       </a>
     <% end %>
 

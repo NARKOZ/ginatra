@@ -23,6 +23,11 @@ pre { white-space: pre; }
 #diff .changed a { color: #3a87ad; }
 #diff .deleted a { color: #b94a48; }
 
+.icon {
+  height: 16px;
+  width: 16px;
+}
+
 .service-page {
   width: 50%;
   margin: 0 auto;

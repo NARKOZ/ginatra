@@ -60,7 +60,7 @@
           </p>
           <% end %>
 
-          <p><span class="icon-download"></span> <%= patch_link @commit, @repo.param %></p>
+          <p><img src="/img/download.svg" alt="download" class="icon"> <%= patch_link @commit, @repo.param %></p>
         </div>
       </div>
     </div>
@@ -83,7 +83,7 @@
     <div class="row">
       <div class="col-md-12">
         <p class="pull-left">
-          <span class="icon-file"></span> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a>
+          <img src="/img/file.svg" alt="file" class="icon"> <a id='file-<%= index + 1 %>'><%= patch.delta.new_file[:path] %></a>
         </p>
         <p class="pull-right">
           <% unless patch.delta.deleted? %>
