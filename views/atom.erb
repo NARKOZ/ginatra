@@ -1,9 +1,9 @@
 <%
   base_url = url prefix_url("#{@repo.param}")
 
-  if params[:ref]
-    url   = "#{base_url}/#{params[:ref]}"
-    name  = "#{@repo.name}: #{params[:ref]}"
+  if @ref
+    url   = "#{base_url}/#{@ref}"
+    name  = "#{@repo.name}: #{@ref}"
   else
     url   = base_url
     name  = "#{@repo.name}: master"

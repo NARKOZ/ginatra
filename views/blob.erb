@@ -3,7 +3,7 @@
 <%= partial :header, locals: { repo: @repo } %>
 <%= partial :tree_nav %>
 
-<% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{params[:tree]}/#{params[:splat].first}" %>
+<% raw_blob_url = "#{prefix_url(@repo.param)}/raw/#{@_tree}/#{@rest}" %>
 
 <div class="row">
   <div class="col-md-12">

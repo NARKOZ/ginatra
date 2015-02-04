@@ -1,30 +1,30 @@
-<% if @repo.branch_exists?(params[:tree]) %>
+<% if @repo.branch_exists?(@_tree) %>
   <div class="row">
     <div class="col-md-12">
       <ul class="nav nav-pills pull-left">
         <li>
-          <a href="<%= prefix_url(@repo.param) %>/<%= params[:tree] %>">Commits</a>
+          <a href="<%= prefix_url(@repo.param) %>/<%= @_tree %>">Commits</a>
         </li>
         <li class="active">
-          <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>">Source</a>
+          <a href="<%= prefix_url(@repo.param) %>/tree/<%= @_tree %>">Source</a>
         </li>
         <li>
-          <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:tree] %>">Stats</a>
+          <a href="<%= prefix_url(@repo.param) %>/stats/<%= @_tree %>">Stats</a>
         </li>
       </ul>
 
       <div class="btn-group pull-right">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-          <%= params[:tree] %> <span class="caret"></span>
+          <%= @_tree %> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
           <li class="dropdown-hint">Branches</li>
           <li class="divider"></li>
           <% @repo.branches.each do |branch| %>
             <% if @blob %>
-              <li><a href="<%= prefix_url(@repo.param) %>/blob/<%= branch.name %>/<%= params[:splat].first %>"><%= branch.name %></a></li>
+              <li><a href="<%= prefix_url(@repo.param) %>/blob/<%= branch.name %>/<%= @rest %>"><%= branch.name %></a></li>
             <% else %>
-              <li><a href="<%= prefix_url(@repo.param) %>/tree/<%= branch.name %><%= "/#{params[:splat].first}" unless params[:splat].nil? || params[:splat].empty? %>"><%= branch.name %></a></li>
+              <li><a href="<%= prefix_url(@repo.param) %>/tree/<%= branch.name %><%= "/#{@rest}" unless @rest.nil? || @rest.empty? %>"><%= branch.name %></a></li>
             <% end %>
           <% end %>
         </ul>
@@ -33,13 +33,13 @@
   </div>
 <% end %>
 
-<% unless params[:splat].nil? or params[:splat].empty? %>
-  <% tree_nav = params[:splat].first.split('/') %>
+<% unless @rest.nil? or @rest.empty? %>
+  <% tree_nav = @rest.split('/') %>
   <div class="row">
     <div class="col-md-12">
       <ol class="breadcrumb" id="js-tree-nav">
         <li>
-          <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>"><%= @repo.name %></a>
+          <a href="<%= prefix_url(@repo.param) %>/tree/<%= @_tree %>"><%= @repo.name %></a>
         </li>
 
         <% tree_nav.each_with_index do |path, index| %>
@@ -47,7 +47,7 @@
             <li class="active"><%= tree_nav.last %></li>
           <% else %>
             <li>
-              <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:tree] %>/<%= tree_nav[0..index].join('/') %>"><%= path %></a>
+              <a href="<%= prefix_url(@repo.param) %>/tree/<%= @_tree %>/<%= tree_nav[0..index].join('/') %>"><%= path %></a>
             </li>
           <% end %>
         <% end %>

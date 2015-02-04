@@ -7,13 +7,13 @@
       <div class="col-md-8">
         <ul class="nav nav-pills">
           <li class="active">
-            <a href="<%= prefix_url(@repo.param) %>/<%= params[:ref] %>">Commits</a>
+            <a href="<%= prefix_url(@repo.param) %>/<%= @ref %>">Commits</a>
           </li>
           <li>
-            <a href="<%= prefix_url(@repo.param) %>/tree/<%= params[:ref] %>">Source</a>
+            <a href="<%= prefix_url(@repo.param) %>/tree/<%= @ref %>">Source</a>
           </li>
           <li>
-            <a href="<%= prefix_url(@repo.param) %>/stats/<%= params[:ref] %>">Stats</a>
+            <a href="<%= prefix_url(@repo.param) %>/stats/<%= @ref %>">Stats</a>
           </li>
         </ul>
 
@@ -40,13 +40,13 @@
         <ul class="pager">
           <% if @previous_commits %>
             <li class="previous">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] - 1 %>'>&larr; Previous</a>
+              <a href='<%= prefix_url(@repo.param) %>/<%= @ref %>/page/<%= @page - 1 %>'>&larr; Previous</a>
             </li>
           <% end %>
 
           <% if @next_commits %>
             <li class="next">
-              <a href='<%= prefix_url(params[:repo]) %>/<%= params[:ref] %>/page/<%= params[:page] + 1 %>'>Next &rarr;</a>
+              <a href='<%= prefix_url(@repo.param) %>/<%= @ref %>/page/<%= @page + 1 %>'>Next &rarr;</a>
             </li>
           <% end %>
         </ul>
@@ -58,7 +58,7 @@
 
           <ul class="list-group">
             <% @repo.branches.each do |branch| %>
-              <a class="list-group-item <%= 'active' if branch.name == params[:ref] %>" href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
+              <a class="list-group-item <%= 'active' if branch.name == @ref %>" href="<%= h prefix_url(@repo.param) %>/<%= h branch.name %>">
                 <%= h branch.name %>
               </a>
             <% end %>

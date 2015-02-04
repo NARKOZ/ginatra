@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<%= prefix_url("assets/application.css") %>" rel="stylesheet">
     <% if @repo %>
-      <link href="<%= atom_feed_url @repo.name, params[:ref] %>" title="Commits to <%= @repo.name %><%= ": #{params[:ref]}" if params[:ref] %>" type="application/atom+xml" rel="alternate">
+      <link href="<%= atom_feed_url @repo.name, @ref %>" title="Commits to <%= @repo.name %><%= ": #{@ref}" if @ref %>" type="application/atom+xml" rel="alternate">
     <% end %>
   </head>
   <body>
