@@ -1,5 +1,6 @@
 ## master
 
+  * Fix server startup when using Ruby 1.9
   * Upgrade to Twitter Bootstrap 3. Make interface mobile-friendly and
     responsive.
   * Introduce a new setting: `sitename` to customize title.
