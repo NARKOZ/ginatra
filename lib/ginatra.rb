@@ -1,5 +1,4 @@
-require 'sinatra/base'
-require 'sinatra/partials'
+require 'roda'
 require 'rouge'
 require 'ginatra/config'
 require 'ginatra/errors'
@@ -11,282 +10,267 @@ require 'ginatra/repo_stats'
 module Ginatra
   # The main application class.
   # Contains all the core application logic and mounted in +config.ru+ file.
-  class App < Sinatra::Base
-    helpers Helpers, Sinatra::Partials
+  class App < Roda
+    include Helpers
 
-    configure do
-      set :host, Ginatra.config.host
-      set :port, Ginatra.config.port
-      set :public_folder, "#{settings.root}/../public"
-      set :views, "#{settings.root}/../views"
-      enable :dump_errors, :logging, :static
-    end
+    use Rack::Static, :urls=>%w'/css /favicon.ico /img /js', :root=>'public'
+
+    plugin :render, :views=>File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'views')
+    plugin :environments
+    plugin :symbol_views
+    plugin :symbol_matchers
+    plugin :path_matchers
+    plugin :sinatra_helpers
+    plugin :delegate
+    request_delegate :get, :root, :on, :is
 
     configure :development do
       # Use better errors in development
       require 'better_errors'
       use BetterErrors::Middleware
-      BetterErrors.application_root = settings.root
+      BetterErrors.application_root = File.dirname(File.dirname(File.expand_path(__FILE__)))
 
       # Reload modified files in development
-      require 'sinatra/reloader'
-      register Sinatra::Reloader
-      Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
+      # require 'sinatra/reloader'
+      # register Sinatra::Reloader
+      # Dir["#{settings.root}/ginatra/*.rb"].each { |file| also_reload file }
     end
 
     def cache(obj)
-      etag obj if settings.production?
+      etag obj if self.class.production?
     end
 
-    not_found do
-      erb :'404', layout: false
+    def partial(template, opts={})
+      render("_#{template}", opts)
     end
 
-    error Ginatra::RepoNotFound, Ginatra::InvalidRef,
-          Rugged::OdbError, Rugged::ObjectError, Rugged::InvalidError do
-      halt 404, erb(:'404', layout: false)
+    plugin :not_found do
+      render '404'
     end
 
-    error 500 do
-      erb :'500', layout: false
-    end
-
-    # The root route
-    get '/' do
-      @repositories = Ginatra::RepoList.list
-      erb :index
-    end
-
-    # The atom feed of recent commits to a +repo+.
-    #
-    # This only returns commits to the +master+ branch.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    get '/:repo.atom' do
-      @repo = RepoList.find(params[:repo])
-      @commits = @repo.commits
-
-      if @commits.empty?
-        return ''
+    plugin :error_handler do |e|
+      case e
+      when Ginatra::RepoNotFound, Ginatra::InvalidRef, Rugged::OdbError, Rugged::ObjectError, Rugged::InvalidError
+        response.status = 404
+        render '404'
       else
-        cache "#{@commits.first.oid}/atom"
-        content_type 'application/xml'
-        erb :atom, layout: false
+        raise e unless self.class.production?
+        render '500'
       end
     end
 
-    # The html page for a +repo+.
-    #
-    # Shows the most recent commits in a log format.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    get '/:repo/?' do
-      @repo = RepoList.find(params[:repo])
+    route do 
+      get do
+        # The root route
+        root do
+          @repositories = Ginatra::RepoList.list
+          :index
+        end
 
-      if @repo.branches.none?
-        erb :empty_repo
-      else
-        params[:page] = 1
-        params[:ref] = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
-        @commits = @repo.commits(params[:ref])
-        cache "#{@commits.first.oid}/log"
-        @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
-        erb :log
-      end
-    end
+        # The atom feed of recent commits to a +repo+.
+        #
+        # This only returns commits to the +master+ branch.
+        #
+        # @param [String] repo the repository url-sanitised-name
+        is :extension => 'atom' do |repo|
+          @repo = RepoList.find(repo)
+          @commits = @repo.commits
 
-    # The atom feed of recent commits to a certain branch of a +repo+.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] ref the repository ref
-    get '/:repo/:ref.atom' do
-      @repo = RepoList.find(params[:repo])
-      @commits = @repo.commits(params[:ref])
+          if @commits.empty?
+            return ''
+          else
+            cache "#{@commits.first.oid}/atom"
+            content_type 'application/xml'
+            render :atom
+          end
+        end
 
-      if @commits.empty?
-        return ''
-      else
-        cache "#{@commits.first.oid}/atom/ref"
-        content_type 'application/xml'
-        erb :atom, layout: false
-      end
-    end
+        # @param [String] repo the repository url-sanitised-name
+        on :repo do |repo|
+          @repo = RepoList.find(repo)
 
-    # The html page for a given +ref+ of a +repo+.
-    #
-    # Shows the most recent commits in a log format.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] ref the repository ref
-    get '/:repo/:ref' do
-      @repo = RepoList.find(params[:repo])
-      @commits = @repo.commits(params[:ref])
-      cache "#{@commits.first.oid}/ref" if @commits.any?
-      params[:page] = 1
-      @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
-      erb :log
-    end
+          # The html page for a +repo+.
+          #
+          # Shows the most recent commits in a log format.
+          is ['', true] do
+            if @repo.branches.none?
+              :empty_repo
+            else
+              @page = 1
+              @ref = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
+              @commits = @repo.commits(@ref)
+              cache "#{@commits.first.oid}/log"
+              @next_commits = !@repo.commits(@ref, 10, 10).nil?
+              :log
+            end
+          end
 
-    # The html page for a +repo+ stats.
-    #
-    # Shows information about repository branch.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] ref the repository ref
-    get '/:repo/stats/:ref' do
-      @repo = RepoList.find(params[:repo])
-      @stats = RepoStats.new(@repo, params[:ref])
-      erb :stats
-    end
+          # The atom feed of recent commits to a certain branch of a +repo+.
+          #
+          # @param [String] ref the repository ref
+          is :extension => 'atom' do |ref|
+            @commits = @repo.commits(ref)
 
-    # The patch file for a given commit to a +repo+.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] commit the repository commit
-    get '/:repo/commit/:commit.patch' do
-      content_type :txt
-      repo   = RepoList.find(params[:repo])
-      commit = repo.commit(params[:commit])
-      cache "#{commit.oid}/patch"
-      diff   = commit.parents.first.diff(commit)
-      diff.patch
-    end
+            if @commits.empty?
+              return ''
+            else
+              cache "#{@commits.first.oid}/atom/ref"
+              content_type 'application/xml'
+              render :atom
+            end
+          end
 
-    # The html representation of a commit.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] commit the repository commit
-    get '/:repo/commit/:commit' do
-      @repo = RepoList.find(params[:repo])
-      @commit = @repo.commit(params[:commit])
-      cache @commit.oid
-      erb :commit
-    end
+          # The html page for a given +ref+ of a +repo+.
+          #
+          # Shows the most recent commits in a log format.
+          #
+          # @param [String] ref the repository ref
+          is :ref do |ref|
+            @ref = ref
+            @commits = @repo.commits(ref)
+            cache "#{@commits.first.oid}/ref" if @commits.any?
+            @page = 1
+            @next_commits = !@repo.commits(ref, 10, 10).nil?
+            :log
+          end
 
-    # The html representation of a tag.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tag the repository tag
-    get '/:repo/tag/:tag' do
-      @repo = RepoList.find(params[:repo])
-      @commit = @repo.commit_by_tag(params[:tag])
-      cache "#{@commit.oid}/tag"
-      erb :commit
-    end
+          # The html page for a +repo+ stats.
+          #
+          # Shows information about repository branch.
+          #
+          # @param [String] ref the repository ref
+          is 'stats/:ref' do |ref|
+            @stats = RepoStats.new(@repo, ref)
+            :stats
+          end
 
-    # HTML page for a given tree in a given +repo+
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/tree/:tree' do
-      @repo = RepoList.find(params[:repo])
-      @tree = @repo.find_tree(params[:tree])
-      cache @tree.oid
+          on 'commit' do
+            # The patch file for a given commit to a +repo+.
+            #
+            # @param [String] commit the repository commit
+            is :extension=>'patch' do |commit|
+              content_type 'text/plain'
+              commit = @repo.commit(commit)
+              cache "#{commit.oid}/patch"
+              diff   = commit.parents.first.diff(commit)
+              diff.patch
+            end
 
-      @path = {
-        blob: "#{params[:repo]}/blob/#{params[:tree]}",
-        tree: "#{params[:repo]}/tree/#{params[:tree]}"
-      }
-      erb :tree, layout: !is_pjax?
-    end
+            # The html representation of a commit.
+            #
+            # @param [String] commit the repository commit
+            is :commit do |commit|
+              @commit = @repo.commit(commit)
+              cache @commit.oid
+              :commit
+            end
+          end
 
-    # HTML page for a given tree in a given +repo+.
-    #
-    # This one supports a splat parameter so you can specify a path.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/tree/:tree/*' do
-      @repo = RepoList.find(params[:repo])
-      @tree = @repo.find_tree(params[:tree])
-      cache "#{@tree.oid}/#{params[:splat].first}"
+          # The html representation of a tag.
+          #
+          # @param [String] tag the repository tag
+          is 'tag/:tag' do |tag|
+            @commit = @repo.commit_by_tag(tag)
+            cache "#{@commit.oid}/tag"
+            :commit
+          end
 
-      @tree.walk(:postorder) do |root, entry|
-        @tree = @repo.lookup entry[:oid] if "#{root}#{entry[:name]}" == params[:splat].first
-      end
+          # @param [String] tree the repository tree
+          on 'tree/:tree' do |tree|
+            @_tree = tree
+            @tree = @repo.find_tree(tree)
 
-      @path = {
-        blob: "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
-        tree: "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
-      }
-      erb :tree, layout: !is_pjax?
-    end
+            # HTML page for a given tree in a given +repo+
+            is do
+              cache @tree.oid
 
-    # HTML page for a given blob in a given +repo+
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/blob/:blob' do
-      @repo = RepoList.find(params[:repo])
-      @tree = @repo.lookup(params[:tree])
+              @path = {
+                blob: "#{repo}/blob/#{tree}",
+                tree: "#{repo}/tree/#{tree}"
+              }
+              is_pjax? ? render(:tree) : :tree
+            end
 
-      @tree.walk(:postorder) do |root, entry|
-        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
-      end
+            # HTML page for a given tree in a given +repo+.
+            #
+            # This one supports a splat parameter so you can specify a path.
+            is :rest do |rest|
+              @rest = rest
+              cache "#{@tree.oid}/#{rest}"
 
-      cache @blob[:oid]
-      erb :blob, layout: !is_pjax?
-    end
+              @tree.walk(:postorder) do |root, entry|
+                @tree = @repo.lookup entry[:oid] if "#{root}#{entry[:name]}" == rest
+              end
 
-    # HTML page for a given blob in a given repo.
-    #
-    # Uses a splat param to specify a blob path.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/blob/:tree/*' do
-      @repo = RepoList.find(params[:repo])
-      @tree = @repo.find_tree(params[:tree])
+              @path = {
+                blob: "#{repo}/blob/#{tree}/#{rest}",
+                tree: "#{repo}/tree/#{tree}/#{rest}"
+              }
+              is_pjax? ? render(:tree) : :tree
+            end
+          end
 
-      @tree.walk(:postorder) do |root, entry|
-        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
-      end
+          on 'blob/:tree' do |tree|
+            @_tree = tree
+            @tree = @repo.find_tree(tree)
 
-      cache "#{@blob[:oid]}/#{@tree.oid}"
-      erb :blob, layout: !is_pjax?
-    end
+            # HTML page for a given blob in a given +repo+
+            is do
+              cache @blob[:oid]
+              view :blob, layout: !is_pjax?
+            end
 
-    # HTML page for a raw blob contents in a given repo.
-    #
-    # Uses a splat param to specify a blob path.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] tree the repository tree
-    get '/:repo/raw/:tree/*' do
-      @repo = RepoList.find(params[:repo])
-      @tree = @repo.find_tree(params[:tree])
+            # HTML page for a given blob in a given repo.
+            #
+            # Uses a splat param to specify a blob path.
+            is :rest do |rest|
+              @rest = rest
+              @tree.walk(:postorder) do |root, entry|
+                @blob = entry if "#{root}#{entry[:name]}" == rest
+              end
 
-      @tree.walk(:postorder) do |root, entry|
-        @blob = entry if "#{root}#{entry[:name]}" == params[:splat].first
-      end
+              cache "#{@blob[:oid]}/#{@tree.oid}"
+              is_pjax? ? render(:blob) : :blob
+            end
+            
+          end
 
-      cache "#{@blob[:oid]}/#{@tree.oid}/raw"
-      blob = @repo.find_blob @blob[:oid]
-      if blob.binary?
-        content_type 'application/octet-stream'
-        blob.text
-      else
-        content_type :txt
-        blob.text
-      end
-    end
+          # HTML page for a raw blob contents in a given repo.
+          #
+          # Uses a splat param to specify a blob path.
+          is 'raw/:tree/:rest' do |tree, rest|
+            @rest = rest
+            @tree = @repo.find_tree(tree)
 
-    # Pagination route for the commits to a given ref in a +repo+.
-    #
-    # @param [String] repo the repository url-sanitised-name
-    # @param [String] ref the repository ref
-    get '/:repo/:ref/page/:page' do
-      pass unless params[:page] =~ /\A\d+\z/
-      params[:page] = params[:page].to_i
-      @repo = RepoList.find(params[:repo])
-      @commits = @repo.commits(params[:ref], 10, (params[:page] - 1) * 10)
-      cache "#{@commits.first.oid}/page/#{params[:page]}/ref/#{params[:ref]}" if @commits.any?
-      @next_commits = !@repo.commits(params[:ref], 10, params[:page] * 10).nil?
-      if params[:page] - 1 > 0
-        @previous_commits = !@repo.commits(params[:ref], 10, (params[:page] - 1) * 10).empty?
-      end
-      erb :log
-    end
+            @tree.walk(:postorder) do |root, entry|
+              @blob = entry if "#{root}#{entry[:name]}" == rest
+            end
 
+            cache "#{@blob[:oid]}/#{@tree.oid}/raw"
+            blob = @repo.find_blob @blob[:oid]
+            if blob.binary?
+              content_type 'application/octet-stream'
+            else
+              content_type 'text/plain'
+            end
+            blob.text
+          end
+
+          # Pagination route for the commits to a given ref in a +repo+.
+          is ':ref/page/:page' do |ref, page|
+            @ref = ref
+            next unless page =~ /\A\d+\z/
+            @page = page = page.to_i
+            @commits = @repo.commits(ref, 10, (page - 1) * 10)
+            cache "#{@commits.first.oid}/page/#{page}/ref/#{ref}" if @commits.any?
+            @next_commits = !@repo.commits(ref, 10, page * 10).nil?
+            if page - 1 > 0
+              @previous_commits = !@repo.commits(ref, 10, (page - 1) * 10).empty?
+            end
+            :log
+          end
+        end # :repo
+      end # get
+    end # route
   end # App
 end # Ginatra

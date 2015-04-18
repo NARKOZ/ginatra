@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 1.9"
 
-  gem.add_dependency 'sinatra',   '~> 1.4.5'
+  gem.add_dependency 'roda',      '~> 1.3'
   gem.add_dependency 'rugged',    '~> 0.21.3'
   gem.add_dependency 'rouge',     '~> 1.7.7'
   gem.add_dependency 'sprockets', '~> 2.0'
@@ -29,7 +29,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rack-test'
-  gem.add_development_dependency 'sinatra-contrib'
   gem.add_development_dependency 'better_errors', '~> 1.1.0'
   gem.add_development_dependency 'binding_of_caller'
 end
