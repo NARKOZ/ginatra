@@ -3,6 +3,7 @@ require 'sinatra/partials'
 require 'rouge'
 require 'ginatra/config'
 require 'ginatra/errors'
+require 'ginatra/logger'
 require 'ginatra/helpers'
 require 'ginatra/repo'
 require 'ginatra/repo_list'
@@ -12,6 +13,7 @@ module Ginatra
   # The main application class.
   # Contains all the core application logic and mounted in +config.ru+ file.
   class App < Sinatra::Base
+    include Logger
     helpers Helpers, Sinatra::Partials
 
     configure do
