@@ -1,9 +1,11 @@
 require 'singleton'
+require 'ginatra/logger'
 
 module Ginatra
   # A singleton class that lets us make and use a constantly updating
   # list of repositories.
   class RepoList
+    include Logger
     include Singleton
     attr_accessor :list
 
@@ -55,6 +57,7 @@ module Ginatra
         begin
           list << Repo.new(path)
         rescue Rugged::RepositoryError
+          logger.warn "SKIPPING '#{path}' - not a git repository"
         end
       end
       list
