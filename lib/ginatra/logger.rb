@@ -16,7 +16,7 @@ module Ginatra
         logger = ::Logger.new file
         logger.level = ::Logger::WARN
         logger.formatter = proc do |severity, datetime, progname, msg|
-          "[#{datetime}] #{severity}: #{msg}\n"
+          "[#{datetime} ##{Process.pid}] #{severity}: #{msg}\n"
         end
         logger
       end
