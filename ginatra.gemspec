@@ -18,10 +18,10 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 1.9"
 
-  gem.add_dependency 'sinatra',   '~> 1.4.5'
-  gem.add_dependency 'rugged',    '~> 0.21.3'
-  gem.add_dependency 'rouge',     '~> 1.7.7'
-  gem.add_dependency 'sprockets', '~> 2.0'
+  gem.add_dependency 'sinatra',   '~> 1.4.6'
+  gem.add_dependency 'rugged',    '~> 0.21.4'
+  gem.add_dependency 'rouge',     '~> 1.8.0'
+  gem.add_dependency 'sprockets', '~> 3.0'
 
   # Assets
   gem.add_dependency 'bootstrap-sass', '3.3.3'
