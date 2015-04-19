@@ -1,4 +1,12 @@
 $(function() {
+  $(window).scroll(function() {
+    if ($(window).scrollTop() >= 220) {
+      $('.hidden-header').show();
+    } else {
+      $('.hidden-header').hide();
+    }
+  });
+
   $('[data-toggle="tooltip"]').tooltip();
 
   $('.js-lazy').lazyload({

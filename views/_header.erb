@@ -1,3 +1,20 @@
+<nav class="navbar navbar-default hidden-header">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="<%= prefix_url %>">
+        <%= repo.name %>
+      </a>
+      <p class="navbar-text"><%= repo.description.split("\n").first %></p>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+      <p class="navbar-text"><%= stats.commits_count %> commits</p>
+      <p class="navbar-text"><%= stats.contributors.size %> contributors</p>
+      <p class="navbar-text"><%= stats.license %> license</p>
+    </ul>
+  </div>
+</nav>
+
 <header class="repo-header">
   <div class="container">
     <div class="row">
