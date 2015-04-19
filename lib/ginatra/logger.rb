@@ -15,6 +15,9 @@ module Ginatra
         file = File.open(LOGFILE, File::WRONLY | File::APPEND | File::CREAT)
         logger = ::Logger.new file
         logger.level = ::Logger::WARN
+        logger.formatter = proc do |severity, datetime, progname, msg|
+          "[#{datetime}] #{severity}: #{msg}\n"
+        end
         logger
       end
     end
