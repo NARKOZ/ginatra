@@ -1,5 +1,7 @@
 ## master
 
+  * Log warnings and errors. Add a new setting: `log_file` to customize log file
+    location.
   * Fix server startup when using Ruby 1.9
   * Upgrade to Twitter Bootstrap 3. Make interface mobile-friendly and
     responsive.
