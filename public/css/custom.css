@@ -27,10 +27,11 @@ pre { white-space: pre; }
   background-color: #6f5499;
   padding: 30px 0;
   margin-bottom: 20px;
+  color: #fff;
 }
 
-.repo-header h1 { color: #fff; }
 .repo-header a { color: #fff; }
+.repo-header h1 { margin-top: 0; color: #fff; }
 .repo-header p.lead { color: #cdbfe3; }
 
 .icon {

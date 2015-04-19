@@ -2,4 +2,5 @@
  *= require twbs
  *= require ./lib/highlight
  *= require custom
+ *= require style
 */

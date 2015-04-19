@@ -1,15 +1,42 @@
 <header class="repo-header">
   <div class="container">
-    <h1>
-      <%= empty_description_hint_for(repo) %>
-      <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
-    </h1>
-    <p class="lead"><%= repo.description.split("\n").first %></p>
+    <div class="row">
+      <div class="col-md-8">
+        <h1>
+          <%= empty_description_hint_for(repo) %>
+          <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
+        </h1>
+        <p class="lead"><%= repo.description.split("\n").first %></p>
 
-    <% if Ginatra.config.git_clone_enabled? %>
-      <div id="js-clone-url" class="muted clone-hint">
-        <code>git clone <strong><%= url repo.param %></strong></code>
+        <% if Ginatra.config.git_clone_enabled? %>
+          <div id="js-clone-url" class="muted clone-hint">
+            <code>git clone <strong><%= url repo.param %></strong></code>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+      <div class="col-md-4">
+        <ul class="list-inline stats">
+          <li>
+            <span class="number">
+              <%= stats.commits_count %>
+            </span>
+            <span>commits</span>
+          </li>
+          <li>
+            <span class="number">
+              <%= stats.contributors.size %>
+            </span>
+            <span>contributors</span>
+          </li>
+          <li>
+            <span class="number">
+              <%= stats.license %>
+            </span>
+            <span>license</span>
+          </li>
+        </ul>
+        <p class="stats-created-at">Created at: <%= time_tag stats.created_at %></p>
+      </div>
+    </div>
   </div>
 </header>
