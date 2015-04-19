@@ -1,11 +1,11 @@
 module Ginatra
   class RepoStats
     # @param [Ginatra::Repo] repo Ginatra::Repo instance
-    # @param [String] branch_name Branch name of repository
+    # @param [String] ref Branch or tag name of repository
     # @return [Ginatra::RepoStats]
-    def initialize(repo, branch_name)
+    def initialize(repo, ref)
       @repo = repo
-      @branch = branch_name
+      @ref = repo.branch_exists?(ref) ? repo.ref("refs/heads/#{ref}") : repo.ref("refs/tags/#{ref}")
     end
 
     # Contributors to repository
@@ -13,9 +13,8 @@ module Ginatra
     # @return [Array] Information about contributors sorted by commits count
     def contributors
       contributors = {}
-      ref = @repo.ref("refs/heads/#{@branch}")
       walker = Rugged::Walker.new(@repo.to_rugged)
-      walker.push(ref.target)
+      walker.push(@ref.target)
 
       walker.each do |commit|
         author = commit.author
@@ -41,7 +40,7 @@ module Ginatra
     #
     # @return [String] License name
     def license
-      last_commit = @repo.ref("refs/heads/#{@branch}").target
+      last_commit = @ref.target
       license = @repo.blob_at(last_commit.oid, 'LICENSE') || @repo.blob_at(last_commit.oid, 'LICENSE.txt')
 
       if license.nil?
@@ -70,11 +69,9 @@ module Ginatra
     #
     # @return [Time] Date of first commit to repository
     def created_at
-      ref = @repo.ref("refs/heads/#{@branch}")
-
       walker = Rugged::Walker.new(@repo.to_rugged)
       walker.sorting(Rugged::SORT_TOPO)
-      walker.push(ref.target)
+      walker.push(@ref.target)
       commit = walker.to_a.last
       Time.at(commit.time)
     end
@@ -83,10 +80,8 @@ module Ginatra
     #
     # @return [Integer] Commits count
     def commits_count
-      ref = @repo.ref("refs/heads/#{@branch}")
-
       walker = Rugged::Walker.new(@repo.to_rugged)
-      walker.push(ref.target)
+      walker.push(@ref.target)
       walker.count
     end
   end

@@ -22,8 +22,7 @@
     </nav>
 
     <% if @repo %>
-      <% ref = params[:ref] ? params[:ref] : params[:tree] %>
-      <%= partial :header, locals: { repo: @repo, stats: Ginatra::RepoStats.new(@repo, ref) } %>
+      <%= partial :header, locals: { repo: @repo, stats: repo_stats(@repo) } %>
     <% end %>
 
     <div class="container-fluid">

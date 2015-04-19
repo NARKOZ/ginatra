@@ -13,6 +13,12 @@ module Ginatra
       request.env['HTTP_X_PJAX']
     end
 
+    # Repository stats for a given repo
+    def repo_stats(repo)
+      ref = params[:ref] || params[:tag] || params[:tree] || 'master'
+      @stats ||= Ginatra::RepoStats.new(repo, ref)
+    end
+
     # Sets title for pages
     def title(*args)
       @title ||= []
