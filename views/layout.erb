@@ -10,11 +10,18 @@
     <% end %>
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="well header">
-        <h1><a href="<%= prefix_url %>"><%= Ginatra.config.sitename %></a></h1>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<%= prefix_url %>">
+            <%= h Ginatra.config.sitename %>
+          </a>
+          <p class="navbar-text"><%= h Ginatra.config.description %></p>
+        </div>
       </div>
+    </nav>
 
+    <div class="container-fluid">
       <%= yield %>
     </div>
 
