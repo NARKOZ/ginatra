@@ -1,5 +1,4 @@
 require 'singleton'
-require 'ginatra/logger'
 
 module Ginatra
   # A singleton class that lets us make and use a constantly updating
