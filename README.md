@@ -33,7 +33,7 @@ It's recommended to install it as a ruby gem, unless you know what you're doing.
 Run the following command to install Ginatra from RubyGems:
 
 ```sh
-gem install ginatra -v 4.0.2
+gem install ginatra -v 4.1.0
 ```
 
 Create config file (see [Configuration](#configuration) section in README).
@@ -53,7 +53,7 @@ Run the following commands to install Ginatra from source:
 ```sh
 git clone git://github.com/NARKOZ/ginatra.git
 cd ginatra/
-git checkout v4.0.2
+git checkout v4.1.0
 bundle
 ```
 

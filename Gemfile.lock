@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ginatra (4.0.2)
+    ginatra (4.1.0)
       bootstrap-sass (= 3.3.3)
       rouge (~> 1.8.0)
       rugged (~> 0.21.4)

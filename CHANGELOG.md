@@ -1,5 +1,9 @@
 ## master
 
+  * Your contribution here.
+
+## 4.1.0 (2015-04-19)
+
   * Log warnings and errors. Add a new setting: `log_file` to customize log file
     location.
   * Fix server startup when using Ruby 1.9
@@ -7,7 +11,6 @@
     responsive.
   * Introduce a new setting: `sitename` to customize title.
   * Improve error handling for invalid custom configuration. (@rogermarlow)
-  * Your contribution here.
 
 ## 4.0.2 (2015-01-15)
 

@@ -1,4 +1,4 @@
 module Ginatra
-  VERSION = "4.0.2"
-  RELEASE_NAME = "Aurora"
+  VERSION = "4.1.0"
+  RELEASE_NAME = "Baku"
 end
