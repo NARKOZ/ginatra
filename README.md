@@ -1,9 +1,9 @@
 # Ginatra
 
-[![Build Status](https://img.shields.io/travis/NARKOZ/ginatra/master.svg?style=flat)](https://travis-ci.org/NARKOZ/ginatra)
-[![Code Climate](https://img.shields.io/codeclimate/github/NARKOZ/ginatra.svg?style=flat)](https://codeclimate.com/github/NARKOZ/ginatra)
-[![Gem Version](https://img.shields.io/gem/v/ginatra.svg?style=flat)](https://rubygems.org/gems/ginatra)
-[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/NARKOZ/ginatra/blob/master/LICENSE.txt)
+[![Build Status](https://img.shields.io/travis/NARKOZ/ginatra/master.svg)](https://travis-ci.org/NARKOZ/ginatra)
+[![Code Climate](https://img.shields.io/codeclimate/github/NARKOZ/ginatra.svg)](https://codeclimate.com/github/NARKOZ/ginatra)
+[![Gem Version](https://img.shields.io/gem/v/ginatra.svg)](https://rubygems.org/gems/ginatra)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/NARKOZ/ginatra/blob/master/LICENSE.txt)
 
 **Ginatra** is a simple web-based git repository browser built on Ruby Sinatra.
 
