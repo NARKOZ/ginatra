@@ -1,12 +1,15 @@
-<div class="page-header">
-  <h1>
-    <%= empty_description_hint_for(repo) %>
-    <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
-    <small><%= repo.description.split("\n").first %></small>
-  </h1>
-  <% if Ginatra.config.git_clone_enabled? %>
-    <div id="js-clone-url" class="muted clone-hint">
-      <code>git clone <strong><%= url repo.param %></strong></code>
-    </div>
-  <% end %>
-</div>
+<header class="repo-header">
+  <div class="container">
+    <h1>
+      <%= empty_description_hint_for(repo) %>
+      <a href="<%= prefix_url(repo.param) %>"><%= repo.name %></a>
+    </h1>
+    <p class="lead"><%= repo.description.split("\n").first %></p>
+
+    <% if Ginatra.config.git_clone_enabled? %>
+      <div id="js-clone-url" class="muted clone-hint">
+        <code>git clone <strong><%= url repo.param %></strong></code>
+      </div>
+    <% end %>
+  </div>
+</header>

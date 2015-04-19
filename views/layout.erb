@@ -21,6 +21,10 @@
       </div>
     </nav>
 
+    <% if @repo %>
+      <%= partial :header, locals: { repo: @repo } %>
+    <% end %>
+
     <div class="container-fluid">
       <%= yield %>
     </div>

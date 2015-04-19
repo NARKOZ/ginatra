@@ -1,7 +1,6 @@
 <% title "#{@repo.name} at #{@tree.oid[0..6]}" %>
 
 <div id="pjax-container">
-  <%= partial :header, locals: { repo: @repo } %>
   <%= partial :tree_nav %>
 
   <div id="loader"><img src="<%= prefix_url("img/loader.svg") %>" alt="loading"></div>

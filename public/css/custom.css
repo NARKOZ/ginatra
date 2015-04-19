@@ -23,6 +23,16 @@ pre { white-space: pre; }
 #diff .changed a { color: #3a87ad; }
 #diff .deleted a { color: #b94a48; }
 
+.repo-header {
+  background-color: #6f5499;
+  padding: 30px 0;
+  margin-bottom: 20px;
+}
+
+.repo-header h1 { color: #fff; }
+.repo-header a { color: #fff; }
+.repo-header p.lead { color: #cdbfe3; }
+
 .icon {
   height: 16px;
   width: 16px;
