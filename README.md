@@ -75,6 +75,8 @@ Create `~/.ginatra/config.yml` file with your own settings. See
 `git_dirs` - Ginatra will look into these folders for git repositories. It's
 required to append `*` at the end of path. Example: `/home/Development/repos/*`
 
+`sitename` - name of the site. Used in the page title and header.
+
 `description` - description of web interface. Used in index page.
 
 `port` - port that Ginatra server will run at.
@@ -86,6 +88,10 @@ in subdirectory.
 
 `git_clone_enabled?` - enables smart HTTP support and allows to clone git
 repositories.
+
+`log_file` - location of the log file where Ginatra will log warnings and
+errors. If this setting doesn't present Ginatra will log out to the standard
+output (stdout).
 
 If you installed Ginatra as an app, you can change settings by editing
 `config.yml` file in root folder.
