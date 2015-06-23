@@ -189,7 +189,7 @@ module Ginatra
         blob: "#{params[:repo]}/blob/#{params[:tree]}",
         tree: "#{params[:repo]}/tree/#{params[:tree]}"
       }
-      erb :tree, layout: !is_pjax?
+      erb :tree, layout: !pjax?
     end
 
     # HTML page for a given tree in a given +repo+.
@@ -211,7 +211,7 @@ module Ginatra
         blob: "#{params[:repo]}/blob/#{params[:tree]}/#{params[:splat].first}",
         tree: "#{params[:repo]}/tree/#{params[:tree]}/#{params[:splat].first}"
       }
-      erb :tree, layout: !is_pjax?
+      erb :tree, layout: !pjax?
     end
 
     # HTML page for a given blob in a given +repo+
@@ -227,7 +227,7 @@ module Ginatra
       end
 
       cache @blob[:oid]
-      erb :blob, layout: !is_pjax?
+      erb :blob, layout: !pjax?
     end
 
     # HTML page for a given blob in a given repo.
@@ -245,7 +245,7 @@ module Ginatra
       end
 
       cache "#{@blob[:oid]}/#{@tree.oid}"
-      erb :blob, layout: !is_pjax?
+      erb :blob, layout: !pjax?
     end
 
     # HTML page for a raw blob contents in a given repo.

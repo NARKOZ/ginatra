@@ -38,7 +38,7 @@ module Ginatra
     final_config
   end
 
-  #parses the config file if it exists
+  # parses the config file if it exists
   def parse_custom_config(custom_config_file)
     begin
       custom_config = YAML.load_file(custom_config_file)
