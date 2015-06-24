@@ -1,7 +1,5 @@
 module Git::Webby
-
   module HttpBackendHelpers #:nodoc:
-
     include GitHelpers
 
     def service_request?
@@ -12,39 +10,39 @@ module Git::Webby
     def service
       @service = params[:service]
       return false if @service.nil?
-      return false if @service[0, 4] != "git-"
-      @service = @service.gsub("git-", "")
+      return false if @service[0, 4] != 'git-'
+      @service = @service.gsub('git-', '')
     end
 
     # pkt_write feature
     def packet_write(line)
-      (line.size + 4).to_s(16).rjust(4, "0") + line
+      (line.size + 4).to_s(16).rjust(4, '0') + line
     end
 
     # pkt_flush feature
     def packet_flush
-      "0000"
+      '0000'
     end
 
     # hdr_nocache feature
     def header_nocache
-      headers "Expires"       => "Fri, 01 Jan 1980 00:00:00 GMT",
-              "Pragma"        => "no-cache",
-              "Cache-Control" => "no-cache, max-age=0, must-revalidate"
+      headers 'Expires'       => 'Fri, 01 Jan 1980 00:00:00 GMT',
+              'Pragma'        => 'no-cache',
+              'Cache-Control' => 'no-cache, max-age=0, must-revalidate'
     end
 
     # hdr_cache_forever feature
     def header_cache_forever
       now = Time.now
-      headers "Date"          => now.to_s,
-              "Expires"       => (now + 31536000).to_s,
-              "Cache-Control" => "public, max-age=31536000"
+      headers 'Date'          => now.to_s,
+              'Expires'       => (now + 31536000).to_s,
+              'Cache-Control' => 'public, max-age=31536000'
     end
 
     # select_getanyfile feature
     def read_any_file
       unless settings.get_any_file
-        halt 403, "Unsupported service: getanyfile"
+        halt 403, 'Unsupported service: getanyfile'
       end
     end
 
@@ -52,7 +50,7 @@ module Git::Webby
     def read_text_file(*file)
       read_any_file
       header_nocache
-      content_type "text/plain"
+      content_type 'text/plain'
       repository.read_file(*file)
     end
 
@@ -75,7 +73,7 @@ module Git::Webby
     def send_info_packs
       read_any_file
       header_nocache
-      content_type "text/plain; charset=utf-8"
+      content_type 'text/plain; charset=utf-8'
       send_file(repository.info_packs_path)
     end
 
@@ -86,7 +84,7 @@ module Git::Webby
       response.body.clear
       response.body << packet_write("# service=git-#{service}\n")
       response.body << packet_flush
-      response.body << repository.run(service, "--stateless-rpc --advertise-refs .")
+      response.body << repository.run(service, '--stateless-rpc --advertise-refs .')
       response.finish
     end
 
@@ -131,12 +129,12 @@ module Git::Webby
     end
 
     # implements the get_text_file function
-    get "/:repository/HEAD" do
-      read_text_file("HEAD")
+    get '/:repository/HEAD' do
+      read_text_file('HEAD')
     end
 
     # implements the get_info_refs function
-    get "/:repository/info/refs" do
+    get '/:repository/info/refs' do
       if service_request? # by URL query parameters
         run_advertisement service
       else
@@ -146,7 +144,7 @@ module Git::Webby
 
     # implements the get_text_file and get_info_packs functions
     get %r{/(.*?)/objects/info/(packs|alternates|http-alternates)$} do |repository, file|
-      if file == "packs"
+      if file == 'packs'
         send_info_packs
       else
         read_text_file(:objects, :info, file)
@@ -160,18 +158,16 @@ module Git::Webby
 
     # implements the get_pack_file and get_idx_file functions
     get %r{/(.*?)/objects/pack/(pack-[0-9a-f]{40}.(pack|idx))$} do |repository, pack, ext|
-      send_pack_idx_file(pack, ext == "idx")
+      send_pack_idx_file(pack, ext == 'idx')
     end
 
     # implements the service_rpc function
-    post "/:repository/:service" do
+    post '/:repository/:service' do
       run_process service
     end
 
   private
 
     helpers AuthenticationHelpers
-
   end # HttpBackendServer
-
 end # Git::Webby

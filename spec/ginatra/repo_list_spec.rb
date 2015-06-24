@@ -4,25 +4,25 @@ describe Ginatra::RepoList do
   let(:repo)      { Ginatra::RepoList.find('test') }
   let(:repo_list) { Ginatra::RepoList.list }
 
-  it "is an array of 'Ginatra::Repo'" do
+  it 'is an array of 'Ginatra::Repo'' do
     repo_list.each do |repo|
       expect(repo).to be_an_instance_of(Ginatra::Repo)
     end
   end
 
-  it "contains the test repo" do
+  it 'contains the test repo' do
     expect(repo_list).to include(repo)
   end
 
-  it "repo? works for existing repo" do
+  it 'repo? works for existing repo' do
     expect(Ginatra::RepoList.instance.repo?('test')).to be true
   end
 
-  it "repo? works for non-existant repo" do
+  it 'repo? works for non-existant repo' do
     expect(Ginatra::RepoList.instance.repo?('bad-test')).to be false
   end
 
-  describe "New repos added to repo directory" do
+  describe 'New repos added to repo directory' do
     before(:each) do
       @new_repo_name = 'temp-new-repo'
       @repo_dir = File.join(current_path, '..', 'repos')
@@ -35,7 +35,7 @@ describe Ginatra::RepoList do
       end
     end
 
-    it "should detect new repo after refresh" do
+    it 'should detect new repo after refresh' do
       repo_list = Ginatra::RepoList.list # calling this should refresh the list
       expect(Ginatra::RepoList.instance.repo?(@new_repo_name)).to be true
 
@@ -43,7 +43,7 @@ describe Ginatra::RepoList do
       expect(repo_list).to include(new_repo)
     end
 
-    it "should detect when a repo has been removed after refresh" do
+    it 'should detect when a repo has been removed after refresh' do
       repo_list = Ginatra::RepoList.list # calling this should refresh the list
       expect(Ginatra::RepoList.instance.repo?(@new_repo_name)).to be true
 

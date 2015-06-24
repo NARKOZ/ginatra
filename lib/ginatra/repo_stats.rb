@@ -34,7 +34,7 @@ module Ginatra
         end
       end
 
-      contributors.sort_by {|c| c.last[:commits_count] }.reverse
+      contributors.sort_by { |c| c.last[:commits_count] }.reverse
     end
 
     # Detect common OSS licenses

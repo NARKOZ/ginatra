@@ -46,20 +46,20 @@ module Ginatra
     # @param [Integer] skip the number of commits in the branch to skip before taking the count.
     #
     # @return [Array<Rugged::Commit>] the array of commits.
-    def commits(branch='master', max_count=10, skip=0)
-      raise Ginatra::InvalidRef unless branch_exists?(branch)
+    def commits(branch = 'master', max_count = 10, skip = 0)
+      fail Ginatra::InvalidRef unless branch_exists?(branch)
 
       walker = Rugged::Walker.new(@repo)
       walker.sorting(Rugged::SORT_TOPO)
       walker.push(@repo.ref("refs/heads/#{branch}").target)
 
-      commits = walker.collect {|commit| commit }
+      commits = walker.collect { |commit| commit }
       commits[skip, max_count]
     end
 
     # Returns list of branches sorted by name alphabetically
     def branches
-      @repo.branches.each(:local).sort_by {|b| b.name }
+      @repo.branches.each(:local).sort_by { |b| b.name }
     end
 
     # Returns list of branches containing the commit
