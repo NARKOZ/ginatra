@@ -37,11 +37,15 @@ server_opts = {
     opts.separator ''
     opts.separator 'Options:'
 
-    opts.on('-p', '--port PORT', 'Port to bind to (defaults from config file)') do |port|
+    port_option = 'Port to bind to (defaults from config file)'
+
+    opts.on('-p', '--port PORT', port_option) do |port|
       options[:port] = port.to_i
     end
 
-    opts.on('-h', '--host HOST', 'Host address to bind to (defaults from config file)') do |host|
+    address_option = address_option
+
+    opts.on('-h', '--host HOST', address_option) do |host|
       options[:host] = host
     end
 
@@ -49,7 +53,9 @@ server_opts = {
       rack_config = File.expand_path("#{__FILE__}/../../config.ru")
       pid_file    = File.expand_path("#{__FILE__}/../../ginatra.pid")
 
-      system "rackup -D -E #{ENV['RACK_ENV']} -P #{pid_file} -p #{options[:port]} -o #{options[:host]} #{rack_config}"
+      system "rackup -D -E #{ENV['RACK_ENV']} "\
+             "-P #{pid_file} -p #{options[:port]} "\
+             "-o #{options[:host]} #{rack_config}"
       puts "Ginatra runs on #{options[:host]}:#{options[:port]}"
     end
   end,
@@ -74,7 +80,11 @@ server_opts = {
 
     opts.on 'Get status of Ginatra web server' do
       pid_file = File.expand_path("#{__FILE__}/../../ginatra.pid")
-      status = File.exist?(pid_file) ? "running.. (pid: #{File.read(pid_file).to_i})" : 'NOT running'
+      if File.exist?(pid_file)
+        status = "running.. (pid: #{File.read(pid_file).to_i})"
+      else
+        status = 'NOT running'
+      end
       puts "Ginatra is #{status}"
     end
   end
