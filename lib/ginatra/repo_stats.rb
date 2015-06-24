@@ -18,23 +18,34 @@ module Ginatra
       walker.push(ref.target)
 
       walker.each do |commit|
-        author = commit.author
-        email = author[:email]
-
-        if contributors[email]
-          contributors[email] = {
-            author: author[:name],
-            commits_count: contributors[email][:commits_count] + 1
-          }
-        else
-          contributors[email] = {
-            author: author[:name],
-            commits_count: 1
-          }
-        end
+        process_commit(commit, contributors)
       end
 
       contributors.sort_by { |c| c.last[:commits_count] }.reverse
+    end
+
+    def process_commit(commit, contributors)
+      author = commit.author
+      email = author[:email]
+      if contributors[email]
+        update_contributor(author, email, contributors)
+      else
+        new_contributor(author, email, contributors)
+      end
+    end
+
+    def update_contributor(author, email, contributors)
+      contributors[email] = {
+        author: author[:name],
+        commits_count: contributors[email][:commits_count] + 1
+      }
+    end
+
+    def new_contributor(author, email, contributors)
+      contributors[email] = {
+        author: author[:name],
+        commits_count: 1
+      }
     end
 
     # Detect common OSS licenses
@@ -42,28 +53,28 @@ module Ginatra
     # @return [String] License name
     def license
       last_commit = @repo.ref("refs/heads/#{@branch}").target
-      license = @repo.blob_at(last_commit.oid, 'LICENSE') || @repo.blob_at(last_commit.oid, 'LICENSE.txt')
+      license_file = @repo.blob_at(last_commit.oid, 'LICENSE')
+      license_text_file =  @repo.blob_at(last_commit.oid, 'LICENSE.txt')
+      license =  license_file || license_text_file
 
       if license.nil?
         'N/A'
       else
-        license_text = license.text
-
-        case license_text
-        when /Apache License/
-          'Apache'
-        when /GNU GENERAL PUBLIC LICENSE/
-          'GPL'
-        when /GNU LESSER GENERAL PUBLIC LICENSE/
-          'LGPL'
-        when /Permission is hereby granted, free of charge,/
-          'MIT'
-        when /Redistribution and use in source and binary forms/
-          'BSD'
-        else
-          'N/A'
-        end
+        return license_name(license.text)
       end
+    end
+
+    def license_name(license_text)
+      gnu_regex = /GNU GENERAL PUBLIC LICENSE/
+      lgpl_regex = /GNU LESSER GENERAL PUBLIC LICENSE/
+      mit_regex = /Permission is hereby granted, free of charge,/
+      bsd_regex = /Redistribution and use in source and binary forms/
+      return 'Apache' if license_text.match /Apache License/
+      return 'GPL' if license_text.match gnu_regex
+      return 'LGPL' if license_text.match lgpl_regex
+      return 'MIT' if license_text.match mit_regex
+      return 'BSD' if license_text.match bsd_regex
+      'N/A'
     end
 
     # Repository created at time

@@ -89,7 +89,11 @@ module Ginatra
         erb :empty_repo
       else
         params[:page] = 1
-        params[:ref] = @repo.branch_exists?('master') ? 'master' : @repo.branches.first.name
+        if @repo.branch_exists?('master')
+          params[:ref] = 'master'
+        else
+          params[:ref] = @repo.branches.first.name
+        end
         @commits = @repo.commits(params[:ref])
         cache "#{@commits.first.oid}/log"
         @next_commits = !@repo.commits(params[:ref], 10, 10).nil?
@@ -289,6 +293,5 @@ module Ginatra
       end
       erb :log
     end
-
   end # App
 end # Ginatra

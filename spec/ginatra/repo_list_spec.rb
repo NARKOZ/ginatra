@@ -4,7 +4,7 @@ describe Ginatra::RepoList do
   let(:repo)      { Ginatra::RepoList.find('test') }
   let(:repo_list) { Ginatra::RepoList.list }
 
-  it 'is an array of 'Ginatra::Repo'' do
+  it "is an array of 'Ginatra::Repo'" do
     repo_list.each do |repo|
       expect(repo).to be_an_instance_of(Ginatra::Repo)
     end

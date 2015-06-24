@@ -3,7 +3,7 @@ module Git::Webby
     include GitHelpers
 
     def service_request?
-      not params[:service].nil?
+      !params[:service].nil?
     end
 
     # select_service feature
@@ -35,15 +35,13 @@ module Git::Webby
     def header_cache_forever
       now = Time.now
       headers 'Date'          => now.to_s,
-              'Expires'       => (now + 31536000).to_s,
+              'Expires'       => (now + 31_536_000).to_s,
               'Cache-Control' => 'public, max-age=31536000'
     end
 
     # select_getanyfile feature
     def read_any_file
-      unless settings.get_any_file
-        halt 403, 'Unsupported service: getanyfile'
-      end
+      halt 403, 'Unsupported service: getanyfile' unless settings.get_any_file
     end
 
     # get_text_file feature
@@ -102,21 +100,21 @@ module Git::Webby
       end # IO
       response.finish
     end
-
   end # HttpBackendHelpers
 
-  # The Smart HTTP handler server. This is the main Web application which respond to following requests:
+  # The Smart HTTP handler server. This is the main Web application
+  # which respond to following requests:
   #
   # <repo.git>/HEAD           :: HEAD contents
   # <repo.git>/info/refs      :: Text file that contains references.
-  # <repo.git>/objects/info/* :: Text file that contains all list of packets, alternates or http-alternates.
+  # <repo.git>/objects/info/* :: Text file that contains all list of packets,
+  #                              alternates or http-alternates.
   # <repo.git>/objects/*/*    :: Git objects, packets or indexes.
   # <repo.git>/upload-pack    :: Post an upload packets.
   # <repo.git>/receive-pack   :: Post a receive packets.
   #
   # See ::configure for more details.
   class HttpBackend < Application
-
     set :authenticate, true
     set :get_any_file, true
     set :upload_pack,  true
@@ -166,7 +164,7 @@ module Git::Webby
       run_process service
     end
 
-  private
+    private
 
     helpers AuthenticationHelpers
   end # HttpBackendServer
