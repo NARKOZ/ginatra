@@ -17,4 +17,4 @@ RSpec.configure do |config|
   config.include Ginatra::Helpers
 end
 
-Ginatra.config.git_dirs << "./repos/*" unless Ginatra.config.git_dirs.include?('./repos/*')
+Ginatra.config.git_dirs << './repos/*' unless Ginatra.config.git_dirs.include?('./repos/*')

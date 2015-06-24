@@ -9,14 +9,15 @@ module Ginatra
     end
 
     # Checks X-PJAX header
-    def is_pjax?
+    def pjax?
       request.env['HTTP_X_PJAX']
     end
 
     # Sets title for pages
     def title(*args)
       @title ||= []
-      @title_options ||= { headline: nil, sitename: h(Ginatra.config.sitename) }
+      @title_options ||= { headline: nil,
+                           sitename: h(Ginatra.config.sitename) }
       options = args.last.is_a?(Hash) ? args.pop : {}
 
       @title += args
@@ -29,12 +30,10 @@ module Ginatra
     end
 
     # Constructs the URL used in the layout's base tag
-    def prefix_url(rest_of_url='')
+    def prefix_url(rest_of_url = '')
       prefix = Ginatra.config.prefix.to_s
 
-      if prefix.length > 0 && prefix[-1].chr == '/'
-        prefix.chop!
-      end
+      prefix.chop! if prefix.length > 0 && prefix[-1].chr == '/'
 
       "#{prefix}/#{rest_of_url}"
     end
@@ -42,18 +41,22 @@ module Ginatra
     # Returns hint to set repository description
     def empty_description_hint_for(repo)
       return '' unless repo.description.empty?
-      hint_text = "Edit `#{repo.path}description` file to set the repository description."
-      "<img src='/img/exclamation-circle.svg' title='#{hint_text}' alt='hint' class='icon'>"
+      hint_text = "Edit `#{repo.path}description` file to"\
+                  " set the repository description."
+      "<img src='/img/exclamation-circle.svg' "\
+      "title='#{hint_text}' alt='hint' class='icon'>"
     end
 
     # Returns file icon depending on filemode
     def file_icon(filemode)
       case filemode
-        # symbolic link (120000)
-        when 40960 then "<img src='/img/mail-forward.svg' alt='symbolic link' class='icon'>"
-        # executable file (100755)
-        when 33261 then "<img src='/img/asterisk.svg' alt='executable file' class='icon'>"
-        else "<img src='/img/file.svg' alt='file' class='icon'>"
+      # symbolic link (120000)
+      when 40_960 then "<img src='/img/mail-forward.svg'"\
+                       " alt='symbolic link' class='icon'>"
+      # executable file (100755)
+      when 33_261 then "<img src='/img/asterisk.svg'"\
+                       " alt='executable file' class='icon'>"
+      else "<img src='/img/file.svg' alt='file' class='icon'>"
       end
     end
 
@@ -68,19 +71,39 @@ module Ginatra
     # @param [String] email the email address
     # @param [Hash] options alt, class and size options for image tag
     # @return [String] html image tag
-    def gravatar_image_tag(email, options={})
+    def gravatar_image_tag(email, options = {})
       alt = options.fetch(:alt, email.gsub(/@\S*/, ''))
       size = options.fetch(:size, 40)
-      url = "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
+      url = 'https://secure.gravatar.com/avatar/'\
+            "#{Digest::MD5.hexdigest(email)}?s=#{size}"
 
       if options[:lazy]
-        placeholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-        tag = "<img data-original='#{url}' src='#{placeholder}' alt='#{h alt}' height='#{size}' width='#{size}' class='js-lazy #{options[:class]}'>"
+        tag = lazy_option_tag(url, placeholder, alt, size, options)
       else
-        tag = "<img src='#{url}' alt='#{h alt}' height='#{size}' width='#{size}'#{" class='#{options[:class]}'" if options[:class]}>"
+        tag = image_tag(url, placeholder, alt, size, options)
       end
 
       tag
+    end
+
+    # image placeholder
+    def placeholder
+      'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP'\
+      '///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+    end
+
+    # Generates a tag with lazy options
+    def lazy_option_tag(url, placeholder, alt, size, options)
+      "<img data-original='#{url}' src='#{placeholder}' "\
+      "alt='#{h alt}' height='#{size}' width='#{size}' "\
+      "class='js-lazy #{options[:class]}'>"
+    end
+
+    # Generates an image tag with no lazy option
+    def image_tag(url, placeholder, alt, size, options)
+      "<img src='#{url}' alt='#{h alt}' height='#{size}' "\
+      "width='#{size}'"\
+      "#{" class='#{options[:class]}'" if options[:class]}>"
     end
 
     # Reformats the date into a user friendly date with html entities
@@ -89,7 +112,7 @@ module Ginatra
     # @return [String] html string formatted using
     #   +"%b %d, %Y &ndash; %H:%M"+
     def nicetime(date)
-      date.strftime("%b %d, %Y &ndash; %H:%M")
+      date.strftime('%b %d, %Y &ndash; %H:%M')
     end
 
     # Returns an html time tag for the given time
@@ -100,7 +123,8 @@ module Ginatra
     def time_tag(time)
       datetime = time.strftime('%Y-%m-%dT%H:%M:%S%z')
       title = time.strftime('%Y-%m-%d %H:%M:%S')
-      "<time datetime='#{datetime}' title='#{title}'>#{time.strftime('%B %d, %Y %H:%M')}</time>"
+      "<time datetime='#{datetime}' title='#{title}'>"\
+      "#{time.strftime('%B %d, %Y %H:%M')}</time>"
     end
 
     # Returns a string including the link to download a patch for a certain
@@ -122,8 +146,9 @@ module Ginatra
     # @param [String] ref the ref to link to.
     #
     # @return [String] the HTML containing the link to the feed.
-    def atom_feed_url(repo_param, ref=nil)
-      ref.nil? ? prefix_url("#{repo_param}.atom") : prefix_url("#{repo_param}/#{ref}.atom")
+    def atom_feed_url(repo_param, ref = nil)
+      ref.nil? ? prefix_url("#{repo_param}.atom") :
+                 prefix_url("#{repo_param}/#{ref}.atom")
     end
 
     # Returns a HTML (+<ul>+) list of the files modified in a given commit.
@@ -137,15 +162,41 @@ module Ginatra
     def file_listing(diff)
       list = []
       diff.deltas.each_with_index do |delta, index|
-        if delta.deleted?
-          list << "<li class='deleted'><img src='/img/minus-square.svg' alt='deleted' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
-        elsif delta.added?
-          list << "<li class='added'><img src='/img/plus-square.svg' alt='added' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
-        elsif delta.modified?
-          list << "<li class='changed'><img src='/img/edit.svg' alt='modified' class='icon'> <a href='#file-#{index + 1}'>#{delta.new_file[:path]}</a></li>"
-        end
+        file_list_item(delta, index, list)
       end
       "<ul class='list-unstyled'>#{list.join}</ul>"
+    end
+
+    # Returns a HTML(+<li>+) tag for each file listing
+    def file_list_item(delta, index, list)
+      if delta.deleted?
+        list << delta_deleted(delta, index)
+      elsif delta.added?
+        list << delta_added(delta, index)
+      elsif delta.modified?
+        list << delta_modified(delta, index)
+      end
+    end
+    # Tag if file deleted
+    def delta_deleted(delta, index)
+      "<li class='deleted'><img src='/img/minus-square.svg'"\
+      " alt='deleted' class='icon'> <a href='#file-#{index + 1}'>"\
+      "#{delta.new_file[:path]}</a></li>"
+    end
+
+    # Tag if file added
+    def delta_added(delta, index)
+      "<li class='added'><img src='/img/plus-square.svg'"\
+      " alt='added' class='icon'> <a href='#file-#{index + 1}'>"\
+      "#{delta.new_file[:path]}</a></li>"
+    end
+
+    # Tag if file modified
+    def delta_modified(delta, index)
+      "<li class='changed'><img src='/img/edit.svg'"\
+      " alt='modified' class='icon'> "\
+      "<a href='#file-#{index + 1}'>"\
+      "#{delta.new_file[:path]}</a></li>"
     end
 
     # Highlights commit diff
@@ -154,22 +205,10 @@ module Ginatra
     #
     # @return [String] highlighted HTML.code
     def highlight_diff(hunk)
-      lines = []
-      lines << hunk.header
-
-      hunk.each_line do |line|
-        if line.context?
-          lines << "  #{line.content}"
-        elsif line.deletion?
-          lines << "- #{line.content}"
-        elsif line.addition?
-          lines << "+ #{line.content}"
-        end
-      end
+      lines = print_lines(hunk)
 
       formatter = Rouge::Formatters::HTML.new
       lexer     = Rouge::Lexers::Diff.new
-
       source   = lines.join
       encoding = source.encoding
       source   = source.force_encoding(Encoding::UTF_8)
@@ -178,18 +217,42 @@ module Ginatra
       hd.force_encoding encoding
     end
 
+    # Prints lines with a + or - symbol depending on the action
+    def print_lines(hunk)
+      lines = []
+      lines << hunk.header
+
+      hunk.each_line do |line|
+        lines << print_line(line)
+      end
+      lines
+    end
+
+    # Prints lines with a + or - symbol depending on the action
+
+    def print_line(line)
+      if line.context?
+        "  #{line.content}"
+      elsif line.deletion?
+        "- #{line.content}"
+      elsif line.addition?
+        "+ #{line.content}"
+      end
+    end
+
     # Highlights blob source
     #
     # @param [Rugged::Blob] blob to highlight source
     #
     # @return [String] highlighted HTML.code
-    def highlight_source(source, filename='')
+    def highlight_source(source, filename = '')
       source    = source.force_encoding(Encoding::UTF_8)
       formatter = Rouge::Formatters::HTML.new(line_numbers: true, wrap: false)
       lexer     = Rouge::Lexer.guess_by_filename(filename)
+      plain_text = Rouge::Lexers::PlainText
 
-      if lexer == Rouge::Lexers::PlainText
-        lexer = Rouge::Lexer.guess_by_source(source) || Rouge::Lexers::PlainText
+      if lexer == plain_text
+        lexer = Rouge::Lexer.guess_by_source(source) || plain_text
       end
 
       formatter.format lexer.lex(source)
@@ -206,29 +269,55 @@ module Ginatra
     #
     # @return [String] the formatted text
     def simple_format(text)
-      text.gsub!(/ +/, " ")
+      text.gsub!(/ +/, ' ')
       text.gsub!(/\r\n?/, "\n")
       text.gsub!(/\n/, "<br />\n")
       text
     end
 
-    # Truncates a given text to a certain number of letters, including a special ending if needed.
+    # Truncates a given text to a certain number of letters,
+    # including a special ending if needed.
     #
-    # @param [String] text the text to truncate
-    # @option options [Integer] :length   (30) the length you want the output string
-    # @option options [String]  :omission ("...") the string to show an omission.
+    # the text to truncate
+    # @param [String] text
+    #
+    # the length you want the output string
+    # @option options [Integer] :length   (30)
+    #
+    # the string to show an omission.
+    # @option options [String]  :omission ("...")
     #
     # @return [String] the truncated text.
-    def truncate(text, options={})
+    def truncate(text, options = {})
       options[:length] ||= 30
-      options[:omission] ||= "..."
+      options[:omission] ||= '...'
 
       if text
         l = options[:length] - options[:omission].length
         chars = text
-        stop = options[:separator] ? (chars.rindex(options[:separator], l) || l) : l
-        (chars.length > options[:length] ? chars[0...stop] + options[:omission] : text).to_s
+        stop = separator(options, chars, l)
+        parse_length(options, chars, text, stop)
       end
+    end
+
+    # Chooses a separator from options
+    def separator(options, chars, l)
+      if options[:separator]
+        stop = chars.rindex(options[:separator], l) || l
+      else
+        stop = l
+      end
+      stop
+    end
+
+    # Parses length from options and applies it to the string
+    def parse_length(options, chars, text, stop)
+      if chars.length > options[:length]
+        result = chars[0...stop] + options[:omission]
+      else
+        result = text
+      end
+      result.to_s
     end
 
     # Returns the rfc representation of a date, for use in the atom feeds.
@@ -236,14 +325,19 @@ module Ginatra
     # @param [DateTime] datetime the date to format
     # @return [String] the formatted datetime
     def rfc_date(datetime)
-      datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
+      datetime.strftime('%Y-%m-%dT%H:%M:%SZ') # 2003-12-13T18:30:02Z
     end
 
     # Returns the Hostname of the given install, for use in the atom feeds.
     #
-    # @return [String] the hostname of the server. Respects HTTP-X-Forwarded-For
+    # @return [String] the hostname of the server.
+    # Respects HTTP-X-Forwarded-For
     def hostname
-      (request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/) ? request.env['HTTP_X_FORWARDED_SERVER'] : request.env['HTTP_HOST']
+      if request.env['HTTP_X_FORWARDED_SERVER'] =~ /[a-z]*/
+        request.env['HTTP_X_FORWARDED_SERVER']
+      else
+        request.env['HTTP_HOST']
+      end
     end
   end
 end

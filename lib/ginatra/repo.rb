@@ -1,8 +1,10 @@
 require 'rugged'
 
 module Ginatra
+  # Git Repository class for Ginatra
   class Repo
-    attr_reader :name, :param, :description
+    attr_reader :name, :param, :description, :repo
+    alias_method :to_rugged, :repo
 
     # Create a new repository, and sort out clever stuff including assigning
     # the param, the name and the description.
@@ -32,34 +34,34 @@ module Ginatra
     def commit_by_tag(name)
       target = @repo.ref("refs/tags/#{name}").target
 
-      if target.is_a? Rugged::Tag::Annotation
-        target = target.target
-      end
+      target = target.target if target.is_a? Rugged::Tag::Annotation
 
       target
     end
 
-    # Return a list of commits in a certain branch, including pagination options and all the refs.
+    # Return a list of commits in a certain branch, including pagination
+    # options and all the refs.
     #
     # @param [String] start the branch to look for commits in
     # @param [Integer] max_count the maximum count of commits
-    # @param [Integer] skip the number of commits in the branch to skip before taking the count.
+    # @param [Integer] skip the number of commits in the branch
+    #                  to skip before taking the count.
     #
     # @return [Array<Rugged::Commit>] the array of commits.
-    def commits(branch='master', max_count=10, skip=0)
-      raise Ginatra::InvalidRef unless branch_exists?(branch)
+    def commits(branch = 'master', max_count = 10, skip = 0)
+      fail Ginatra::InvalidRef unless branch_exists?(branch)
 
       walker = Rugged::Walker.new(@repo)
       walker.sorting(Rugged::SORT_TOPO)
       walker.push(@repo.ref("refs/heads/#{branch}").target)
 
-      commits = walker.collect {|commit| commit }
+      commits = walker.map { |commit| commit }
       commits[skip, max_count]
     end
 
     # Returns list of branches sorted by name alphabetically
     def branches
-      @repo.branches.each(:local).sort_by {|b| b.name }
+      @repo.branches.each(:local).sort_by { |b| b.name }
     end
 
     # Returns list of branches containing the commit
@@ -69,7 +71,7 @@ module Ginatra
         walker = Rugged::Walker.new(@repo)
         walker.sorting(Rugged::SORT_TOPO)
         walker.push(@repo.ref("refs/heads/#{branch.name}").target)
-        walker.collect { |c| b << branch if c.oid == commit }
+        walker.map { |c| b << branch if c.oid == commit }
       end
       b
     end
@@ -92,11 +94,6 @@ module Ginatra
       else
         lookup(oid)
       end
-    end
-
-    # Returns Rugged::Repository instance
-    def to_rugged
-      @repo
     end
 
     # Catch all
