@@ -41,7 +41,7 @@ Create config file (see [Configuration](#configuration) section in README).
 Start the Ginatra server:
 
 ```sh
-ginatra run
+RACK_ENV=production ginatra run
 ```
 
 By default Ginatra will run on `localhost:9797`
@@ -62,6 +62,7 @@ Create config file or modify existing (see [Configuration](#configuration) secti
 Start the Ginatra server:
 
 ```sh
+export RACK_ENV=production 
 ./bin/ginatra run
 ```
 
