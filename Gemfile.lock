@@ -30,8 +30,8 @@ GEM
     execjs (2.5.2)
     json (1.8.2)
     multi_json (1.11.0)
-    rack (1.6.0)
-    rack-protection (1.5.3)
+    rack (1.6.11)
+    rack-protection (1.5.5)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
