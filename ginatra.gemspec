@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = "Web interface for git repositories"
   gem.description   = "Git repository viewer with a rocking good web interface"
   gem.homepage      = "https://github.com/narkoz/ginatra"
-  gem.email         = ["mail@narkoz.me"]
+  gem.email         = ["nihad@42na.in"]
   gem.authors       = ["Nihad Abbasov", "Sam Elliott", "Ryan Bigg"]
 
   gem.files         = `git ls-files`.split($/) - ['Gemfile.lock']
